@@ -7,9 +7,10 @@ import Orders from "@/pages/Orders";
 import Customers from "@/pages/Customers";
 import Collections from "@/pages/Collections";
 import Campaigns from "@/pages/Campaigns";
-import Analytics from "@/pages/Analytics";
 import SettingsPage from "@/pages/Settings";
 import NotFound from "@/pages/NotFound";
+import Analytics from "@/pages/Analytics";
+import Appointment from "@/pages/Appointment";
 import SignIn from "@/pages/SignIn";
 import { LoadingOverlay } from "@/components/feedback/LoadingOverlay";
 
@@ -154,6 +155,20 @@ const AppRoutes = () => {
                 transition={pageTransition}
               >
                 <Analytics />
+              </motion.div>
+            } 
+          />
+           <Route 
+            path="/appointments" 
+            element={
+              <motion.div
+                initial="initial"
+                animate="in"
+                exit="out"
+                variants={pageVariants}
+                transition={pageTransition}
+              >
+                <Appointment />
               </motion.div>
             } 
           />

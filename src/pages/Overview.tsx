@@ -90,8 +90,8 @@ const Overview = () => {
               </p>
              
             </div>
-            <div className="absolute -right-10 bottom-0 h-72 w-72 rounded-full bg-primary-foreground/10 blur-3xl" />
-            <div className="absolute right-14 top-6 h-32 w-32 rounded-full border border-primary-foreground/30" />
+            
+            
           </motion.div>
 
           <div className="space-y-4">
@@ -148,7 +148,7 @@ const Overview = () => {
                   </div>
                 </div>
               ))}
-              <Button asChild variant="ghost" className="w-full justify-center text-sm font-semibold text-foreground">
+              <Button asChild variant="primary" className="w-full justify-center text-sm font-semibold ">
                 <Link to="/orders">View full production board</Link>
               </Button>
             </CardContent>

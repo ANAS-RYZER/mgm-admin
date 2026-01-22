@@ -52,7 +52,7 @@ const Analytics = () => {
             <p>• Bridal Polki collections driving <span className="font-semibold text-primary-foreground">18% uplift</span> in South India.</p>
             <p>• Concierge diamond upgrades increased average ticket size by <span className="font-semibold text-primary-foreground">₹28K</span>.</p>
             <p>• Festival omnichannel pushes contributed <span className="font-semibold text-primary-foreground">₹4.2L</span> incremental revenue.</p>
-            <Button variant="outline" className="w-full border-primary-foreground/40 text-primary-foreground">
+            <Button variant="outline" className="w-full border-primary-foreground/40 text-black">
               View Detailed Report
             </Button>
           </CardContent>
@@ -98,23 +98,23 @@ const Analytics = () => {
       </section>
 
       <section className="grid gap-6 md:grid-cols-2">
-        <Card className="border-border/60 bg-background/85">
+        <Card className="border-border/60 bg-gradient-mgm text-primary-foreground">
           <CardHeader>
-            <CardTitle>Channel Mix</CardTitle>
-            <CardDescription>Balance omnichannel investments to sustain demand.</CardDescription>
+            <CardTitle className="text-primary-foreground">Channel Mix</CardTitle>
+            <CardDescription className="text-primary-foreground/80">Balance omnichannel investments to sustain demand.</CardDescription>
           </CardHeader>
-          <CardContent className="space-y-3 text-sm text-muted-foreground">
-            <div className="flex items-center justify-between rounded-lg border border-border/60 bg-background/80 px-4 py-3">
+          <CardContent className="space-y-3 text-sm text-primary-foreground/85">
+            <div className="flex items-center justify-between gap-3 rounded-2xl border border-primary-foreground/15 bg-primary-foreground/10 p-4">
               <span>Showroom Experiences</span>
-              <span className="font-semibold text-foreground">42%</span>
+              <span className="font-semibold text-gold">42%</span>
             </div>
-            <div className="flex items-center justify-between rounded-lg border border-border/60 bg-background/80 px-4 py-3">
+            <div className="flex items-center justify-between gap-3 rounded-2xl border border-primary-foreground/15 bg-primary-foreground/10 p-4">
               <span>Digital Commerce</span>
-              <span className="font-semibold text-foreground">33%</span>
+              <span className="font-semibold text-gold">33%</span>
             </div>
-            <div className="flex items-center justify-between rounded-lg border border-border/60 bg-background/80 px-4 py-3">
+            <div className="flex items-center justify-between gap-3 rounded-2xl border border-primary-foreground/15 bg-primary-foreground/10 p-4">
               <span>Concierge & VIP</span>
-              <span className="font-semibold text-foreground">25%</span>
+              <span className="font-semibold text-gold">25%</span>
             </div>
           </CardContent>
         </Card>

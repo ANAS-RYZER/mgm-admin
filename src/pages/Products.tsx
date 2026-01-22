@@ -1,14 +1,52 @@
 import { AdminLayout } from "@/components/layout/AdminLayout";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { productCatalogue } from "@/data/sample-data";
-import { Sparkles, Plus, Upload, Search, Filter, Edit, Eye, Trash2, MoreVertical, Image, Package, DollarSign, Star, Calendar, ChevronDown, X, Save } from "lucide-react";
+import {
+  Sparkles,
+  Plus,
+  Upload,
+  Search,
+  Filter,
+  Edit,
+  Eye,
+  Trash2,
+  MoreVertical,
+  Image,
+  Package,
+  DollarSign,
+  Star,
+  Calendar,
+  ChevronDown,
+  X,
+  Save,
+} from "lucide-react";
 import { useState, useEffect, ChangeEvent } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface Product {
   id: string;
@@ -29,10 +67,12 @@ interface Product {
 
 const Products = () => {
   const [products, setProducts] = useState<Product[]>(productCatalogue);
-  const [filteredProducts, setFilteredProducts] = useState<Product[]>(productCatalogue);
+  const [filteredProducts, setFilteredProducts] =
+    useState<Product[]>(productCatalogue);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
-  const [selectedStatus, setSelectedStatus] = useState("all");
+  const [selectedStatus, 
+    setSelectedStatus] = useState("all");
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
@@ -46,25 +86,44 @@ const Products = () => {
   const [productImages, setProductImages] = useState<string[]>([]);
   const [imageFiles, setImageFiles] = useState<File[]>([]);
 
-  const categories = ["all", "Bridal", "Temple", "Contemporary", "Royal", "Classics"];
-  const statuses = ["all", "In Production", "Low Stock", "Ready to Ship", "New Launch", "Best Seller"];
+  const categories = [
+    "all",
+    "Bridal",
+    "Temple",
+    "Contemporary",
+    "Royal",
+    "Classics",
+  ];
+  const statuses = [
+    "all",
+    "In Production",
+    "Low Stock",
+    "Ready to Ship",
+    "New Launch",
+    "Best Seller",
+  ];
 
   useEffect(() => {
     let filtered = products;
 
     if (searchTerm) {
-      filtered = filtered.filter(product => 
-        product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        product.category.toLowerCase().includes(searchTerm.toLowerCase())
+      filtered = filtered.filter(
+        (product) =>
+          product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          product.category.toLowerCase().includes(searchTerm.toLowerCase()),
       );
     }
 
     if (selectedCategory !== "all") {
-      filtered = filtered.filter(product => product.category === selectedCategory);
+      filtered = filtered.filter(
+        (product) => product.category === selectedCategory,
+      );
     }
 
     if (selectedStatus !== "all") {
-      filtered = filtered.filter(product => product.status === selectedStatus);
+      filtered = filtered.filter(
+        (product) => product.status === selectedStatus,
+      );
     }
 
     setFilteredProducts(filtered);
@@ -83,7 +142,7 @@ const Products = () => {
       weight: "",
       material: "",
       dimensions: "",
-      images: []
+      images: [],
     });
     setProductImages([]);
     setImageFiles([]);
@@ -124,15 +183,22 @@ const Products = () => {
         weight: formData.weight,
         material: formData.material,
         dimensions: formData.dimensions,
-        images: productImages
+        images: productImages,
       };
       setProducts([...products, newProduct]);
     } else if (isEditModalOpen && selectedProduct) {
-      setProducts(products.map(p => 
-        p.id === selectedProduct.id 
-          ? { ...p, ...formData, updatedAt: "Just now", images: productImages }
-          : p
-      ));
+      setProducts(
+        products.map((p) =>
+          p.id === selectedProduct.id
+            ? {
+                ...p,
+                ...formData,
+                updatedAt: "Just now",
+                images: productImages,
+              }
+            : p,
+        ),
+      );
     }
     setIsAddModalOpen(false);
     setIsEditModalOpen(false);
@@ -143,7 +209,7 @@ const Products = () => {
 
   const handleConfirmDelete = () => {
     if (selectedProduct) {
-      setProducts(products.filter(p => p.id !== selectedProduct.id));
+      setProducts(products.filter((p) => p.id !== selectedProduct.id));
     }
     setIsDeleteModalOpen(false);
     setSelectedProduct(null);
@@ -153,9 +219,9 @@ const Products = () => {
     const files = Array.from(e.target.files || []);
     const newImageFiles = [...imageFiles, ...files];
     setImageFiles(newImageFiles);
-    
+
     // Create preview URLs for the images
-    const newImages = files.map(file => URL.createObjectURL(file));
+    const newImages = files.map((file) => URL.createObjectURL(file));
     setProductImages([...productImages, ...newImages]);
   };
 
@@ -168,36 +234,44 @@ const Products = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "In Production": return "bg-blue-100 text-blue-800 border-blue-200";
-      case "Low Stock": return "bg-red-100 text-red-800 border-red-200";
-      case "Ready to Ship": return "bg-green-100 text-green-800 border-green-200";
-      case "New Launch": return "bg-purple-100 text-purple-800 border-purple-200";
-      case "Best Seller": return "bg-yellow-100 text-yellow-800 border-yellow-200";
-      default: return "bg-gray-100 text-gray-800 border-gray-200";
+      case "In Production":
+        return "bg-blue-100 text-blue-800 border-blue-200";
+      case "Low Stock":
+        return "bg-red-100 text-red-800 border-red-200";
+      case "Ready to Ship":
+        return "bg-green-100 text-green-800 border-green-200";
+      case "New Launch":
+        return "bg-purple-100 text-purple-800 border-purple-200";
+      case "Best Seller":
+        return "bg-yellow-100 text-yellow-800 border-yellow-200";
+      default:
+        return "bg-gray-100 text-gray-800 border-gray-200";
     }
   };
 
   const handleBulkUpload = () => {
     if (!uploadFile) return;
-    
+
     // Simulate file upload with progress
     let progress = 0;
     const interval = setInterval(() => {
       progress += 10;
       setUploadProgress(progress);
-      
+
       if (progress >= 100) {
         clearInterval(interval);
         // Parse CSV and add products
         const reader = new FileReader();
         reader.onload = (e) => {
           const text = e.target?.result as string;
-          const lines = text.split('\n');
+          const lines = text.split("\n");
           const newProducts: Product[] = [];
-          
+
           lines.slice(1).forEach((line, index) => {
             if (line.trim()) {
-              const [name, category, stock, price, status] = line.split(',').map(item => item.trim());
+              const [name, category, stock, price, status] = line
+                .split(",")
+                .map((item) => item.trim());
               if (name && category && stock && price && status) {
                 newProducts.push({
                   id: `prd-bulk-${Date.now()}-${index}`,
@@ -207,12 +281,12 @@ const Products = () => {
                   price,
                   status,
                   rating: 4.5,
-                  updatedAt: "Just now"
+                  updatedAt: "Just now",
                 });
               }
             }
           });
-          
+
           setProducts([...products, ...newProducts]);
           setUploadFile(null);
           setUploadProgress(0);
@@ -222,7 +296,7 @@ const Products = () => {
       }
     }, 200);
   };
-  
+
   return (
     <AdminLayout
       title="Product Catalogue"
@@ -234,10 +308,16 @@ const Products = () => {
           <CardHeader className="flex flex-row items-center justify-between">
             <div>
               <CardTitle>Featured Inventory</CardTitle>
-              <CardDescription>Monitor stock posture across hero SKUs.</CardDescription>
+              <CardDescription>
+                Monitor stock posture across hero SKUs.
+              </CardDescription>
             </div>
             <div className="flex gap-2">
-              <Button onClick={() => setIsBulkUploadOpen(true)} variant="outline" className="gap-2">
+              <Button
+                onClick={() => setIsBulkUploadOpen(true)}
+                variant="outline"
+                className="gap-2"
+              >
                 <Upload className="h-4 w-4" /> Bulk Upload
               </Button>
               <Button onClick={handleAddProduct} className="gap-2">
@@ -257,28 +337,61 @@ const Products = () => {
                   className="pl-10"
                 />
               </div>
-              <select 
-                value={selectedCategory} 
-                onChange={(e) => setSelectedCategory(e.target.value)}
-                className="px-3 py-2 border rounded-md bg-background"
+              <Select
+                value={selectedCategory}
+                onValueChange={setSelectedCategory}
               >
-                {categories.map(category => (
-                  <option key={category} value={category}>
-                    {category === "all" ? "All Categories" : category}
-                  </option>
-                ))}
-              </select>
-              <select 
-                value={selectedStatus} 
+                <SelectTrigger className="w-48 rounded-xl  bg-white/5 text-black backdrop-blur-sm hover:bg-white/10">
+                  <SelectValue placeholder="Select category" />
+                </SelectTrigger>
+
+                <SelectContent className="z-50 w-56 rounded-2xl border border-white/10 bg-gradient-to-b from-[#2a0f1c] to-[#1f0a14] p-2 shadow-2xl backdrop-blur-xl">
+                  {categories.map((category) => (
+                    <SelectItem
+                      key={category}
+                      value={category}
+                      className="
+          rounded-lg px-3 py-2 text-sm text-white/80
+          transition hover:bg-white/5 hover:text-white
+          focus:bg-white/10 focus:text-white
+          cursor-pointer
+        "
+                    >
+                      {category === "all" ? "All Categories" : category}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+
+              <Select
+                value={selectedStatus}
                 onChange={(e) => setSelectedStatus(e.target.value)}
                 className="px-3 py-2 border rounded-md bg-background"
               >
-                {statuses.map(status => (
-                  <option key={status} value={status}>
-                    {status === "all" ? "All Statuses" : status}
-                  </option>
-                ))}
-              </select>
+                <SelectTrigger className="w-48 rounded-xl  bg-white/5 text-black backdrop-blur-sm hover:bg-white/10">
+                  <SelectValue
+                    placeholder="Select status"
+                    className="text-white"
+                  />
+                </SelectTrigger>
+
+                <SelectContent
+                  side="bottom"
+                  align="start"
+                  sideOffset={8}
+                  className="z-50 w-56 rounded-2xl border border-white/10 bg-gradient-to-b from-[#2a0f1c] to-[#1f0a14] p-2 shadow-2xl backdrop-blur-xl text-white"
+                >
+                  {statuses.map((status) => (
+                    <SelectItem
+                      key={status}
+                      value={status}
+                      className="rounded-lg px-3 py-2 text-sm !text-white/90 transition hover:bg-white/5 hover:text-white focus:bg-white/10 focus:text-white cursor-pointer"
+                    >
+                      {status === "all" ? "All Statuses" : status}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
 
             {/* Enhanced Product Table */}
@@ -304,7 +417,9 @@ const Products = () => {
                           </div>
                           <div>
                             <p className="font-medium">{product.name}</p>
-                            <p className="text-xs text-muted-foreground">SKU: {product.id}</p>
+                            <p className="text-xs text-muted-foreground">
+                              SKU: {product.id}
+                            </p>
                           </div>
                         </div>
                       </TableCell>
@@ -313,13 +428,17 @@ const Products = () => {
                           {product.category}
                         </div>
                       </TableCell>
-                  
+
                       <TableCell>
                         <div className="flex items-center gap-2">
-                          <span className={cn(
-                            "font-semibold",
-                            product.stock < 10 ? "text-red-600" : "text-green-600"
-                          )}>
+                          <span
+                            className={cn(
+                              "font-semibold",
+                              product.stock < 10
+                                ? "text-red-600"
+                                : "text-green-600",
+                            )}
+                          >
                             {product.stock}
                           </span>
                           {product.stock < 10 && (
@@ -329,7 +448,9 @@ const Products = () => {
                           )}
                         </div>
                       </TableCell>
-                      <TableCell className="font-semibold">{product.price}</TableCell>
+                      <TableCell className="font-semibold">
+                        {product.price}
+                      </TableCell>
                       <TableCell>
                         <div className="flex items-center gap-1">
                           <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
@@ -338,22 +459,22 @@ const Products = () => {
                       </TableCell>
                       <TableCell className="text-right">
                         <div className="flex items-center justify-end gap-1">
-                          <Button 
-                            variant="ghost" 
+                          <Button
+                            variant="ghost"
                             size="sm"
                             onClick={() => handleViewProduct(product)}
                           >
                             <Eye className="h-4 w-4" />
                           </Button>
-                          <Button 
-                            variant="ghost" 
+                          <Button
+                            variant="ghost"
                             size="sm"
                             onClick={() => handleEditProduct(product)}
                           >
                             <Edit className="h-4 w-4" />
                           </Button>
-                          <Button 
-                            variant="ghost" 
+                          <Button
+                            variant="ghost"
                             size="sm"
                             onClick={() => handleDeleteProduct(product)}
                             className="text-red-600 hover:text-red-700"
@@ -394,9 +515,15 @@ const Products = () => {
           <CardHeader className="flex flex-row items-center justify-between">
             <div>
               <CardTitle>Custom Request Pipeline</CardTitle>
-              <CardDescription>Map bespoke commissions to specialist ateliers.</CardDescription>
+              <CardDescription>
+                Map bespoke commissions to specialist ateliers.
+              </CardDescription>
             </div>
-            <Button variant="outline" className="gap-2" onClick={() => setIsWorkflowModalOpen(true)}>
+            <Button
+              variant="outline"
+              className="gap-2"
+              onClick={() => setIsWorkflowModalOpen(true)}
+            >
               <Sparkles className="h-4 w-4" /> Configure Workflow
             </Button>
           </CardHeader>
@@ -422,9 +549,15 @@ const Products = () => {
                 key={item.title}
                 className="rounded-2xl border border-border/60 bg-background/80 p-4 shadow-card"
               >
-                <p className="text-sm font-semibold text-foreground">{item.title}</p>
-                <p className="mt-2 text-xs text-muted-foreground">{item.description}</p>
-                <p className="mt-3 text-xs font-semibold text-gold">Status: {item.status}</p>
+                <p className="text-sm font-semibold text-foreground">
+                  {item.title}
+                </p>
+                <p className="mt-2 text-xs text-muted-foreground">
+                  {item.description}
+                </p>
+                <p className="mt-3 text-xs font-semibold text-gold">
+                  Status: {item.status}
+                </p>
               </div>
             ))}
           </CardContent>
@@ -450,7 +583,9 @@ const Products = () => {
               onClick={(e) => e.stopPropagation()}
             >
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold text-white">Bulk Upload Products</h3>
+                <h3 className="text-lg font-semibold text-white">
+                  Bulk Upload Products
+                </h3>
                 <Button
                   variant="ghost"
                   size="sm"
@@ -546,8 +681,13 @@ const Products = () => {
             >
               <div className="flex flex-wrap items-start justify-between gap-4 mb-8">
                 <div>
-                  <h3 className="text-2xl font-semibold text-white">Add New Product</h3>
-                  <p className="text-sm text-white/60">Capture the essential details to craft a new catalogue highlight.</p>
+                  <h3 className="text-2xl font-semibold text-white">
+                    Add New Product
+                  </h3>
+                  <p className="text-sm text-white/60">
+                    Capture the essential details to craft a new catalogue
+                    highlight.
+                  </p>
                 </div>
                 <Button
                   variant="ghost"
@@ -562,93 +702,137 @@ const Products = () => {
               <div className="space-y-5">
                 <div className="grid gap-3.5 md:grid-cols-2 xl:grid-cols-3">
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-sm font-medium text-white/80">Product Name</label>
+                    <label className="text-sm font-medium text-white/80">
+                      Product Name
+                    </label>
                     <Input
                       placeholder="Enter product name"
                       value={formData.name || ""}
-                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({ ...formData, name: e.target.value })
+                      }
                       className="h-11 rounded-xl border border-white/20 bg-white/10 text-white placeholder-white/60 focus-visible:border-white/60 focus-visible:ring-2 focus-visible:ring-[#f7e49b] focus-visible:ring-opacity-40 transition-colors"
                     />
                   </div>
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-sm font-medium text-white/80">Category</label>
+                    <label className="text-sm font-medium text-white/80">
+                      Category
+                    </label>
                     <select
                       value={formData.category || "Bridal"}
-                      onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({ ...formData, category: e.target.value })
+                      }
                       className="h-11 w-full rounded-xl border border-white/20 bg-white/10 px-3 text-white focus:outline-none focus:ring-2 focus:ring-[#f7e49b] focus:ring-opacity-40 focus:border-white/60 transition-colors"
                     >
-                      {categories.filter(cat => cat !== "all").map(category => (
-                        <option key={category} value={category} className="bg-[#2a0f1c]">
-                          {category}
-                        </option>
-                      ))}
+                      {categories
+                        .filter((cat) => cat !== "all")
+                        .map((category) => (
+                          <option
+                            key={category}
+                            value={category}
+                            className="bg-[#2a0f1c]"
+                          >
+                            {category}
+                          </option>
+                        ))}
                     </select>
                   </div>
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-sm font-medium text-white/80">SKU</label>
+                    <label className="text-sm font-medium text-white/80">
+                      SKU
+                    </label>
                     <Input
                       placeholder="Enter SKU"
                       value={formData.sku || ""}
-                      onChange={(e) => setFormData({ ...formData, sku: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({ ...formData, sku: e.target.value })
+                      }
                       className="h-11 rounded-xl border border-white/20 bg-white/10 text-white placeholder-white/60 focus-visible:border-white/60 focus-visible:ring-2 focus-visible:ring-[#f7e49b] focus-visible:ring-opacity-40 transition-colors"
                     />
                   </div>
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-sm font-medium text-white/80">Price</label>
+                    <label className="text-sm font-medium text-white/80">
+                      Price
+                    </label>
                     <Input
                       placeholder="Enter price"
                       value={formData.price || ""}
-                      onChange={(e) => setFormData({ ...formData, price: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({ ...formData, price: e.target.value })
+                      }
                       className="h-11 rounded-xl border border-white/20 bg-white/10 text-white placeholder-white/60 focus-visible:border-white/60 focus-visible:ring-2 focus-visible:ring-[#f7e49b] focus-visible:ring-opacity-40 transition-colors"
                     />
                   </div>
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-sm font-medium text-white/80">Stock Quantity</label>
+                    <label className="text-sm font-medium text-white/80">
+                      Stock Quantity
+                    </label>
                     <Input
                       type="number"
                       placeholder="Enter stock quantity"
                       value={formData.stock || 0}
-                      onChange={(e) => setFormData({ ...formData, stock: parseInt(e.target.value) || 0 })}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          stock: parseInt(e.target.value) || 0,
+                        })
+                      }
                       className="h-11 rounded-xl border border-white/20 bg-white/10 text-white placeholder-white/60 focus-visible:border-white/60 focus-visible:ring-2 focus-visible:ring-[#f7e49b] focus-visible:ring-opacity-40 transition-colors"
                     />
                   </div>
-                 
+
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-sm font-medium text-white/80">Weight</label>
+                    <label className="text-sm font-medium text-white/80">
+                      Weight
+                    </label>
                     <Input
                       placeholder="Enter weight"
                       value={formData.weight || ""}
-                      onChange={(e) => setFormData({ ...formData, weight: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({ ...formData, weight: e.target.value })
+                      }
                       className="h-11 rounded-xl border border-white/20 bg-white/10 text-white placeholder-white/60 focus-visible:border-white/60 focus-visible:ring-2 focus-visible:ring-[#f7e49b] focus-visible:ring-opacity-40 transition-colors"
                     />
                   </div>
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-sm font-medium text-white/80">Material</label>
+                    <label className="text-sm font-medium text-white/80">
+                      Material
+                    </label>
                     <Input
                       placeholder="Enter material"
                       value={formData.material || ""}
-                      onChange={(e) => setFormData({ ...formData, material: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({ ...formData, material: e.target.value })
+                      }
                       className="h-11 rounded-xl border border-white/20 bg-white/10 text-white placeholder-white/60 focus-visible:border-white/60 focus-visible:ring-2 focus-visible:ring-[#f7e49b] focus-visible:ring-opacity-40 transition-colors"
                     />
                   </div>
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-sm font-medium text-white/80">Dimensions</label>
+                    <label className="text-sm font-medium text-white/80">
+                      Dimensions
+                    </label>
                     <Input
                       placeholder="Enter dimensions"
                       value={formData.dimensions || ""}
-                      onChange={(e) => setFormData({ ...formData, dimensions: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({ ...formData, dimensions: e.target.value })
+                      }
                       className="h-11 rounded-xl border border-white/20 bg-white/10 text-white placeholder-white/60 focus-visible:border-white/60 focus-visible:ring-2 focus-visible:ring-[#f7e49b] focus-visible:ring-opacity-40 transition-colors"
                     />
                   </div>
-               
                 </div>
 
                 <div className="space-y-2 xl:col-span-3">
-                  <label className="block text-sm font-medium text-white/80">Description</label>
+                  <label className="block text-sm font-medium text-white/80">
+                    Description
+                  </label>
                   <Textarea
                     placeholder="Describe craftsmanship, gem palette, and signature finish"
                     value={formData.description || ""}
-                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, description: e.target.value })
+                    }
                     className="min-h-[96px] rounded-2xl border border-white/20 bg-white/10 text-white placeholder-white/60 focus-visible:border-white/60 focus-visible:ring-2 focus-visible:ring-[#f7e49b] focus-visible:ring-opacity-40 transition-colors"
                   />
                 </div>
@@ -656,20 +840,30 @@ const Products = () => {
                 <div className="space-y-3 xl:col-span-3">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm font-medium text-white/80">Product Images</p>
-                      <p className="text-xs text-white/50">Showcase hero angles, detail macro shots, and artisan signatures.</p>
+                      <p className="text-sm font-medium text-white/80">
+                        Product Images
+                      </p>
+                      <p className="text-xs text-white/50">
+                        Showcase hero angles, detail macro shots, and artisan
+                        signatures.
+                      </p>
                     </div>
                     {productImages.length > 0 && (
                       <span className="rounded-full border border-white/15 bg-white/5 px-3 py-1 text-xs text-white/60">
-                        {productImages.length} image{productImages.length > 1 ? "s" : ""}
+                        {productImages.length} image
+                        {productImages.length > 1 ? "s" : ""}
                       </span>
                     )}
                   </div>
                   <div className="space-y-3">
                     <div className="rounded-2xl border border-dashed border-white/20 bg-white/5 p-5 text-center backdrop-blur-xl">
                       <Image className="mx-auto mb-3 h-9 w-9 text-white/60" />
-                      <p className="text-sm text-white/80">Upload product visuals</p>
-                      <p className="text-xs text-white/50">PNG or JPG up to 10MB • Multiple files allowed</p>
+                      <p className="text-sm text-white/80">
+                        Upload product visuals
+                      </p>
+                      <p className="text-xs text-white/50">
+                        PNG or JPG up to 10MB • Multiple files allowed
+                      </p>
                       <input
                         type="file"
                         accept="image/*"
@@ -679,7 +873,10 @@ const Products = () => {
                         id="product-image-upload"
                       />
                       <label htmlFor="product-image-upload">
-                        <Button variant="outline" className="mt-3 cursor-pointer rounded-full border border-white/20 bg-white/10 px-4 py-2 text-sm text-white transition-colors hover:bg-white/20">
+                        <Button
+                          variant="outline"
+                          className="mt-3 cursor-pointer rounded-full border border-white/20 bg-white/10 px-4 py-2 text-sm text-white transition-colors hover:bg-white/20"
+                        >
                           <Upload className="mr-2 h-4 w-4" />
                           Choose Images
                         </Button>
@@ -689,7 +886,10 @@ const Products = () => {
                     {productImages.length > 0 && (
                       <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
                         {productImages.map((image, index) => (
-                          <div key={index} className="group relative overflow-hidden rounded-2xl border border-white/15 bg-white/5 backdrop-blur-md">
+                          <div
+                            key={index}
+                            className="group relative overflow-hidden rounded-2xl border border-white/15 bg-white/5 backdrop-blur-md"
+                          >
                             <img
                               src={image}
                               alt={`Product image ${index + 1}`}
@@ -754,7 +954,9 @@ const Products = () => {
               onClick={(e) => e.stopPropagation()}
             >
               <div className="flex items-center justify-between mb-6">
-                <h3 className="text-xl font-semibold text-white">Product Details</h3>
+                <h3 className="text-xl font-semibold text-white">
+                  Product Details
+                </h3>
                 <Button
                   variant="ghost"
                   size="sm"
@@ -764,22 +966,28 @@ const Products = () => {
                   <X className="h-4 w-4" />
                 </Button>
               </div>
-              
+
               <div className="space-y-4">
                 <div className="flex items-center gap-4">
                   <div className="flex h-16 w-16 items-center justify-center rounded-lg bg-gradient-to-br from-yellow-100 to-yellow-50">
                     <Package className="h-8 w-8 text-yellow-600" />
                   </div>
                   <div>
-                    <h4 className="text-lg font-semibold text-white">{selectedProduct.name}</h4>
-                    <p className="text-sm text-white/60">SKU: {selectedProduct.id}</p>
+                    <h4 className="text-lg font-semibold text-white">
+                      {selectedProduct.name}
+                    </h4>
+                    <p className="text-sm text-white/60">
+                      SKU: {selectedProduct.id}
+                    </p>
                   </div>
                 </div>
-                
+
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <p className="text-xs text-white/60">Category</p>
-                    <p className="text-sm font-medium text-white">{selectedProduct.category}</p>
+                    <p className="text-sm font-medium text-white">
+                      {selectedProduct.category}
+                    </p>
                   </div>
                   {/* <div>
                     <p className="text-xs text-white/60">Status</p>
@@ -792,25 +1000,33 @@ const Products = () => {
                   </div> */}
                   <div>
                     <p className="text-xs text-white/60">Stock</p>
-                    <p className="text-sm font-medium text-white">{selectedProduct.stock} units</p>
+                    <p className="text-sm font-medium text-white">
+                      {selectedProduct.stock} units
+                    </p>
                   </div>
                   <div>
                     <p className="text-xs text-white/60">Price</p>
-                    <p className="text-sm font-medium text-white">{selectedProduct.price}</p>
+                    <p className="text-sm font-medium text-white">
+                      {selectedProduct.price}
+                    </p>
                   </div>
                   <div>
                     <p className="text-xs text-white/60">Rating</p>
                     <div className="flex items-center gap-1">
                       <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                      <span className="text-sm text-white">{selectedProduct.rating}</span>
+                      <span className="text-sm text-white">
+                        {selectedProduct.rating}
+                      </span>
                     </div>
                   </div>
                   <div>
                     <p className="text-xs text-white/60">Last Updated</p>
-                    <p className="text-sm text-white">{selectedProduct.updatedAt}</p>
+                    <p className="text-sm text-white">
+                      {selectedProduct.updatedAt}
+                    </p>
                   </div>
                 </div>
-                
+
                 <div className="flex gap-2 pt-4">
                   <Button
                     variant="outline"
@@ -855,8 +1071,13 @@ const Products = () => {
             >
               <div className="flex flex-wrap items-start justify-between gap-4 mb-6">
                 <div>
-                  <h3 className="text-2xl font-semibold text-white">Edit Product</h3>
-                  <p className="text-sm text-white/60">Fine-tune catalogue details to keep inventory narratives current.</p>
+                  <h3 className="text-2xl font-semibold text-white">
+                    Edit Product
+                  </h3>
+                  <p className="text-sm text-white/60">
+                    Fine-tune catalogue details to keep inventory narratives
+                    current.
+                  </p>
                 </div>
                 <Button
                   variant="ghost"
@@ -871,99 +1092,152 @@ const Products = () => {
               <div className="space-y-5">
                 <div className="grid gap-3.5 md:grid-cols-2 xl:grid-cols-3">
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-sm font-medium text-white/80">Product Name</label>
+                    <label className="text-sm font-medium text-white/80">
+                      Product Name
+                    </label>
                     <Input
                       placeholder="Enter product name"
                       value={formData.name || ""}
-                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({ ...formData, name: e.target.value })
+                      }
                       className="h-11 rounded-xl border border-white/20 bg-white/10 text-white placeholder-white/60 focus-visible:border-white/60 focus-visible:ring-2 focus-visible:ring-[#f7e49b] focus-visible:ring-opacity-40 transition-colors"
                     />
                   </div>
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-sm font-medium text-white/80">Category</label>
+                    <label className="text-sm font-medium text-white/80">
+                      Category
+                    </label>
                     <select
                       value={formData.category || "Bridal"}
-                      onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({ ...formData, category: e.target.value })
+                      }
                       className="h-11 w-full rounded-xl border border-white/20 bg-white/10 px-3 text-white focus:outline-none focus:ring-2 focus:ring-[#f7e49b] focus:ring-opacity-40 focus:border-white/60 transition-colors"
                     >
-                      {categories.filter(cat => cat !== "all").map(category => (
-                        <option key={category} value={category} className="bg-[#2a0f1c]">
-                          {category}
-                        </option>
-                      ))}
+                      {categories
+                        .filter((cat) => cat !== "all")
+                        .map((category) => (
+                          <option
+                            key={category}
+                            value={category}
+                            className="bg-[#2a0f1c]"
+                          >
+                            {category}
+                          </option>
+                        ))}
                     </select>
                   </div>
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-sm font-medium text-white/80">SKU</label>
+                    <label className="text-sm font-medium text-white/80">
+                      SKU
+                    </label>
                     <Input
                       placeholder="Enter SKU"
                       value={formData.sku || ""}
-                      onChange={(e) => setFormData({ ...formData, sku: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({ ...formData, sku: e.target.value })
+                      }
                       className="h-11 rounded-xl border border-white/20 bg-white/10 text-white placeholder-white/60 focus-visible:border-white/60 focus-visible:ring-2 focus-visible:ring-[#f7e49b] focus-visible:ring-opacity-40 transition-colors"
                     />
                   </div>
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-sm font-medium text-white/80">Price</label>
+                    <label className="text-sm font-medium text-white/80">
+                      Price
+                    </label>
                     <Input
                       placeholder="Enter price"
                       value={formData.price || ""}
-                      onChange={(e) => setFormData({ ...formData, price: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({ ...formData, price: e.target.value })
+                      }
                       className="h-11 rounded-xl border border-white/20 bg-white/10 text-white placeholder-white/60 focus-visible:border-white/60 focus-visible:ring-2 focus-visible:ring-[#f7e49b] focus-visible:ring-opacity-40 transition-colors"
                     />
                   </div>
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-sm font-medium text-white/80">Stock Quantity</label>
+                    <label className="text-sm font-medium text-white/80">
+                      Stock Quantity
+                    </label>
                     <Input
                       type="number"
                       placeholder="Enter stock quantity"
                       value={formData.stock || 0}
-                      onChange={(e) => setFormData({ ...formData, stock: parseInt(e.target.value) || 0 })}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          stock: parseInt(e.target.value) || 0,
+                        })
+                      }
                       className="h-11 rounded-xl border border-white/20 bg-white/10 text-white placeholder-white/60 focus-visible:border-white/60 focus-visible:ring-2 focus-visible:ring-[#f7e49b] focus-visible:ring-opacity-40 transition-colors"
                     />
                   </div>
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-sm font-medium text-white/80">Status</label>
+                    <label className="text-sm font-medium text-white/80">
+                      Status
+                    </label>
                     <select
                       value={formData.status || "In Production"}
-                      onChange={(e) => setFormData({ ...formData, status: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({ ...formData, status: e.target.value })
+                      }
                       className="h-11 w-full rounded-xl border border-white/20 bg-white/10 px-3 text-white focus:outline-none focus:ring-2 focus:ring-[#f7e49b] focus:ring-opacity-40 focus;border-white/60 transition-colors"
                     >
-                      {statuses.filter(status => status !== "all").map(status => (
-                        <option key={status} value={status} className="bg-[#2a0f1c]">
-                          {status}
-                        </option>
-                      ))}
+                      {statuses
+                        .filter((status) => status !== "all")
+                        .map((status) => (
+                          <option
+                            key={status}
+                            value={status}
+                            className="bg-[#2a0f1c]"
+                          >
+                            {status}
+                          </option>
+                        ))}
                     </select>
                   </div>
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-sm font-medium text-white/80">Weight</label>
+                    <label className="text-sm font-medium text-white/80">
+                      Weight
+                    </label>
                     <Input
                       placeholder="Enter weight"
                       value={formData.weight || ""}
-                      onChange={(e) => setFormData({ ...formData, weight: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({ ...formData, weight: e.target.value })
+                      }
                       className="h-11 rounded-xl border border-white/20 bg-white/10 text-white placeholder-white/60 focus-visible;border-white/60 focus-visible:ring-2 focus-visible:ring-[#f7e49b] focus-visible:ring-opacity-40 transition-colors"
                     />
                   </div>
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-sm font-medium text-white/80">Material</label>
+                    <label className="text-sm font-medium text-white/80">
+                      Material
+                    </label>
                     <Input
                       placeholder="Enter material"
                       value={formData.material || ""}
-                      onChange={(e) => setFormData({ ...formData, material: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({ ...formData, material: e.target.value })
+                      }
                       className="h-11 rounded-xl border border-white/20 bg-white/10 text-white placeholder-white/60 focus-visible;border-white/60 focus-visible:ring-2 focus-visible:ring-[#f7e49b] focus-visible:ring-opacity-40 transition-colors"
                     />
                   </div>
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-sm font-medium text-white/80">Dimensions</label>
+                    <label className="text-sm font-medium text-white/80">
+                      Dimensions
+                    </label>
                     <Input
                       placeholder="Enter dimensions"
                       value={formData.dimensions || ""}
-                      onChange={(e) => setFormData({ ...formData, dimensions: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({ ...formData, dimensions: e.target.value })
+                      }
                       className="h-11 rounded-xl border border-white/20 bg-white/10 text-white placeholder-white/60 focus-visible;border-white/60 focus-visible:ring-2 focus-visible:ring-[#f7e49b] focus-visible:ring-opacity-40 transition-colors"
                     />
                   </div>
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-sm font-medium text-white/80">Rating</label>
+                    <label className="text-sm font-medium text-white/80">
+                      Rating
+                    </label>
                     <Input
                       type="number"
                       step="0.1"
@@ -971,18 +1245,27 @@ const Products = () => {
                       max="5"
                       placeholder="Enter rating (0-5)"
                       value={formData.rating || 0}
-                      onChange={(e) => setFormData({ ...formData, rating: parseFloat(e.target.value) || 0 })}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          rating: parseFloat(e.target.value) || 0,
+                        })
+                      }
                       className="h-11 rounded-xl border border-white/20 bg-white/10 text-white placeholder-white/60 focus-visible;border-white/60 focus-visible:ring-2 focus-visible:ring-[#f7e49b] focus-visible:ring-opacity-40 transition-colors"
                     />
                   </div>
                 </div>
 
                 <div className="space-y-2 xl:col-span-3">
-                  <label className="block text-sm font-medium text-white/80">Description</label>
+                  <label className="block text-sm font-medium text-white/80">
+                    Description
+                  </label>
                   <Textarea
                     placeholder="Describe craftsmanship, gem palette, and signature finish"
                     value={formData.description || ""}
-                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, description: e.target.value })
+                    }
                     className="min-h-[96px] rounded-2xl border border-white/20 bg-white/10 text-white placeholder-white/60 focus-visible:border-white/60 focus-visible:ring-2 focus-visible:ring-[#f7e49b] focus-visible:ring-opacity-40 transition-colors"
                   />
                 </div>
@@ -990,20 +1273,30 @@ const Products = () => {
                 <div className="space-y-3 xl:col-span-3">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm font-medium text-white/80">Product Images</p>
-                      <p className="text-xs text-white/50">Showcase hero angles, detail macro shots, and artisan signatures.</p>
+                      <p className="text-sm font-medium text-white/80">
+                        Product Images
+                      </p>
+                      <p className="text-xs text-white/50">
+                        Showcase hero angles, detail macro shots, and artisan
+                        signatures.
+                      </p>
                     </div>
                     {productImages.length > 0 && (
                       <span className="rounded-full border border-white/15 bg-white/5 px-3 py-1 text-xs text-white/60">
-                        {productImages.length} image{productImages.length > 1 ? "s" : ""}
+                        {productImages.length} image
+                        {productImages.length > 1 ? "s" : ""}
                       </span>
                     )}
                   </div>
                   <div className="space-y-3">
                     <div className="rounded-2xl border border-dashed border-white/20 bg-white/5 p-5 text-center backdrop-blur-xl">
                       <Image className="mx-auto mb-3 h-9 w-9 text-white/60" />
-                      <p className="text-sm text-white/80">Upload product visuals</p>
-                      <p className="text-xs text-white/50">PNG or JPG up to 10MB • Multiple files allowed</p>
+                      <p className="text-sm text-white/80">
+                        Upload product visuals
+                      </p>
+                      <p className="text-xs text-white/50">
+                        PNG or JPG up to 10MB • Multiple files allowed
+                      </p>
                       <input
                         type="file"
                         accept="image/*"
@@ -1013,7 +1306,10 @@ const Products = () => {
                         id="edit-product-image-upload"
                       />
                       <label htmlFor="edit-product-image-upload">
-                        <Button variant="outline" className="mt-3 cursor-pointer rounded-full border border-white/20 bg-white/10 px-4 py-2 text-sm text-white transition-colors hover:bg-white/20">
+                        <Button
+                          variant="outline"
+                          className="mt-3 cursor-pointer rounded-full border border-white/20 bg-white/10 px-4 py-2 text-sm text-white transition-colors hover:bg-white/20"
+                        >
                           <Upload className="mr-2 h-4 w-4" />
                           Choose Images
                         </Button>
@@ -1023,7 +1319,10 @@ const Products = () => {
                     {productImages.length > 0 && (
                       <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
                         {productImages.map((image, index) => (
-                          <div key={index} className="group relative overflow-hidden rounded-2xl border border-white/15 bg-white/5 backdrop-blur-md">
+                          <div
+                            key={index}
+                            className="group relative overflow-hidden rounded-2xl border border-white/15 bg-white/5 backdrop-blur-md"
+                          >
                             <img
                               src={image}
                               alt={`Product image ${index + 1}`}
@@ -1088,7 +1387,9 @@ const Products = () => {
               onClick={(e) => e.stopPropagation()}
             >
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold text-white">Delete Product</h3>
+                <h3 className="text-lg font-semibold text-white">
+                  Delete Product
+                </h3>
                 <Button
                   variant="ghost"
                   size="sm"
@@ -1108,7 +1409,8 @@ const Products = () => {
                     Delete {selectedProduct.name}?
                   </h4>
                   <p className="text-sm text-white/60">
-                    This action cannot be undone. This product will be permanently removed from your inventory.
+                    This action cannot be undone. This product will be
+                    permanently removed from your inventory.
                   </p>
                 </div>
 
@@ -1153,8 +1455,13 @@ const Products = () => {
             >
               <div className="flex items-center justify-between mb-6">
                 <div>
-                  <h3 className="text-xl font-semibold text-white">Configure Custom Request Workflow</h3>
-                  <p className="text-sm text-white/60 mt-1">Define stages and assign specialist ateliers for bespoke commissions</p>
+                  <h3 className="text-xl font-semibold text-white">
+                    Configure Custom Request Workflow
+                  </h3>
+                  <p className="text-sm text-white/60 mt-1">
+                    Define stages and assign specialist ateliers for bespoke
+                    commissions
+                  </p>
                 </div>
                 <Button
                   variant="ghost"
@@ -1175,31 +1482,81 @@ const Products = () => {
                   </h4>
                   <div className="space-y-3">
                     {[
-                      { stage: "Initial Consultation", description: "Client requirements gathering and design brief", duration: "1-2 days" },
-                      { stage: "Design Sketch", description: "Initial concept development and approval", duration: "3-5 days" },
-                      { stage: "3D Rendering", description: "Digital modeling and visualization", duration: "5-7 days" },
-                      { stage: "Material Sourcing", description: "Gemstone and metal procurement", duration: "7-10 days" },
-                      { stage: "Artisan Assignment", description: "Matching with specialist karigar", duration: "1-2 days" },
-                      { stage: "Production", description: "Handcrafting and assembly", duration: "14-21 days" },
-                      { stage: "Quality Assurance", description: "Final inspection and certification", duration: "2-3 days" },
-                      { stage: "Delivery Coordination", description: "Packaging and shipping arrangement", duration: "1-2 days" }
+                      {
+                        stage: "Initial Consultation",
+                        description:
+                          "Client requirements gathering and design brief",
+                        duration: "1-2 days",
+                      },
+                      {
+                        stage: "Design Sketch",
+                        description: "Initial concept development and approval",
+                        duration: "3-5 days",
+                      },
+                      {
+                        stage: "3D Rendering",
+                        description: "Digital modeling and visualization",
+                        duration: "5-7 days",
+                      },
+                      {
+                        stage: "Material Sourcing",
+                        description: "Gemstone and metal procurement",
+                        duration: "7-10 days",
+                      },
+                      {
+                        stage: "Artisan Assignment",
+                        description: "Matching with specialist karigar",
+                        duration: "1-2 days",
+                      },
+                      {
+                        stage: "Production",
+                        description: "Handcrafting and assembly",
+                        duration: "14-21 days",
+                      },
+                      {
+                        stage: "Quality Assurance",
+                        description: "Final inspection and certification",
+                        duration: "2-3 days",
+                      },
+                      {
+                        stage: "Delivery Coordination",
+                        description: "Packaging and shipping arrangement",
+                        duration: "1-2 days",
+                      },
                     ].map((item, index) => (
-                      <div key={index} className="flex items-center justify-between p-3 rounded-lg border border-white/10 bg-white/5">
+                      <div
+                        key={index}
+                        className="flex items-center justify-between p-3 rounded-lg border border-white/10 bg-white/5"
+                      >
                         <div className="flex items-center gap-3">
                           <div className="flex h-8 w-8 items-center justify-center rounded-full bg-yellow-500/20 border border-yellow-500/30">
-                            <span className="text-xs font-semibold text-yellow-400">{index + 1}</span>
+                            <span className="text-xs font-semibold text-yellow-400">
+                              {index + 1}
+                            </span>
                           </div>
                           <div>
-                            <p className="text-sm font-medium text-white">{item.stage}</p>
-                            <p className="text-xs text-white/60">{item.description}</p>
+                            <p className="text-sm font-medium text-white">
+                              {item.stage}
+                            </p>
+                            <p className="text-xs text-white/60">
+                              {item.description}
+                            </p>
                           </div>
                         </div>
                         <div className="flex items-center gap-4">
-                          <span className="text-xs text-white/60">{item.duration}</span>
+                          <span className="text-xs text-white/60">
+                            {item.duration}
+                          </span>
                           <select className="px-2 py-1 text-xs border border-white/20 rounded bg-white/10 text-white">
-                            <option className="bg-[#2a0f1c]">Auto-assign</option>
-                            <option className="bg-[#2a0f1c]">Manual review</option>
-                            <option className="bg-[#2a0f1c]">Client approval</option>
+                            <option className="bg-[#2a0f1c]">
+                              Auto-assign
+                            </option>
+                            <option className="bg-[#2a0f1c]">
+                              Manual review
+                            </option>
+                            <option className="bg-[#2a0f1c]">
+                              Client approval
+                            </option>
                           </select>
                         </div>
                       </div>
@@ -1215,29 +1572,64 @@ const Products = () => {
                   </h4>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     {[
-                      { name: "Heritage Craft Studio", specialty: "Traditional Temple Jewelry", capacity: "Active" },
-                      { name: "Contemporary Design Lab", specialty: "Modern Bridal Sets", capacity: "Available" },
-                      { name: "Royal Atelier", specialty: "High-Value Custom Pieces", capacity: "Limited" },
-                      { name: "Diamond Workshop", specialty: "Precision Stone Setting", capacity: "Available" }
+                      {
+                        name: "Heritage Craft Studio",
+                        specialty: "Traditional Temple Jewelry",
+                        capacity: "Active",
+                      },
+                      {
+                        name: "Contemporary Design Lab",
+                        specialty: "Modern Bridal Sets",
+                        capacity: "Available",
+                      },
+                      {
+                        name: "Royal Atelier",
+                        specialty: "High-Value Custom Pieces",
+                        capacity: "Limited",
+                      },
+                      {
+                        name: "Diamond Workshop",
+                        specialty: "Precision Stone Setting",
+                        capacity: "Available",
+                      },
                     ].map((atelier, index) => (
-                      <div key={index} className="p-3 rounded-lg border border-white/10 bg-white/5">
+                      <div
+                        key={index}
+                        className="p-3 rounded-lg border border-white/10 bg-white/5"
+                      >
                         <div className="flex items-center justify-between mb-2">
-                          <p className="text-sm font-medium text-white">{atelier.name}</p>
-                          <div className={cn(
-                            "inline-flex items-center rounded-full border px-2 py-0.5 text-xs font-semibold",
-                            atelier.capacity === "Active" ? "bg-green-100/20 text-green-400 border-green-400/30" :
-                            atelier.capacity === "Available" ? "bg-blue-100/20 text-blue-400 border-blue-400/30" :
-                            "bg-yellow-100/20 text-yellow-400 border-yellow-400/30"
-                          )}>
+                          <p className="text-sm font-medium text-white">
+                            {atelier.name}
+                          </p>
+                          <div
+                            className={cn(
+                              "inline-flex items-center rounded-full border px-2 py-0.5 text-xs font-semibold",
+                              atelier.capacity === "Active"
+                                ? "bg-green-100/20 text-green-400 border-green-400/30"
+                                : atelier.capacity === "Available"
+                                  ? "bg-blue-100/20 text-blue-400 border-blue-400/30"
+                                  : "bg-yellow-100/20 text-yellow-400 border-yellow-400/30",
+                            )}
+                          >
                             {atelier.capacity}
                           </div>
                         </div>
-                        <p className="text-xs text-white/60">{atelier.specialty}</p>
+                        <p className="text-xs text-white/60">
+                          {atelier.specialty}
+                        </p>
                         <div className="mt-2 flex gap-2">
-                          <Button size="sm" variant="outline" className="text-xs border-white/20 text-white hover:bg-white/10">
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="text-xs border-white/20 text-white hover:bg-white/10"
+                          >
                             Assign
                           </Button>
-                          <Button size="sm" variant="ghost" className="text-xs text-white/60 hover:text-white">
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            className="text-xs text-white/60 hover:text-white"
+                          >
                             View Details
                           </Button>
                         </div>
@@ -1255,37 +1647,72 @@ const Products = () => {
                   <div className="space-y-3">
                     <div className="flex items-center justify-between p-3 rounded-lg border border-white/10 bg-white/5">
                       <div className="flex items-center gap-3">
-                        <input type="checkbox" defaultChecked className="rounded border-white/20 bg-white/10" />
+                        <input
+                          type="checkbox"
+                          defaultChecked
+                          className="rounded border-white/20 bg-white/10"
+                        />
                         <div>
-                          <p className="text-sm font-medium text-white">Auto-assign based on value</p>
-                          <p className="text-xs text-white/60">Orders above ₹50,000 go to Royal Atelier</p>
+                          <p className="text-sm font-medium text-white">
+                            Auto-assign based on value
+                          </p>
+                          <p className="text-xs text-white/60">
+                            Orders above ₹50,000 go to Royal Atelier
+                          </p>
                         </div>
                       </div>
-                      <Button size="sm" variant="ghost" className="text-white/60 hover:text-white">
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        className="text-white/60 hover:text-white"
+                      >
                         <Edit className="h-3 w-3" />
                       </Button>
                     </div>
                     <div className="flex items-center justify-between p-3 rounded-lg border border-white/10 bg-white/5">
                       <div className="flex items-center gap-3">
-                        <input type="checkbox" defaultChecked className="rounded border-white/20 bg-white/10" />
+                        <input
+                          type="checkbox"
+                          defaultChecked
+                          className="rounded border-white/20 bg-white/10"
+                        />
                         <div>
-                          <p className="text-sm font-medium text-white">Priority client routing</p>
-                          <p className="text-xs text-white/60">VIP clients get dedicated artisan assignment</p>
+                          <p className="text-sm font-medium text-white">
+                            Priority client routing
+                          </p>
+                          <p className="text-xs text-white/60">
+                            VIP clients get dedicated artisan assignment
+                          </p>
                         </div>
                       </div>
-                      <Button size="sm" variant="ghost" className="text-white/60 hover:text-white">
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        className="text-white/60 hover:text-white"
+                      >
                         <Edit className="h-3 w-3" />
                       </Button>
                     </div>
                     <div className="flex items-center justify-between p-3 rounded-lg border border-white/10 bg-white/5">
                       <div className="flex items-center gap-3">
-                        <input type="checkbox" className="rounded border-white/20 bg-white/10" />
+                        <input
+                          type="checkbox"
+                          className="rounded border-white/20 bg-white/10"
+                        />
                         <div>
-                          <p className="text-sm font-medium text-white">Weekend processing</p>
-                          <p className="text-xs text-white/60">Enable weekend workflow for urgent requests</p>
+                          <p className="text-sm font-medium text-white">
+                            Weekend processing
+                          </p>
+                          <p className="text-xs text-white/60">
+                            Enable weekend workflow for urgent requests
+                          </p>
                         </div>
                       </div>
-                      <Button size="sm" variant="ghost" className="text-white/60 hover:text-white">
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        className="text-white/60 hover:text-white"
+                      >
                         <Edit className="h-3 w-3" />
                       </Button>
                     </div>

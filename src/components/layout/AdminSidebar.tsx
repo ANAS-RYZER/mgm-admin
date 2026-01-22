@@ -27,6 +27,7 @@ const navigation = [
   // { label: "Campaigns", icon: Megaphone, to: "/campaigns" },
   { label: "Analytics", icon: BarChart3, to: "/analytics" },
   // { label: "Settings", icon: Settings, to: "/settings" },
+  { label: "Appointments", icon: BarChart3, to: "/appointments" },
 ];
 
 interface AdminSidebarProps {

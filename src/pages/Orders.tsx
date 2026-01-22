@@ -60,7 +60,7 @@ const Orders = () => {
               <p>• Confirm insurance appraisal for high-value Polki bridal sets.</p>
               <p>• Update concierge team with expected delivery windows for platinum patrons.</p>
             </div>
-            <Button variant="outline" className="w-full border-primary-foreground/40 text-primary-foreground">
+            <Button variant="outline" className="w-full">
               Manage Dispatch Board
             </Button>
           </CardContent>

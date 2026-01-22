@@ -39,7 +39,7 @@ export const AdminHeader = ({ title, description, onSidebarToggle, isSidebarOpen
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
-        className="relative overflow-hidden border-b border-white/10 bg-gradient-to-r from-[#3C1124] via-[#250915] to-[#11030A] backdrop-blur-xl"
+        className="relative overflow-visible border-b border-white/10 bg-gradient-to-r from-[#3C1124] via-[#250915] to-[#11030A] backdrop-blur-xl z-10"
       >
         {/* Animated background elements */}
         <div className="absolute inset-0 overflow-hidden">
@@ -195,7 +195,7 @@ export const AdminHeader = ({ title, description, onSidebarToggle, isSidebarOpen
                           animate={{ opacity: 1, scale: 1, y: 0 }}
                           exit={{ opacity: 0, scale: 0.95, y: -10 }}
                           transition={{ duration: 0.2, ease: "easeOut" }}
-                          className="fixed right-4 top-16 z-50 w-56 rounded-2xl border border-white/10 bg-gradient-to-b from-[#2a0f1c] to-[#1f0a14] p-2 shadow-2xl backdrop-blur-xl"
+                          className="absolute right-4 top-16 z-50 w-56 rounded-2xl border border-white/10 bg-gradient-to-b from-[#2a0f1c] to-[#1f0a14] p-2 shadow-2xl backdrop-blur-xl overflow-visible"
                           onClick={(e) => e.stopPropagation()}
                         >
                           <div className="space-y-1">
@@ -228,7 +228,7 @@ export const AdminHeader = ({ title, description, onSidebarToggle, isSidebarOpen
                     <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/50" />
                     <Input
                       placeholder="Search products, orders, customers..."
-                      className="h-11 w-full rounded-xl border border-white/10 bg-white/5 pl-10 pr-4 text-white placeholder:text-white/40 backdrop-blur-sm transition focus:border-yellow-400/30 focus:bg-white/10"
+                      className="h-11 w-full rounded-xl border border-white/10 bg-white/5 pl-10 pr-4 text-white placeholder:text-white/40 backdrop-blur-sm transition"
                       onFocus={() => setSearchFocused(true)}
                       onBlur={() => setSearchFocused(false)}
                     />
