@@ -13,6 +13,7 @@ import Analytics from "@/pages/Analytics";
 import Appointment from "@/pages/Appointment";
 import SignIn from "@/pages/SignIn";
 import { LoadingOverlay } from "@/components/feedback/LoadingOverlay";
+import AddProduct from "./pages/AddProduct";
 
 const AppRoutes = () => {
   const location = useLocation();
@@ -85,6 +86,21 @@ const AppRoutes = () => {
                 transition={pageTransition}
               >
                 <Products />
+              </motion.div>
+            } 
+          />
+
+          <Route 
+            path="/products/newProduct" 
+            element={
+              <motion.div
+                initial="initial"
+                animate="in"
+                exit="out"
+                variants={pageVariants}
+                transition={pageTransition}
+              >
+                <AddProduct />
               </motion.div>
             } 
           />

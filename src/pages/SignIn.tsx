@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useLogin } from "@/hooks/Login-flow/useLogin";
 
 const slides = [
   {
@@ -10,27 +11,33 @@ const slides = [
     title: "Traditional South Indian Heritage",
     description: "Exquisite temple jewelry craftsmanship passed down through generations, featuring intricate gold work and timeless designs.",
     image:
-      "https://images.unsplash.com/photo-1596445836564-2a0a5ac55ec2?auto=format&fit=crop&w=900&q=80",
+      "https://i.pinimg.com/736x/08/65/8a/08658ae90fea1324eb0c98cd959b2382.jpg",
   },
   {
     id: 2,
     title: "Bridal Elegance Redefined",
     description: "Magnificent gold necklaces and ornamental pieces that celebrate the sacred union of tradition and beauty.",
     image:
-      "https://images.unsplash.com/photo-1530549387789-4c1017266635?auto=format&fit=crop&w=900&q=80",
+      "https://i.pinimg.com/1200x/e1/f7/fb/e1f7fb5d395dbc53bae7771749b6c449.jpg",
   },
   {
     id: 3,
     title: "Royal Craftsmanship",
     description: "Handcrafted gold jewelry with precious stones, embodying the rich cultural legacy of South Indian artistry.",
     image:
-      "https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?auto=format&fit=crop&w=900&q=80",
+      "https://i.pinimg.com/736x/90/7d/30/907d3065a10dfb2f476e48c26978475e.jpg",
   },
 ];
 
 const SignIn = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const activeSlide = useMemo(() => slides[activeIndex], [activeIndex]);
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+
+  const {mutate:login} = useLogin();
 
   useEffect(() => {
     const interval = setInterval(() => {
