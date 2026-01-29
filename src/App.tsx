@@ -2,7 +2,7 @@ import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import Overview from "@/pages/Overview";
-import Products from "@/pages/Products";
+import Products from "@/pages/Products/Products";
 import Orders from "@/pages/Orders";
 import Customers from "@/pages/Customers";
 import Collections from "@/pages/Collections";
@@ -12,6 +12,12 @@ import SettingsPage from "@/pages/Settings";
 import NotFound from "@/pages/NotFound";
 import SignIn from "@/pages/SignIn";
 import { LoadingOverlay } from "@/components/feedback/LoadingOverlay";
+import AddProduct from "./pages/AddProduct/AddProduct";
+import {
+  QueryClient,
+  QueryClientProvider,
+  useQueryClient,
+} from "@tanstack/react-query";
 
 const AppRoutes = () => {
   const location = useLocation();
@@ -34,24 +40,24 @@ const AppRoutes = () => {
     initial: {
       opacity: 0,
       x: -20,
-      scale: 0.98
+      scale: 0.98,
     },
     in: {
       opacity: 1,
       x: 0,
-      scale: 1
+      scale: 1,
     },
     out: {
       opacity: 0,
       x: 20,
-      scale: 0.98
-    }
+      scale: 0.98,
+    },
   };
 
   const pageTransition = {
     type: "tween" as const,
     ease: "anticipate" as const,
-    duration: 0.4
+    duration: 0.4,
   };
 
   return (
@@ -59,8 +65,8 @@ const AppRoutes = () => {
       <LoadingOverlay visible={isLoading} />
       <AnimatePresence mode="wait">
         <Routes location={location} key={location.pathname}>
-          <Route 
-            path="/" 
+          <Route
+            path="/"
             element={
               <motion.div
                 initial="initial"
@@ -71,10 +77,10 @@ const AppRoutes = () => {
               >
                 <Overview />
               </motion.div>
-            } 
+            }
           />
-          <Route 
-            path="/products" 
+          <Route
+            path="/products"
             element={
               <motion.div
                 initial="initial"
@@ -85,10 +91,24 @@ const AppRoutes = () => {
               >
                 <Products />
               </motion.div>
-            } 
+            }
           />
-          <Route 
-            path="/orders" 
+          <Route
+            path="/add-product"
+            element={
+              <motion.div
+                initial="initial"
+                animate="in"
+                exit="out"
+                variants={pageVariants}
+                transition={pageTransition}
+              >
+                <AddProduct />
+              </motion.div>
+            }
+          />
+          <Route
+            path="/orders"
             element={
               <motion.div
                 initial="initial"
@@ -99,10 +119,10 @@ const AppRoutes = () => {
               >
                 <Orders />
               </motion.div>
-            } 
+            }
           />
-          <Route 
-            path="/customers" 
+          <Route
+            path="/customers"
             element={
               <motion.div
                 initial="initial"
@@ -113,10 +133,10 @@ const AppRoutes = () => {
               >
                 <Customers />
               </motion.div>
-            } 
+            }
           />
-          <Route 
-            path="/collections" 
+          <Route
+            path="/collections"
             element={
               <motion.div
                 initial="initial"
@@ -127,10 +147,10 @@ const AppRoutes = () => {
               >
                 <Collections />
               </motion.div>
-            } 
+            }
           />
-          <Route 
-            path="/campaigns" 
+          <Route
+            path="/campaigns"
             element={
               <motion.div
                 initial="initial"
@@ -141,10 +161,10 @@ const AppRoutes = () => {
               >
                 <Campaigns />
               </motion.div>
-            } 
+            }
           />
-          <Route 
-            path="/analytics" 
+          <Route
+            path="/analytics"
             element={
               <motion.div
                 initial="initial"
@@ -155,10 +175,10 @@ const AppRoutes = () => {
               >
                 <Analytics />
               </motion.div>
-            } 
+            }
           />
-          <Route 
-            path="/settings" 
+          <Route
+            path="/settings"
             element={
               <motion.div
                 initial="initial"
@@ -169,10 +189,10 @@ const AppRoutes = () => {
               >
                 <SettingsPage />
               </motion.div>
-            } 
+            }
           />
-          <Route 
-            path="/signin" 
+          <Route
+            path="/signin"
             element={
               <motion.div
                 initial="initial"
@@ -183,10 +203,10 @@ const AppRoutes = () => {
               >
                 <SignIn />
               </motion.div>
-            } 
+            }
           />
-          <Route 
-            path="*" 
+          <Route
+            path="*"
             element={
               <motion.div
                 initial="initial"
@@ -197,7 +217,7 @@ const AppRoutes = () => {
               >
                 <NotFound />
               </motion.div>
-            } 
+            }
           />
         </Routes>
       </AnimatePresence>
@@ -205,11 +225,14 @@ const AppRoutes = () => {
   );
 };
 
+const queryClient = new QueryClient();
 const App = () => {
   return (
-    <BrowserRouter>
-      <AppRoutes />
-    </BrowserRouter>
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <AppRoutes />
+      </BrowserRouter>
+    </QueryClientProvider>
   );
 };
 
