@@ -17,7 +17,11 @@ interface TableComponentProps<TData> {
   model?: string;
 }
 
-function TableComponent<TData>({ columns, data, model }: TableComponentProps<TData>) {
+function TableComponent<TData>({
+  columns,
+  data,
+  model,
+}: TableComponentProps<TData>) {
   const [columnSizing, setColumnSizing] = React.useState({});
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const table = useReactTable({
@@ -41,11 +45,13 @@ function TableComponent<TData>({ columns, data, model }: TableComponentProps<TDa
   const tableData = table.getRowModel().rows || [];
 
   return (
-    <div className="overflow-auto">
-      <table className="min-w-full table-fixed border border-gray-300">
-        <THeader headerGroups={table.getHeaderGroups()} />
-        <TBody data={tableData} model={model} />
-      </table>
+    <div className="rounded-xl border bg-white shadow-sm overflow-hidden">
+      <div className="overflow-x-auto">
+        <table className="min-w-full table-fixed">
+          <THeader headerGroups={table.getHeaderGroups()} />
+          <TBody data={tableData} model={model} />
+        </table>
+      </div>
     </div>
   );
 }

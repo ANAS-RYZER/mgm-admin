@@ -7,18 +7,18 @@ interface THeaderProps {
 
 const THeader: React.FC<THeaderProps> = ({ headerGroups }) => {
   return (
-    <thead className="bg-gray-50">
+    <thead className="bg-[#FAF7F2]">
       {headerGroups.map((headerGroup) => (
         <tr key={headerGroup.id}>
           {headerGroup.headers.map((header) => {
             const headerContent = flexRender(
               header.column.columnDef.header,
-              header.getContext()
+              header.getContext(),
             );
             return (
               <th
                 key={header.id}
-                className="relative p-2 border-b text-left text-sm font-medium"
+                className="relative px-6 py-4 text-left text-xs font-semibold tracking-wide text-gray-500"
                 style={{ maxWidth: header.getSize() }}
                 colSpan={header.colSpan}
               >
@@ -31,7 +31,7 @@ const THeader: React.FC<THeaderProps> = ({ headerGroups }) => {
                   onClick={header.column.getToggleSortingHandler()}
                   title={String(headerContent)}
                 >
-                  <span className="truncate">{headerContent}</span>
+                  <span className="truncate uppercase">{headerContent}</span>
                   <span className="w-1">
                     {header.column.getCanSort() && (
                       <span className="ml-[1px] text-xs">

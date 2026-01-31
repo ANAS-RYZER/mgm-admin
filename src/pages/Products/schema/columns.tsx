@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Eye, Edit, Trash2 } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 
 export const productColumns = [
   {
@@ -36,7 +37,7 @@ export const productColumns = [
     accessorKey: 'categories',
     cell: ({ row }: { row: any }) => {
       return (
-        <span className="capitalize">{row.original.categories || '-'}</span>
+        <Badge  className="capitalize border-black/20 text-primary bg-gray-200/60">{row.original.categories || '-'}</Badge>
       );
     },
   },

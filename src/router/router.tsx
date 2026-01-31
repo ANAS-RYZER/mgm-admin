@@ -68,6 +68,14 @@ const mainRoutes: RouteConfig[] = [
     path: "/dashboard",
     component: React.lazy(() => import("@/pages/dashboard")),
   },
+  {
+    path: "/applications",
+    component: React.lazy(() => import("@/pages/applications")),
+  },
+  {
+    path: "/applications/:id",
+    component: React.lazy(() => import("@/pages/applications/application")),
+  },
 
 ];
 

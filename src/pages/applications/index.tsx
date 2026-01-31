@@ -1,38 +1,51 @@
 import { AdminLayout } from "@/components/layout/AdminLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Plus, Search } from "lucide-react";
+import { LoaderCircle, Search } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import TableComponent from "@/components/TableComponent";
-import { productColumns } from "./schema/columns";
-import useGetAllProducts from "@/hooks/product/useGetAllProducts";
+import { applicationListCols } from "./schema/applicationListCols";
+import useGetAllApplications from "@/hooks/applications/useGetApplications";
 
-const Products = () => {
+const Applications = () => {
   const navigate = useNavigate();
-  const [searchTerm, setSearchTerm] = useState("");
 
-  const { data: products, isFetching: isLoadingProducts } = useGetAllProducts();
+  const [searchTerm, setSearchTerm] = useState("");
+  const [status, setStatus] = useState<string>("");
+
+  const cols=applicationListCols();
+
+  const { data: applications, isFetching: isLoadingApplications } = useGetAllApplications({
+    status,
+  });
 
   return (
     <AdminLayout
-      title="Product Catalogue"
-      description="Curate inventory, manage artisanship pipelines, and govern MGM Jewels collections."
+      title="Agent Management"
+      description="Manage your agents and their details"
       className="space-y-8"
+      searchBar={false}
     >
       <section className="space-y-6">
         {/* Header */}
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div>
-            <h2 className="text-lg font-semibold">Featured Inventory</h2>
+            <h2 className="text-lg font-semibold">All Applications</h2>
             <p className="text-sm text-muted-foreground">
-              Monitor stock posture across hero SKUs.
+              Monitor application activities and performance.
             </p>
           </div>
 
-          <Button onClick={() => navigate("/add-product")} className="gap-2">
-            <Plus className="h-4 w-4" /> Add Product
+          {/* Future action button */}
+          {/*
+          <Button
+            onClick={() => navigate("/add-application")}
+            className="gap-2"
+          >
+            <Plus className="h-4 w-4" /> Add Application
           </Button>
+          */}
         </div>
 
         {/* Search */}
@@ -40,7 +53,7 @@ const Products = () => {
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
-              placeholder="Search products..."
+              placeholder="Search applications..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="pl-10"
@@ -49,16 +62,16 @@ const Products = () => {
         </div>
 
         {/* Table */}
-        <div className="rounded-xl bg-background">
-          {isLoadingProducts ? (
-            <div className="p-4 text-sm text-muted-foreground">
-              Loading products...
+        <div className="rounded-xl  bg-background">
+          {isLoadingApplications ? (
+            <div className="flex items-center justify-center p-10 text-muted-foreground">
+              <LoaderCircle size={50} className=" animate-spin text-gold" />
             </div>
           ) : (
             <TableComponent
-              columns={productColumns}
-              data={products}
-              model="product"
+              columns={cols}
+              data={applications}
+              model="Application"
             />
           )}
         </div>
@@ -67,4 +80,4 @@ const Products = () => {
   );
 };
 
-export default Products;
+export default Applications;

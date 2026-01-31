@@ -13,10 +13,12 @@ const TBody: React.FC<TBodyProps> = ({ data, model }) => {
     return (
       <tbody>
         <tr>
-          <td colSpan={100}>
+          <td colSpan={100} className="px-6 py-16">
             <Empty
               title={emptyData?.title || "No Data Available"}
-              description={emptyData?.description || "No data found for this table."}
+              description={
+                emptyData?.description || "No data found for this table."
+              }
               icon={emptyData?.icon}
               actionButton={emptyData?.actionButton}
             />
@@ -29,11 +31,14 @@ const TBody: React.FC<TBodyProps> = ({ data, model }) => {
   return (
     <tbody>
       {data.map((row: any) => (
-        <tr key={row.id || row.original?._id || Math.random()} className="hover:bg-gray-50">
+        <tr
+          key={row.id || row.original?._id || Math.random()}
+          className="border-b last:border-b-0 hover:bg-[#FAF7F2]/60 transition-colors"
+        >
           {row.getVisibleCells().map((cell: any) => (
             <td
               key={cell.id}
-              className="p-2 border-b text-sm"
+              className="px-6 py-4 text-sm text-gray-700"
               style={{ maxWidth: cell.column.getSize() }}
             >
               <div className="truncate">
