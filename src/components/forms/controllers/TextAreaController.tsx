@@ -38,7 +38,7 @@ export function TextareaController({ control, fieldConfig }: any) {
               {...field}
               placeholder={fieldConfig.placeholder}
               rows={4}
-              className="!bg-gray-100 border border-black/10 !focus-visible:ring-1 !focus-visible:ring-gold !focus-visible:ring-offset-0"
+              className="bg-gray-100 border border-black/10 font-medium shadow-none focus-visible:ring-1 focus-visible:ring-gold focus-visible:ring-offset-0"
             />
           </FormControl>
 

@@ -18,6 +18,11 @@ export function SelectController({ control, fieldConfig }: any) {
     <FormField
       control={control}
       name={fieldConfig.name}
+      rules={{
+        required: fieldConfig.required
+          ? `${fieldConfig.label} is required`
+          : false,
+      }}
       render={({ field }) => (
         <FormItem>
           <FormLabel className="text-black">
@@ -26,7 +31,7 @@ export function SelectController({ control, fieldConfig }: any) {
           </FormLabel>
           <FormControl>
             <Select value={field.value} onValueChange={field.onChange}>
-              <SelectTrigger className="h-11 rounded-md !bg-gray-100 border border-black/10 !focus-visible:ring-1 !focus-visible:ring-gold !focus-visible:ring-offset-0">
+              <SelectTrigger className="h-11 rounded-lg bg-gray-100 border border-black/10 font-medium shadow-none focus-visible:ring-1 focus-visible:ring-gold focus-visible:ring-offset-0">
                 <SelectValue
                   placeholder={fieldConfig.placeholder ?? "Select"}
                 />

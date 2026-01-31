@@ -1,7 +1,8 @@
 import axios from "axios";
 
 // const BASE_URL = "https://test.ownmali.com/api";
-const BASE_URL = "https://mgm-backend.vercel.app";
+// const BASE_URL = "https://mgm-backend.vercel.app";
+ const BASE_URL = "http://localhost:5050";
 
 const api = axios.create({
   baseURL: BASE_URL,

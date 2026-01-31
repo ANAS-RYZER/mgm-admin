@@ -1,5 +1,5 @@
 import { Fragment } from "react";
-import { Link, NavLink, useNavigate } from "react-router-dom";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import {
   LayoutDashboard,
   Diamond,
@@ -19,14 +19,11 @@ import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 const navigation = [
-  { label: "Overview", icon: LayoutDashboard, to: "/" },
+  { label: "Dashboard", icon: LayoutDashboard, to: "/dashboard" },
   { label: "Products", icon: Diamond, to: "/products" },
-  // { label: "Orders", icon: PackageSearch, to: "/orders" },
-  { label: "Customers", icon: Users, to: "/customers" },
-  // { label: "Collections", icon: Palette, to: "/collections" },
-  // { label: "Campaigns", icon: Megaphone, to: "/campaigns" },
-  { label: "Analytics", icon: BarChart3, to: "/analytics" },
-  // { label: "Settings", icon: Settings, to: "/settings" },
+
+
+
 ];
 
 interface AdminSidebarProps {
@@ -34,8 +31,12 @@ interface AdminSidebarProps {
   onToggle: () => void;
 }
 
+/** Paths that should highlight the "Products" nav item (product section) */
+const PRODUCT_SECTION_PATHS = ["/products", "/add-product"];
+
 export const AdminSidebar = ({ isOpen, onToggle }: AdminSidebarProps) => {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleSignOut = () => {
     navigate('/signin');
@@ -47,6 +48,8 @@ export const AdminSidebar = ({ isOpen, onToggle }: AdminSidebarProps) => {
         ? "bg-white text-[#2C0D1B] shadow-[0px_22px_45px_-26px_rgba(255,255,255,0.85)]"
         : "text-white/75 hover:bg-white/10 hover:text-white"
     );
+
+  const isProductsSectionActive = PRODUCT_SECTION_PATHS.includes(location.pathname);
 
   const SidebarInner = ({ onNavigate }: { onNavigate?: () => void }) => (
     <div className="flex h-full flex-col px-6 py-8 text-white">
@@ -64,7 +67,9 @@ export const AdminSidebar = ({ isOpen, onToggle }: AdminSidebarProps) => {
             key={to}
             to={to}
             end={to === "/"}
-            className={({ isActive }) => navItemClasses(isActive)}
+            className={({ isActive }) =>
+              navItemClasses(to === "/products" ? isActive || isProductsSectionActive : isActive)
+            }
             onClick={onNavigate}
           >
             <Icon className="h-4 w-4" />

@@ -42,7 +42,7 @@ export function ImageUploadController({ fieldConfig }: Props) {
 
   const { control, setValue, setError, clearErrors, watch } = useFormContext();
   const value = watch(name);
-  const sku = watch("sku");
+
 
   const { mutate: presign, isPending: presigning } = usePresignedUpload();
   const { mutate: upload, isPending: uploadingFile } = useUploadFile();
@@ -77,7 +77,7 @@ export function ImageUploadController({ fieldConfig }: Props) {
         fileName: file.name,
         fileSize: file.size,
         mimeType: file.type,
-        refId: sku || "",
+        refId: meta?.refId || "",
         belongsTo: meta?.belongsTo || "",
         isPublic: meta?.isPublic ?? false,
         metadata: meta?.metadata ?? {},

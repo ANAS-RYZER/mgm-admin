@@ -107,13 +107,16 @@ export default function MultiImageUploadController({
       onSuccess(presignedList: any) {
         const uploadedUrls: string[] = [];
 
+
         // STEP 2 — UPLOAD FILES PARALLEL
         presignedList.forEach((res: any, index: any) => {
           upload(
             { url: res.uploadUrl, file: validFiles[index] },
             {
               onSuccess() {
-                resolveUrl(res.savedS3Object._id, {
+                console.log("res", res),
+
+                resolveUrl(res.assetS3Object._id, {
                   onSuccess(url: any) {
                     uploadedUrls.push(url);
 

@@ -1,14 +1,12 @@
-type Option = {
-  label: string;
-  value: string;
-};
+import { FieldConfig } from "@/lib/FiledConfig";
+
 
 export type ProductFormValues = {
   sku: string;
   name: string;
+  categories: string;
   description?: string;
 
-  category: string;
   status?: string;
 
   mrpPrice: number | "";
@@ -30,29 +28,9 @@ export type ProductFormValues = {
   stoneSpecs?: any[];
 };
 
-export type FieldConfig = {
-  name: string;
-  type:
-    | "text"
-    | "number"
-    | "select"
-    | "textarea"
-    | "image-upload"
-    | "multiple-image-upload"
-    | "repeatable-group";
-  label: string;
-  placeholder?: string;
-  required?: boolean;
-  options?: Option[];
-  defaultValue?: any;
-  colSpan?: string;
-  meta?: any;
 
-  // 👇 NEW
-  fields?: FieldConfig[]; // children for arrays
-};
 
-export const CATEGORY_OPTIONS = [
+export const categories_OPTIONS = [
   { label: "Rings", value: "rings" },
   { label: "Necklaces", value: "necklaces" },
   { label: "Earrings", value: "earrings" },
@@ -74,6 +52,7 @@ export const STATUS_OPTIONS = [
 ];
 
 export const productBasicInfoConfig = (): FieldConfig[] => {
+
   return [
     {
       name: "name",
@@ -86,9 +65,8 @@ export const productBasicInfoConfig = (): FieldConfig[] => {
       name: "categories",
       type: "select",
       label: "Category",
-      // defaultValue: "rings",
       placeholder: "Select category",
-      options: CATEGORY_OPTIONS,
+      options: categories_OPTIONS,
       required: true,
     },
 
@@ -107,13 +85,13 @@ export const productBasicInfoConfig = (): FieldConfig[] => {
       placeholder: "Enter material",
       required: true,
     },
-    {
-      name: "dimensions",
-      type: "text",
-      label: "Dimensions",
-      placeholder: "Enter dimensions",
-      required: true,
-    },
+    // {
+    //   name: "dimensions",
+    //   type: "text",
+    //   label: "Dimensions",
+    //   placeholder: "Enter dimensions",
+    //   required: true,
+    // },
   ];
 };
 
@@ -155,6 +133,8 @@ export const prodcutPricingAndInventoryConfig = (): FieldConfig[] => {
   ];
 };
 export const prodcutGoldSpecConfig = (): FieldConfig[] => [
+
+  
   {
     name: "goldSpecs.karat",
     type: "text",
@@ -176,25 +156,19 @@ export const prodcutGoldSpecConfig = (): FieldConfig[] => [
     required: true,
   },
   {
-    name: "goldSpecs.grossWeight",
-    type: "number",
-    label: "Gross Weight (g)",
-    required: true,
-  },
-  {
     name: "goldSpecs.makingCharges",
     type: "number",
-    label: "Making Charges (₹)",
+    label: "Making Charges (%)",
   },
-  {
-    name: "goldSpecs.purity",
-    type: "text",
-    label: "Purity",
-    placeholder: "916 Hallmark",
-  },
+  // {
+  //   name: "goldSpecs.purity",
+  //   type: "text",
+  //   label: "Purity",
+  //   placeholder: "916 Hallmark",
+  // },
 ];
 
-export const productImageConfig = (): FieldConfig[] => [
+export const productImageConfig = (sku: string): FieldConfig[] => [
   {
     name: "image",
     type: "image-upload",
@@ -204,12 +178,13 @@ export const productImageConfig = (): FieldConfig[] => [
       belongsTo: "product",
       isPublic: true,
       dimensions: "1200 × 1200",
+      refId: sku || ""  ,
     },
     colSpan: "col-span-3",
   },
 ];
 
-export const productGalleryConfig = (): FieldConfig[] => [
+export const productGalleryConfig = (sku: string): FieldConfig[] => [
   {
     name: "gallery",
     type: "multiple-image-upload",
@@ -218,28 +193,58 @@ export const productGalleryConfig = (): FieldConfig[] => [
     meta: {
       belongsTo: "product",
       isPublic: true,
+      dimensions: "1200 × 1200",
+      refId: sku || "",
     },
     colSpan: "col-span-3",
   },
 ];
 
 export const productStoneSpecsConfig = (): FieldConfig[] => [
+  // export class StoneDetailsDto {
+  //   @IsNotEmpty()
+  //   stoneName: string;
+  
+  //   @IsNumber()
+  //   quantity: number;
+  
+  //   @IsEnum(GemCut)
+  //   cut: GemCut;
+  
+  //   @IsOptional()
+  //   @IsEnum(DiamondClarity)
+  //   clarity?: DiamondClarity;
+  
+  //   @ValidateNested()
+  //   @Type(() => ColorDto)
+  //   color: ColorDto;
+  // }
+  
   {
     name: "stoneSpecs",
     type: "repeatable-group",
     label: "Stone Specifications",
     fields: [
       {
-        name: "name",
+        name: "stoneName",
         type: "text",
         label: "Stone Name",
         placeholder: "Diamond",
       },
       {
-        name: "weight",
+        name: "quantity",
         type: "number",
         label: "Weight (ct)",
         placeholder: "0.00",
+      },
+      {
+        name: "cut",
+        type: "select",
+        label: "Cut",
+        placeholder: "Cut",
+        options: [
+          { label: "Round", value: "round" },
+        ],
       },
       {
         name: "color",
@@ -252,6 +257,12 @@ export const productStoneSpecsConfig = (): FieldConfig[] => [
         type: "text",
         label: "Clarity",
         placeholder: "VVS1",
+      },
+      {
+        name: "stoneSpecs.price",
+        type: "text",
+        label: "Price (₹)",
+        placeholder: "0.00",
       },
     ],
   },

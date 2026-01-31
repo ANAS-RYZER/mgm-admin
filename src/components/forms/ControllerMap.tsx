@@ -8,6 +8,7 @@ import { TextareaController } from "./controllers/TextAreaController";
 export function ControllerMap({ control, fieldConfig }: any) {
   switch (fieldConfig.type) {
     case "text":
+      
     case "number":
       return <InputController control={control} fieldConfig={fieldConfig} />;
 
