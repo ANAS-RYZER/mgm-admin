@@ -1,0 +1,83 @@
+import { AdminLayout } from "@/components/layout/AdminLayout";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { LoaderCircle, Search } from "lucide-react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import TableComponent from "@/components/TableComponent";
+import { applicationListCols } from "./schema/applicationListCols";
+import useGetAllApplications from "@/hooks/applications/useGetApplications";
+
+const Applications = () => {
+  const navigate = useNavigate();
+
+  const [searchTerm, setSearchTerm] = useState("");
+  const [status, setStatus] = useState<string>("");
+
+  const cols=applicationListCols();
+
+  const { data: applications, isFetching: isLoadingApplications } = useGetAllApplications({
+    status,
+  });
+
+  return (
+    <AdminLayout
+      title="Application Management"
+      description="Manage your applications and their details"
+      className="space-y-8"
+      searchBar={false}
+    >
+      <section className="space-y-6">
+        {/* Header */}
+        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+          <div>
+            <h2 className="text-lg font-semibold">All Applications</h2>
+            <p className="text-sm text-muted-foreground">
+              Monitor application activities and performance.
+            </p>
+          </div>
+
+          {/* Future action button */}
+          {/*
+          <Button
+            onClick={() => navigate("/add-application")}
+            className="gap-2"
+          >
+            <Plus className="h-4 w-4" /> Add Application
+          </Button>
+          */}
+        </div>
+
+        {/* Search */}
+        <div className="flex flex-col gap-3 md:flex-row md:items-center">
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <Input
+              placeholder="Search applications..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="pl-10"
+            />
+          </div>
+        </div>
+
+        {/* Table */}
+        <div className="rounded-xl  bg-background">
+          {isLoadingApplications ? (
+            <div className="flex items-center justify-center p-10 text-muted-foreground">
+              <LoaderCircle size={50} className=" animate-spin text-gold" />
+            </div>
+          ) : (
+            <TableComponent
+              columns={cols}
+              data={applications}
+              model="Application"
+            />
+          )}
+        </div>
+      </section>
+    </AdminLayout>
+  );
+};
+
+export default Applications;

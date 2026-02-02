@@ -1,5 +1,5 @@
 import { Fragment } from "react";
-import { Link, NavLink, useNavigate } from "react-router-dom";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import {
   LayoutDashboard,
   Diamond,
@@ -14,19 +14,18 @@ import {
   UserCircle2,
   Store,
   LogOut,
+  ClipboardList,
+  UserCog,
+  UserCheck,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 const navigation = [
-  { label: "Overview", icon: LayoutDashboard, to: "/" },
+  { label: "Dashboard", icon: LayoutDashboard, to: "/dashboard" },
   { label: "Products", icon: Diamond, to: "/products" },
-  // { label: "Orders", icon: PackageSearch, to: "/orders" },
-  { label: "Customers", icon: Users, to: "/customers" },
-  // { label: "Collections", icon: Palette, to: "/collections" },
-  // { label: "Campaigns", icon: Megaphone, to: "/campaigns" },
-  { label: "Analytics", icon: BarChart3, to: "/analytics" },
-  // { label: "Settings", icon: Settings, to: "/settings" },
+  { label: "Applications", icon: ClipboardList , to: "/applications" },
+  { label: "Agents", icon: UserCheck   , to: "/agents" },
 ];
 
 interface AdminSidebarProps {
@@ -34,37 +33,54 @@ interface AdminSidebarProps {
   onToggle: () => void;
 }
 
+/** Paths that should highlight the "Products" nav item (product section) */
+const PRODUCT_SECTION_PATHS = ["/products", "/add-product"];
+
 export const AdminSidebar = ({ isOpen, onToggle }: AdminSidebarProps) => {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleSignOut = () => {
-    navigate('/signin');
+    navigate("/signin");
   };
   const navItemClasses = (isActive: boolean) =>
     cn(
       "flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium tracking-wide transition-all duration-200",
       isActive
         ? "bg-white text-[#2C0D1B] shadow-[0px_22px_45px_-26px_rgba(255,255,255,0.85)]"
-        : "text-white/75 hover:bg-white/10 hover:text-white"
+        : "text-white/75 hover:bg-white/10 hover:text-white",
     );
+
+  const isProductsSectionActive = PRODUCT_SECTION_PATHS.includes(
+    location.pathname,
+  );
 
   const SidebarInner = ({ onNavigate }: { onNavigate?: () => void }) => (
     <div className="flex h-full flex-col px-6 py-8 text-white">
       <div className="flex items-center justify-center">
         <Link to="/" className="text-center">
-          <p className="font-elegant text-xl uppercase tracking-[0.4em] text-gold-light">MGM</p>
-          <p className="text-[10px] font-semibold uppercase tracking-[0.45em] text-white/60">Jewels Admin</p>
+          <p className="font-elegant text-xl uppercase tracking-[0.4em] text-gold-light">
+            MGM
+          </p>
+          <p className="text-[10px] font-semibold uppercase tracking-[0.45em] text-white/60">
+            Jewels Admin
+          </p>
         </Link>
       </div>
 
-     
       <nav className="mt-10 flex-1 space-y-2">
         {navigation.map(({ label, icon: Icon, to }) => (
           <NavLink
             key={to}
             to={to}
             end={to === "/"}
-            className={({ isActive }) => navItemClasses(isActive)}
+            className={({ isActive }) =>
+              navItemClasses(
+                to === "/products"
+                  ? isActive || isProductsSectionActive
+                  : isActive,
+              )
+            }
             onClick={onNavigate}
           >
             <Icon className="h-4 w-4" />
