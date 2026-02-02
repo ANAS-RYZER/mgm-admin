@@ -5,25 +5,24 @@ import { LoaderCircle, Search } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import TableComponent from "@/components/TableComponent";
-import { applicationListCols } from "./schema/applicationListCols";
 import useGetAllApplications from "@/hooks/applications/useGetApplications";
+import { agentListCols } from "./schema/agentListCols";
+import useGetAllAgents from "@/hooks/agents/useGetAllAgents";
 
-const Applications = () => {
+const Agents = () => {
   const navigate = useNavigate();
 
   const [searchTerm, setSearchTerm] = useState("");
   const [status, setStatus] = useState<string>("");
 
-  const cols=applicationListCols();
+  const cols = agentListCols();
 
-  const { data: applications, isFetching: isLoadingApplications } = useGetAllApplications({
-    status,
-  });
+  const { data: agents, isFetching: isLoadingAgents } = useGetAllAgents();
 
   return (
     <AdminLayout
-      title="Application Management"
-      description="Manage your applications and their details"
+      title="Agent Management"
+      description="Manage your agents and their details"
       className="space-y-8"
       searchBar={false}
     >
@@ -31,16 +30,16 @@ const Applications = () => {
         {/* Header */}
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div>
-            <h2 className="text-lg font-semibold">All Applications</h2>
+            <h2 className="text-lg font-semibold">All Agents</h2>
             <p className="text-sm text-muted-foreground">
-              Monitor application activities and performance.
+              Monitor agents activities and performance.
             </p>
           </div>
 
           {/* Future action button */}
           {/*
           <Button
-            onClick={() => navigate("/add-application")}
+            onClick={() => navigate("/add-agent")}
             className="gap-2"
           >
             <Plus className="h-4 w-4" /> Add Application
@@ -63,16 +62,12 @@ const Applications = () => {
 
         {/* Table */}
         <div className="rounded-xl  bg-background">
-          {isLoadingApplications ? (
+          {isLoadingAgents ? (
             <div className="flex items-center justify-center p-10 text-muted-foreground">
               <LoaderCircle size={50} className=" animate-spin text-gold" />
             </div>
           ) : (
-            <TableComponent
-              columns={cols}
-              data={applications}
-              model="Application"
-            />
+            <TableComponent columns={cols} data={agents} model="Agents" />
           )}
         </div>
       </section>
@@ -80,4 +75,4 @@ const Applications = () => {
   );
 };
 
-export default Applications;
+export default Agents;

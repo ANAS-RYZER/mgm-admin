@@ -14,6 +14,9 @@ import {
   UserCircle2,
   Store,
   LogOut,
+  ClipboardList,
+  UserCog,
+  UserCheck,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
@@ -21,8 +24,8 @@ import { cn } from "@/lib/utils";
 const navigation = [
   { label: "Dashboard", icon: LayoutDashboard, to: "/dashboard" },
   { label: "Products", icon: Diamond, to: "/products" },
-  { label: "Applications", icon: Diamond, to: "/applications" },
-  { label: "Agents", icon: Diamond, to: "/agents" },
+  { label: "Applications", icon: ClipboardList , to: "/applications" },
+  { label: "Agents", icon: UserCheck   , to: "/agents" },
 ];
 
 interface AdminSidebarProps {
