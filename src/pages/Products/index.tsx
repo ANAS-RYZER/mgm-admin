@@ -20,7 +20,7 @@ const Products = () => {
       description="Curate inventory, manage artisanship pipelines, and govern MGM Jewels collections."
       className="space-y-8"
     >
-      <section className="space-y-6">
+      <section className="space-y-6 z-10">
         {/* Header */}
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div>

@@ -11,5 +11,6 @@ export default function useGetAllProducts() {
     
     staleTime: 60 * 1000,
     retry: 2,
+    refetchOnWindowFocus: false,
   });
 }
