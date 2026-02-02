@@ -8,9 +8,9 @@ export const applicationListCols = () => {
   return [
     {
       header: "Application ID",
-      accessorKey: "agentId",
+      accessorKey: "applicationId",
       cell: ({ row }: { row: any }) => {
-        const agentId = row.original.agentId;
+        const agentId = row.original.applicationId;
         return <span className="font-mono text-xs">{agentId || "-"}</span>;
       },
     },
