@@ -139,7 +139,7 @@ export const AdminHeader = ({
               <div className="flex items-center gap-3">
                 {/* Notifications */}
                 <div ref={notificationRef} className="relative">
-                  <HeaderControl
+                  {/* <HeaderControl
                     intent="icon"
                     onClick={(e) => {
                       e.stopPropagation();
@@ -152,123 +152,13 @@ export const AdminHeader = ({
                       <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-yellow-400/80 opacity-75" />
                       <span className="relative inline-flex h-3 w-3 rounded-full bg-gradient-to-br from-yellow-400 to-yellow-300 shadow-lg" />
                     </span>
-                  </HeaderControl>
+                  </HeaderControl> */}
 
-                  <AnimatePresence>
-                    {notificationsOpen && (
-                      <>
-                        {/* Backdrop */}
-                        <motion.div
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          exit={{ opacity: 0 }}
-                          transition={{ duration: 0.2 }}
-                          className="fixed inset-0 z-40 bg-black/20 backdrop-blur-sm"
-                          onClick={() => setNotificationsOpen(false)}
-                        />
-                        {/* Dropdown */}
-                        <motion.div
-                          initial={{ opacity: 0, scale: 0.95, y: -10 }}
-                          animate={{ opacity: 1, scale: 1, y: 0 }}
-                          exit={{ opacity: 0, scale: 0.95, y: -10 }}
-                          transition={{ duration: 0.2, ease: "easeOut" }}
-                          className="fixed right-4 top-16 z-50 w-80 rounded-2xl border border-white/10 bg-gradient-to-b from-[#2a0f1c] to-[#1f0a14] p-4 shadow-2xl backdrop-blur-xl"
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          <div className="space-y-3">
-                            <div className="flex items-center justify-between border-b border-white/10 pb-2">
-                              <h3 className="text-sm font-semibold text-white">
-                                Notifications
-                              </h3>
-                              <span className="text-xs text-yellow-400/80">
-                                3 new
-                              </span>
-                            </div>
-                            <div className="space-y-2">
-                              <NotificationItem
-                                title="New order received"
-                                description="Order #1234 - Diamond Ring"
-                                time="2m ago"
-                              />
-                              <NotificationItem
-                                title="Low stock alert"
-                                description="Gold chains running low"
-                                time="15m ago"
-                              />
-                              <NotificationItem
-                                title="Customer inquiry"
-                                description="Question about custom jewelry"
-                                time="1h ago"
-                              />
-                            </div>
-                          </div>
-                        </motion.div>
-                      </>
-                    )}
-                  </AnimatePresence>
+         
                 </div>
 
                 {/* User menu */}
-                <div ref={userMenuRef} className="relative">
-                  <HeaderControl
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setUserMenuOpen(!userMenuOpen);
-                    }}
-                    className="gap-2 pr-3"
-                  >
-                    <div className="flex h-6 w-6 items-center justify-center rounded-full bg-gradient-to-br from-yellow-400/30 to-yellow-300/20">
-                      <User2 className="h-3 w-3 text-yellow-300" />
-                    </div>
-                    <span className="hidden sm:block text-sm text-white/90">
-                      Admin
-                    </span>
-                    <ChevronDown
-                      className={cn(
-                        "h-4 w-4 text-white/60 transition-transform",
-                        userMenuOpen && "rotate-180",
-                      )}
-                    />
-                  </HeaderControl>
-
-                  <AnimatePresence>
-                    {userMenuOpen && (
-                      <>
-                        {/* Backdrop */}
-                        <motion.div
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          exit={{ opacity: 0 }}
-                          transition={{ duration: 0.2 }}
-                          className="fixed inset-0 z-40 bg-black/20 backdrop-blur-sm"
-                          onClick={() => setUserMenuOpen(false)}
-                        />
-                        {/* Dropdown */}
-                        <motion.div
-                          initial={{ opacity: 0, scale: 0.95, y: -10 }}
-                          animate={{ opacity: 1, scale: 1, y: 0 }}
-                          exit={{ opacity: 0, scale: 0.95, y: -10 }}
-                          transition={{ duration: 0.2, ease: "easeOut" }}
-                          className="fixed right-4 top-16 z-50 w-56 rounded-2xl border border-white/10 bg-gradient-to-b from-[#2a0f1c] to-[#1f0a14] p-2 shadow-2xl backdrop-blur-xl"
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          <div className="space-y-1">
-                            <MenuItem icon={Home} label="Dashboard" />
-                            <MenuItem icon={TrendingUp} label="Analytics" />
-                            <MenuItem icon={Gem} label="Products" />
-                            <MenuItem icon={Settings} label="Settings" />
-                            <div className="border-t border-white/10 my-1" />
-                            <MenuItem
-                              icon={LogOut}
-                              label="Sign Out"
-                              className="text-red-400/80 hover:text-red-400"
-                            />
-                          </div>
-                        </motion.div>
-                      </>
-                    )}
-                  </AnimatePresence>
-                </div>
+            
               </div>
             </div>
 

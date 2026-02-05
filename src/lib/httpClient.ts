@@ -26,7 +26,7 @@ const clearTokens = () => {
 
 const logout = () => {
   clearTokens();
-  window.location.href = "/sign-in";
+  window.location.href = "/signin";
 };
 
 
