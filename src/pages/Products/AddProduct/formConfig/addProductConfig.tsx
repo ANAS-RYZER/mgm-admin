@@ -1,8 +1,8 @@
 import { FieldConfig } from "@/lib/FiledConfig";
+import { selectRowsFn } from "@tanstack/react-table";
 
 
 export type ProductFormValues = {
-  sku: string;
   name: string;
   categories: string;
   description?: string;
@@ -23,7 +23,6 @@ export type ProductFormValues = {
     goldWeight: number | "";
     grossWeight: number | "";
     makingCharges?: number | "";
-    purity?: string;
   };
   stoneSpecs?: any[];
 };
@@ -70,13 +69,7 @@ export const productBasicInfoConfig = (): FieldConfig[] => {
       required: true,
     },
 
-    {
-      name: "sku",
-      type: "text",
-      label: "SKU",
-      placeholder: "Enter SKU",
-      required: true,
-    },
+  
 
     {
       name: "material",
@@ -135,20 +128,35 @@ export const prodcutPricingAndInventoryConfig = (): FieldConfig[] => {
 export const prodcutGoldSpecConfig = (): FieldConfig[] => [
 
   
-  {
-    name: "goldSpecs.karat",
-    type: "text",
-    label: "Karat",
-    placeholder: "e.g., 18K",
-    required: true,
-  },
+
   {
     name: "goldSpecs.metal",
-    type: "text",
+    type: "select",
     label: "Metal",
-    placeholder: "Gold",
+    placeholder: "Select metal",
     required: true,
+    options: [
+      { label: "Gold", value: "gold" },
+      { label: "Silver", value: "silver" },
+      { label: "Platinum", value: "platinum" },
+      { label: "Palladium", value: "palladium" },
+    ],
   },
+  {
+    name: "goldSpecs.karat",
+    type: "select",
+    label: "Karat",
+    placeholder: "Select karat",
+    required: true,
+    options: [
+      { label: "24K", value: "24K" },
+      { label: "22K", value: "22K" },
+      { label: "18K", value: "18K" },
+      // { label: "16K", value: "16K" },
+      { label: "14K", value: "14K" },
+   
+    ],
+  },  
   {
     name: "goldSpecs.goldWeight",
     type: "number",
@@ -168,7 +176,7 @@ export const prodcutGoldSpecConfig = (): FieldConfig[] => [
   // },
 ];
 
-export const productImageConfig = (sku: string): FieldConfig[] => [
+export const productImageConfig = (refId: string): FieldConfig[] => [
   {
     name: "image",
     type: "image-upload",
@@ -178,13 +186,13 @@ export const productImageConfig = (sku: string): FieldConfig[] => [
       belongsTo: "product",
       isPublic: true,
       dimensions: "1200 × 1200",
-      refId: sku || ""  ,
+      refId: refId || "",
     },
     colSpan: "col-span-3",
   },
 ];
 
-export const productGalleryConfig = (sku: string): FieldConfig[] => [
+export const productGalleryConfig = (refId: string): FieldConfig[] => [
   {
     name: "gallery",
     type: "multiple-image-upload",
@@ -194,7 +202,7 @@ export const productGalleryConfig = (sku: string): FieldConfig[] => [
       belongsTo: "product",
       isPublic: true,
       dimensions: "1200 × 1200",
-      refId: sku || "",
+      refId: refId || "",
     },
     colSpan: "col-span-3",
   },
@@ -259,10 +267,20 @@ export const productStoneSpecsConfig = (): FieldConfig[] => [
         placeholder: "VVS1",
       },
       {
-        name: "stoneSpecs.price",
-        type: "text",
+        name: "diamondType",
+        type:   "select",
+        label: " Diamond Type",
+        options : [
+            {label : "Lab Grown" , value : "lab-grown"},
+            {label : "Natural" , value : "Natural"}
+            
+          ]
+     
+      },
+      {
+        name: "price",
+        type: "calculated-stone-price",
         label: "Price (₹)",
-        placeholder: "0.00",
       },
     ],
   },
