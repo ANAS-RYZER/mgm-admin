@@ -46,7 +46,7 @@ const convertToRouteObjects = (routes: RouteConfig[]): RouteObject[] =>
 const authRoutes: RouteObject[] = [
   {
     path: "/signin",
-    element: lazyLoad(React.lazy(() => import("@/pages/SignIn"))),
+    element: lazyLoad(React.lazy(() => import("@/pages/signin"))),
     errorElement: <ErrorPage />,
   },
 ];
