@@ -33,7 +33,7 @@ const slides = [
   },
 ];
 
-const SignIn = () => {
+const index = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const activeSlide = useMemo(() => slides[activeIndex], [activeIndex]);
 
@@ -215,4 +215,4 @@ const SignIn = () => {
   );
 };
 
-export default SignIn;
+export default index;
