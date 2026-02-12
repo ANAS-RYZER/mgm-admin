@@ -1,50 +1,71 @@
 import { AdminLayout } from "@/components/layout/AdminLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { LoaderCircle, Search } from "lucide-react";
+import { Calendar, Clock, LoaderCircle, Search } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import TableComponent from "@/components/TableComponent";
 import useGetAllApplications from "@/hooks/applications/useGetApplications";
-import { agentListCols } from "./schema/agentListCols";
-import useGetAllAgents from "@/hooks/agents/useGetAllAgents";
+import { applicationListCols } from "../applications/schema/applicationListCols";
+import { appointmentListCols } from "./schema/appointmentListCols";
+import useGetAppointments from "@/hooks/appointments/useGetAppointments";
+import DashboardCard from "./components/DashboardCard";
 
-const Agents = () => {
+const Appointments = () => {
   const navigate = useNavigate();
 
   const [searchTerm, setSearchTerm] = useState("");
   const [status, setStatus] = useState<string>("");
 
-  const cols = agentListCols();
+  const cols = appointmentListCols();
 
-  const { data: agents, isFetching: isLoadingAgents } = useGetAllAgents();
+  const { data: appointments, isFetching: isLoadingAppointments } =
+    useGetAppointments(searchTerm);
+  console.log("Appointments", appointments);
 
   return (
     <AdminLayout
-      title="Partner Management"
-      description="Manage your partners and their details"
+      title="Visit Management"
+      description="Monitor store visit appointments"
       className="space-y-8"
       searchBar={false}
     >
-      <section className="space-y-6 z-10">
+      <section className="space-y-6">
         {/* Header */}
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div>
-            <h2 className="text-lg font-semibold">All Partners</h2>
+            <h2 className="text-lg font-semibold">All Appointments</h2>
             <p className="text-sm text-muted-foreground">
-              Monitor partner's activities and performance.
+              Monitor store visit appointments and their details.
             </p>
           </div>
 
           {/* Future action button */}
           {/*
           <Button
-            onClick={() => navigate("/add-agent")}
+            onClick={() => navigate("/add-application")}
             className="gap-2"
           >
             <Plus className="h-4 w-4" /> Add Application
           </Button>
           */}
+        </div>
+        <div className="w-full grid grid-cols-3 gap-2">
+          <DashboardCard
+            title="Today's Visit"
+            value={appointments?.todayAppointments || 0}
+            icon={<Clock size={20} className=" text-gold" />}
+          />
+          <DashboardCard
+            title="Total Appointments"
+            value={appointments?.totalAppointments || 0}
+            icon={<Calendar size={20} className=" text-gold" />}
+          />
+          <DashboardCard
+            title="Today's Visit"
+            value={2}
+            icon={<Clock size={20} className=" text-gold" />}
+          />
         </div>
 
         {/* Search */}
@@ -52,7 +73,7 @@ const Agents = () => {
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
-              placeholder="Search applications..."
+              placeholder="Search by user, email, partner, date…"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="pl-10"
@@ -62,12 +83,16 @@ const Agents = () => {
 
         {/* Table */}
         <div className="rounded-xl  bg-background">
-          {isLoadingAgents ? (
+          {isLoadingAppointments ? (
             <div className="flex items-center justify-center p-10 text-muted-foreground">
               <LoaderCircle size={50} className=" animate-spin text-gold" />
             </div>
           ) : (
-            <TableComponent columns={cols} data={agents} model="Agents" />
+            <TableComponent
+              columns={cols}
+              data={appointments.appointments || []}
+              model="Appointment"
+            />
           )}
         </div>
       </section>
@@ -75,4 +100,4 @@ const Agents = () => {
   );
 };
 
-export default Agents;
+export default Appointments;

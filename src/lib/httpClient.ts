@@ -1,8 +1,8 @@
 import axios from "axios";
 
 // const BASE_URL = "https://test.ownmali.com/api";
-// const BASE_URL = "https://mgm-backend.vercel.app";  
- const BASE_URL = "http://localhost:5050";
+// const BASE_URL = "https://mgm-backend.vercel.app";
+const BASE_URL = "http://localhost:5050";
 
 const api = axios.create({
   baseURL: BASE_URL,
@@ -11,9 +11,9 @@ const api = axios.create({
   },
 });
 
-
 const getAccessToken = () => localStorage.getItem("accessToken");
 const getRefreshToken = () => localStorage.getItem("refreshToken");
+const getSessionId = () => localStorage.getItem("sessionId");
 
 const setAccessToken = (token: string) =>
   localStorage.setItem("accessToken", token);
@@ -23,30 +23,23 @@ const clearTokens = () => {
   localStorage.removeItem("refreshToken");
 };
 
-
 const logout = () => {
   clearTokens();
   window.location.href = "/signin";
 };
 
-
-api.interceptors.request.use(
-  (config) => {
-    const token = getAccessToken();
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  },
-  Promise.reject
-);
-
+api.interceptors.request.use((config) => {
+  const token = getAccessToken();
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+}, Promise.reject);
 
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
-
 
     if (!error.response) {
       return Promise.reject({ message: "Network Error" });
@@ -60,13 +53,14 @@ api.interceptors.response.use(
 
       try {
         const refreshToken = getRefreshToken();
-        if (!refreshToken) {
+        const sessionId = getSessionId();
+        if (!sessionId) {
           logout();
           return Promise.reject({ message: "No refresh token" });
         }
 
-        const { data } = await axios.post(`${BASE_URL}/admin/refresh-token`, {
-          refreshToken,
+        const { data } = await axios.post(`${BASE_URL}/admin/auth/refresh`, {
+          sessionId,
         });
 
         const newAccessToken = data?.data?.accessToken;
@@ -84,7 +78,7 @@ api.interceptors.response.use(
     }
 
     return Promise.reject(error);
-  }
+  },
 );
 
 export default api;

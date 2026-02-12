@@ -42,6 +42,8 @@ function TableComponent<TData>({
     onColumnSizingChange: setColumnSizing,
   });
 
+  console.log("Table State", table.getHeaderGroups());
+
   const tableData = table.getRowModel().rows || [];
 
   return (

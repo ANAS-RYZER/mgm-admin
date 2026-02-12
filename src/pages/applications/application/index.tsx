@@ -55,7 +55,7 @@ const ApplicationReviewPage = () => {
       {application && (
         <div className="space-y-6">
           <ApplicationTopBar
-            applicationId={application?.agentId}
+            applicationId={application?.applicationId || ""}
             status={application?.status}
             onUpdateStatus={handleUpdateStatus}
             isUpdating={isUpdating}

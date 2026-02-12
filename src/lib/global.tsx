@@ -18,9 +18,15 @@ export const EMPTY_TABLE_DATA = [
     icon: <Container size={44} />,
   },
   {
-    id: "Agents",
-    title: "No agents found",
-    description: "There are no agents available at the moment.",
+    id: "Partners",
+    title: "No partners found",
+    description: "There are no partners available at the moment.",
+    icon: <Container size={44} />,
+  },
+  {
+    id: "Appointments",
+    title: "No appointments found",
+    description: "There are no appointments available at the moment.",
     icon: <Container size={44} />,
   },
 ];

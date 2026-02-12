@@ -17,6 +17,7 @@ import {
   ClipboardList,
   UserCog,
   UserCheck,
+  Calendar,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
@@ -25,7 +26,8 @@ const navigation = [
   { label: "Dashboard", icon: LayoutDashboard, to: "/dashboard" },
   { label: "Products", icon: Diamond, to: "/products" },
   { label: "Applications", icon: ClipboardList , to: "/applications" },
-  { label: "Agents", icon: UserCheck   , to: "/agents" },
+  { label: "Partners", icon: UserCheck   , to: "/partners" },
+  { label: "Appointments", icon: Calendar   , to: "/appointments" },
 ];
 
 interface AdminSidebarProps {
