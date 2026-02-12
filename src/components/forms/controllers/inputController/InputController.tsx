@@ -28,7 +28,8 @@ export function InputController({ control, fieldConfig }: any) {
           <FormControl>
             <Input
               {...field}
-              type={"text"}
+              type={fieldConfig.type === "number" ? "number" : "text"}
+              step={fieldConfig.type === "number" ? (fieldConfig.step ?? "any") : undefined}
               placeholder={fieldConfig.placeholder}
               disabled={fieldConfig.disabled}
               onChange={(e) => {

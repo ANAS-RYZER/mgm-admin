@@ -4,8 +4,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import useGetPrices, { type PriceItem } from "@/hooks/prices/useGetPrices";
 import useUpdatePrice from "@/hooks/prices/useUpdatePrice";
-import { Loader2 } from "lucide-react";
-import { useCallback, useState } from "react";
+import { Loader2, Pencil } from "lucide-react";
+import { useCallback, useRef, useState } from "react";
 import { toast } from "sonner";
 
 function PriceRow({
@@ -19,25 +19,67 @@ function PriceRow({
 }) {
   const id = item._id ?? item.id;
   const [value, setValue] = useState(String(item.price));
+  const [isEditing, setIsEditing] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
   const isDirty = Number(value) !== item.price;
 
   const handleBlur = useCallback(() => {
     const num = Number(value);
-    if (!id || !isDirty || Number.isNaN(num) || num < 0) return;
-    onSave(id, num);
-  }, [id, value, isDirty, onSave]);
+    if (!id || Number.isNaN(num) || num < 0) {
+      setIsEditing(false);
+      setValue(String(item.price));
+      return;
+    }
+    if (isDirty) onSave(id, num);
+    setIsEditing(false);
+  }, [id, value, isDirty, item.price, onSave]);
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter") {
       (e.target as HTMLInputElement).blur();
     }
+    if (e.key === "Escape") {
+      setValue(String(item.price));
+      setIsEditing(false);
+      inputRef.current?.blur();
+    }
   };
+
+  const startEditing = () => {
+    if (!id || isSaving) return;
+    setIsEditing(true);
+    setValue(String(item.price));
+    setTimeout(() => inputRef.current?.focus(), 0);
+  };
+
+  if (!isEditing) {
+    return (
+      <div className="flex items-center gap-4 py-2 border-b border-black/5 last:border-0">
+        <span className="flex-1 text-sm font-medium text-foreground">{item.name}</span>
+        <div className="flex items-center gap-2 w-36 justify-end">
+          <span className="text-sm text-muted-foreground tabular-nums">{item.price}</span>
+          <Button
+            type="button"
+            size="icon"
+            variant="ghost"
+            className="h-8 w-8 shrink-0 text-muted-foreground hover:text-foreground"
+            disabled={!id || isSaving}
+            onClick={startEditing}
+            aria-label="Edit price"
+          >
+            <Pencil className="h-4 w-4" />
+          </Button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex items-center gap-4 py-2 border-b border-black/5 last:border-0">
       <span className="flex-1 text-sm font-medium text-foreground">{item.name}</span>
       <div className="flex items-center gap-2 w-36">
         <Input
+          ref={inputRef}
           type="number"
           value={value}
           onChange={(e) => setValue(e.target.value)}
@@ -46,7 +88,7 @@ function PriceRow({
           disabled={!id || isSaving}
           className="h-9 text-sm text-right"
         />
-        {isDirty && id && (
+        {id && (
           <Button
             type="button"
             size="sm"
@@ -55,7 +97,10 @@ function PriceRow({
             disabled={isSaving}
             onClick={() => {
               const num = Number(value);
-              if (!Number.isNaN(num) && num >= 0) onSave(id, num);
+              if (!Number.isNaN(num) && num >= 0) {
+                onSave(id, num);
+                setIsEditing(false);
+              }
             }}
           >
             {isSaving ? <Loader2 className="h-4 w-4 animate-spin" /> : "Save"}

@@ -1,4 +1,7 @@
 import { CalculatedStonePriceController } from "./controllers/calculatedController/CalculatedStonePriceController";
+import { CalculatedNetPriceController } from "./controllers/calculatedController/CalculatedNetPriceController";
+import { CalculatedTotalCostController } from "./controllers/calculatedController/CalculatedTotalCostController";
+import { FetchedMetalPriceController } from "./controllers/calculatedController/FetchedMetalPriceController";
 import { ImageUploadController } from "./controllers/image/ImageUploadController";
 import { InputController } from "./controllers/inputController/InputController";
 import MultiImageUploadController from "./controllers/multiImageController/MultiImageUploadController";
@@ -28,6 +31,15 @@ export function ControllerMap({ control, fieldConfig }: any) {
 
     case "calculated-stone-price":
       return <CalculatedStonePriceController control={control} fieldConfig={fieldConfig} />;
+
+    case "fetched-metal-price":
+      return <FetchedMetalPriceController control={control} fieldConfig={fieldConfig} />;
+
+    case "calculated-total-cost":
+      return <CalculatedTotalCostController control={control} fieldConfig={fieldConfig} />;
+
+    case "calculated-net-price":
+      return <CalculatedNetPriceController control={control} fieldConfig={fieldConfig} />;
 
     default:
       return null;

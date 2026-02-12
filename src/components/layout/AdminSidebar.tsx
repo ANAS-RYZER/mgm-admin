@@ -3,12 +3,7 @@ import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import {
   LayoutDashboard,
   Diamond,
-  PackageSearch,
-  Users,
-  Palette,
-  Megaphone,
-  BarChart3,
-  Settings,
+
   Menu,
   X,
   UserCircle2,

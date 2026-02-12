@@ -30,7 +30,6 @@ const AddProduct = () => {
 
   const basicInfoFields = productBasicInfoConfig();
   const descInfoFields = prodcutDescInfoConfig();
-  const goldSpecFields = prodcutGoldSpecConfig();
   const priceAndInventoryFields = prodcutPricingAndInventoryConfig();
 
   const { mutate: addProduct, isPending: isAdding } = useAddProduct();
@@ -43,8 +42,10 @@ const AddProduct = () => {
       description: "",
       categories: "",
 
+      calculatedTotalCost: "",
       mrpPrice: "",
       discountedPrice: "",
+      netPrice: "",
       stockQuantity: "",
 
       image: "",
@@ -53,15 +54,19 @@ const AddProduct = () => {
       goldSpecs: {
         karat: "",
         metal: "",
+        purity: "",
         goldWeight: "",
         grossWeight: "",
+        goldPrice: "",
         makingCharges: "",
-      
       },
 
       stoneSpecs: [], // ✅ clean
     },
   });
+
+  const metal = useWatch({ control: methods.control, name: "goldSpecs.metal", defaultValue: "" });
+  const goldSpecFields = prodcutGoldSpecConfig(metal);
 
   const onSubmit = (data: any) => {
     console.log("Submitted Product (raw):", data);
@@ -74,8 +79,10 @@ const AddProduct = () => {
       name: submitData.name,
       description: submitData.description,
       categories: submitData.categories || category, // Use categories, fallback to category if needed
+      calculatedTotalCost: submitData.calculatedTotalCost,
       mrpPrice: submitData.mrpPrice,
-      discountedPrice: submitData.discountedPrice || 0,
+      discountedPrice: submitData.discountedPrice ?? 0,
+      netPrice: submitData.netPrice,
       stockQuantity: submitData.stockQuantity,
       material: submitData.material,
       image: submitData.image,

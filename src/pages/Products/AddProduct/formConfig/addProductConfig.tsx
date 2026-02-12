@@ -9,8 +9,10 @@ export type ProductFormValues = {
 
   status?: string;
 
+  calculatedTotalCost?: number | "";
   mrpPrice: number | "";
   discountedPrice?: number | "";
+  netPrice?: number | "";
 
   stockQuantity: number | "";
 
@@ -20,8 +22,10 @@ export type ProductFormValues = {
   goldSpecs: {
     karat: string;
     metal: string;
+    purity?: string;
     goldWeight: number | "";
     grossWeight: number | "";
+    goldPrice?: number | "";
     makingCharges?: number | "";
   };
   stoneSpecs?: any[];
@@ -103,9 +107,10 @@ export const prodcutDescInfoConfig = (): FieldConfig[] => {
 
 export const prodcutPricingAndInventoryConfig = (): FieldConfig[] => {
   return [
+   
     {
       name: "mrpPrice",
-      type: "number",
+      type: "calculated-total-cost",
       label: "MRP Price",
       placeholder: "₹ 0.00",
       required: true,
@@ -113,8 +118,13 @@ export const prodcutPricingAndInventoryConfig = (): FieldConfig[] => {
     {
       name: "discountedPrice",
       type: "number",
-      label: "Discounted Price",
-      placeholder: "₹ 0.00",
+      label: "Discounted %",
+      placeholder: "0",
+    },
+    {
+      name: "netPrice",
+      type: "calculated-net-price",
+      label: "Net price",
     },
     {
       name: "stockQuantity",
@@ -125,56 +135,79 @@ export const prodcutPricingAndInventoryConfig = (): FieldConfig[] => {
     },
   ];
 };
-export const prodcutGoldSpecConfig = (): FieldConfig[] => [
+export const PLATINUM_PURITY_OPTIONS = [
+  { label: "99%", value: "99%" },
+  { label: "90%", value: "90%" },
+  {label : "95%", value : "95%"},
+  { label: "85%", value: "85%" },
+];
 
-  
+export const prodcutGoldSpecConfig = (metal: string = ""): FieldConfig[] => {
+  const isPlatinum = metal === "platinum";
 
-  {
-    name: "goldSpecs.metal",
-    type: "select",
-    label: "Metal",
-    placeholder: "Select metal",
-    required: true,
-    options: [
-      { label: "Gold", value: "gold" },
-      { label: "Silver", value: "silver" },
-      { label: "Platinum", value: "platinum" },
-      { label: "Palladium", value: "palladium" },
-    ],
-  },
-  {
-    name: "goldSpecs.karat",
-    type: "select",
-    label: "Karat",
-    placeholder: "Select karat",
-    required: true,
-    options: [
-      { label: "24K", value: "24K" },
-      { label: "22K", value: "22K" },
-      { label: "18K", value: "18K" },
-      // { label: "16K", value: "16K" },
-      { label: "14K", value: "14K" },
-   
-    ],
-  },  
-  {
-    name: "goldSpecs.goldWeight",
+  return [
+    {
+      name: "goldSpecs.metal",
+      type: "select",
+      label: "Metal",
+      placeholder: "Select metal",
+      required: true,
+      options: [
+        { label: "Gold", value: "gold" },
+        { label: "Platinum", value: "platinum" },
+      ],
+    },
+    // Karat for Gold only
+    ...(isPlatinum
+      ? []
+      : [
+          {
+            name: "goldSpecs.karat",
+            type: "select" as const,
+            label: "Karat",
+            placeholder: "Select karat",
+            required: true,
+            options: [
+              { label: "24K", value: "24K" },
+              { label: "22K", value: "22K" },
+              { label: "18K", value: "18K" },
+              { label: "14K", value: "14K" },
+            ],
+          },
+        ]),
+    // Purity for Platinum only
+    ...(isPlatinum
+      ? [
+          {
+            name: "goldSpecs.purity",
+            type: "select" as const,
+            label: "Purity",
+            placeholder: "Select purity",
+            required: true,
+            options: PLATINUM_PURITY_OPTIONS,
+          },
+        ]
+      : []),
+    {
+      name: "goldSpecs.goldWeight",
     type: "number",
     label: "Gold Weight (g)",
     required: true,
   },
+ 
   {
-    name: "goldSpecs.makingCharges",
+    name: "goldSpecs.grossWeight",
     type: "number",
-    label: "Making Charges (%)",
+    label: "Gross Weight (g)",
+    required: true,
   },
-  // {
-  //   name: "goldSpecs.purity",
-  //   type: "text",
-  //   label: "Purity",
-  //   placeholder: "916 Hallmark",
-  // },
-];
+  {
+    name: "goldSpecs.goldPrice",
+    type: "fetched-metal-price",
+    label: "Metal value (weight × per g price)",
+  },
+  ];
+};
 
 export const productImageConfig = (refId: string): FieldConfig[] => [
   {

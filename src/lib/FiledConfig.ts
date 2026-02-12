@@ -13,7 +13,10 @@ export type FieldConfig = {
       | "image-upload"
       | "multiple-image-upload"
       | "repeatable-group"
-      | "calculated-stone-price";
+      | "calculated-stone-price"
+      | "fetched-metal-price"
+      | "calculated-total-cost"
+      | "calculated-net-price";
 
     multiple?: boolean;
     disabled?: boolean;
