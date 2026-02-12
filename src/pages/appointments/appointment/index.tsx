@@ -50,7 +50,9 @@ const AppointmentDetails = () => {
               "---"
             }
           />
-          <div className="grid grid-cols-4 gap-4">
+
+          {/* TOP INFO CARDS */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <DashboardCard
               title="Appointment ID"
               value={appointment?._id || "---"}
@@ -58,6 +60,7 @@ const AppointmentDetails = () => {
               valueClass="text-sm font-semibold truncate ml-2 mt-2"
               leftIcon={<Hash size={15} className="text-gold" />}
             />
+
             <DashboardCard
               title="Date"
               value={appointment?.date || "---"}
@@ -65,6 +68,7 @@ const AppointmentDetails = () => {
               valueClass="text-sm font-semibold ml-2 mt-2"
               leftIcon={<Calendar size={15} className="text-gold" />}
             />
+
             <DashboardCard
               title="Slot"
               value={
@@ -72,9 +76,10 @@ const AppointmentDetails = () => {
                 "---"
               }
               titleClass="text-xs"
-              valueClass="text-sm font-semibold ml-2 mt-2 "
+              valueClass="text-sm font-semibold ml-2 mt-2"
               leftIcon={<TimerIcon size={15} className="text-gold" />}
             />
+
             <DashboardCard
               title="Status"
               value={
@@ -82,27 +87,29 @@ const AppointmentDetails = () => {
                   className={clsx(
                     config.bgColor,
                     config.borderColor,
-
-                    "cursor-pointer text-white rounded-md",
+                    "text-white rounded-md",
                   )}
                 >
                   {config.text}
                 </Badge>
               }
               titleClass="text-xs"
-              valueClass="text-sm  font-semibold"
+              valueClass="text-sm font-semibold"
               leftIcon={<Icon size={15} className="text-gold" />}
             />
-            {/* <DashboardCard/> */}
           </div>
 
-          <div className="w-full grid grid-cols-3 gap-4">
-            <div className="col-span-2 space-y-5">
+          {/* MAIN CONTENT */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+            {/* LEFT SIDE */}
+            <div className="lg:col-span-2 space-y-5">
               <UserAction
                 name={appointment?.userDetails?.fullName}
                 status={appointment?.status || "CONFIRMED"}
               />
-              <div className="flex gap-5">
+
+              {/* PROFILE CARDS */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <UserProfileCard
                   title="Customer Details"
                   name={appointment?.userDetails?.fullName || "User"}
@@ -112,13 +119,14 @@ const AppointmentDetails = () => {
                   phone={appointment?.userDetails?.phone || "+91 9876543210"}
                   id={
                     <>
-                      User Id:{" "}
-                      <span className="text-black">
+                      User Id:
+                      <span className="text-black ml-1">
                         {appointment?.userDetails?._id || "12345"}
                       </span>
                     </>
                   }
                 />
+
                 <UserProfileCard
                   title="Partner Details"
                   name={appointment?.agentDetails?.name || "Partner"}
@@ -128,8 +136,8 @@ const AppointmentDetails = () => {
                   phone={appointment?.agentDetails?.phone || "+91 9876543210"}
                   id={
                     <>
-                      User Id:{" "}
-                      <span className="text-black">
+                      User Id:
+                      <span className="text-black ml-1">
                         {appointment?.agentDetails?.referralCode || "12345"}
                       </span>
                     </>
@@ -138,14 +146,15 @@ const AppointmentDetails = () => {
               </div>
             </div>
 
-            <div className="col-span-1 border rounded-lg shadow-md p-5 overflow-hidden bg-white/50">
+            {/* RIGHT SIDE PRODUCTS */}
+            <div className="border rounded-lg shadow-md p-5 bg-white/50">
               <h1 className="text-lg font-semibold mb-2">
                 Products Interested
               </h1>
               <hr />
-              {appointment?.productDetails &&
-              appointment.productDetails.length > 0 ? (
-                <div className="grid grid-cols-2 gap-4  mt-5 overflow-y-auto max-h-[300px] pr-2">
+
+              {appointment?.productDetails?.length > 0 ? (
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-2 gap-4 mt-5 max-h-[350px] overflow-y-auto pr-2">
                   {appointment.productDetails.map((product: any) => (
                     <ProductCard
                       key={product._id}
@@ -156,7 +165,7 @@ const AppointmentDetails = () => {
                   ))}
                 </div>
               ) : (
-                <p className="text-sm text-muted-foreground">
+                <p className="text-sm text-muted-foreground mt-3">
                   No products available
                 </p>
               )}

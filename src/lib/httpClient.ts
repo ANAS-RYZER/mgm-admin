@@ -1,13 +1,8 @@
 import axios from "axios";
 
 // const BASE_URL = "https://test.ownmali.com/api";
-<<<<<<< HEAD
-// const BASE_URL = "https://mgm-backend.vercel.app";
-const BASE_URL = "http://localhost:5050";
-=======
 // const BASE_URL = "https://mgm-backend.vercel.app";  
  const BASE_URL = "http://localhost:5050";
->>>>>>> 592e515d0a8a75a7b0cb73251ba81f4c18f126c3
 
 const api = axios.create({
   baseURL: BASE_URL,
@@ -26,6 +21,7 @@ const setAccessToken = (token: string) =>
 const clearTokens = () => {
   localStorage.removeItem("accessToken");
   localStorage.removeItem("refreshToken");
+  localStorage.removeItem("sessionId");
 };
 
 const logout = () => {
@@ -59,8 +55,9 @@ api.interceptors.response.use(
       try {
         const refreshToken = getRefreshToken();
         const sessionId = getSessionId();
+        console.log("Attempting token refresh with sessionId:", sessionId);
         if (!sessionId) {
-          logout();
+          // logout();
           return Promise.reject({ message: "No refresh token" });
         }
 

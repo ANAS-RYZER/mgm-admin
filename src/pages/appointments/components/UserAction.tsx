@@ -33,7 +33,7 @@ const UserAction = ({ name, status }: UserActionProps) => {
             Confirm the visit outcome:
           </p>
 
-          <div className="flex gap-3 mt-4">
+          <div className="flex md:flex-row flex-col gap-3 mt-4">
             <Button className="bg-red-600 hover:bg-red-700 text-white">
               Mark as Not Visited
             </Button>
