@@ -12,8 +12,13 @@ export type FieldConfig = {
       | "textarea"
       | "image-upload"
       | "multiple-image-upload"
-      | "repeatable-group";
-      
+      | "repeatable-group"
+      | "calculated-stone-price"
+      | "fetched-metal-price"
+      | "calculated-total-cost"
+      | "calculated-net-price";
+
+    multiple?: boolean;
     disabled?: boolean;
     label: string;
     placeholder?: string;

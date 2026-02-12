@@ -3,12 +3,7 @@ import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import {
   LayoutDashboard,
   Diamond,
-  PackageSearch,
-  Users,
-  Palette,
-  Megaphone,
-  BarChart3,
-  Settings,
+
   Menu,
   X,
   UserCircle2,
@@ -18,6 +13,7 @@ import {
   UserCog,
   UserCheck,
   Calendar,
+  Calculator,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
@@ -28,6 +24,7 @@ const navigation = [
   { label: "Applications", icon: ClipboardList , to: "/applications" },
   { label: "Partners", icon: UserCheck   , to: "/partners" },
   { label: "Appointments", icon: Calendar   , to: "/appointments" },
+  {  label : "Prices" , icon :  Calculator  , to : "/prices"}
 ];
 
 interface AdminSidebarProps {

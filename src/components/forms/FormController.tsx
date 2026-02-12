@@ -1,7 +1,7 @@
 import { ControllerMap } from "./ControllerMap";
-import { InputController } from "./controllers/InputController";
-import { SelectController } from "./controllers/SelectController";
-import { TextareaController } from "./controllers/TextAreaController";
+import { InputController } from "./controllers/inputController/InputController";
+import { SelectController } from "./controllers/selectController/SelectController";
+import { TextareaController } from "./controllers/textArea/TextAreaController";
 
 export function FormRenderer({ control, fields }: any) {
   return (

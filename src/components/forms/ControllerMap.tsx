@@ -1,9 +1,13 @@
-import { ImageUploadController } from "./controllers/ImageUploadController";
-import { InputController } from "./controllers/InputController";
-import MultiImageUploadController from "./controllers/MultiImageUploadController";
-import { RepeatableGroupController } from "./controllers/RepeatableGroupController";
-import { SelectController } from "./controllers/SelectController";
-import { TextareaController } from "./controllers/TextAreaController";
+import { CalculatedStonePriceController } from "./controllers/calculatedController/CalculatedStonePriceController";
+import { CalculatedNetPriceController } from "./controllers/calculatedController/CalculatedNetPriceController";
+import { CalculatedTotalCostController } from "./controllers/calculatedController/CalculatedTotalCostController";
+import { FetchedMetalPriceController } from "./controllers/calculatedController/FetchedMetalPriceController";
+import { ImageUploadController } from "./controllers/image/ImageUploadController";
+import { InputController } from "./controllers/inputController/InputController";
+import MultiImageUploadController from "./controllers/multiImageController/MultiImageUploadController";
+import { RepeatableGroupController } from "./controllers/repetableController/RepeatableGroupController";
+import { SelectController } from "./controllers/selectController/SelectController";
+import { TextareaController } from "./controllers/textArea/TextAreaController";
 
 export function ControllerMap({ control, fieldConfig }: any) {
   switch (fieldConfig.type) {
@@ -24,6 +28,18 @@ export function ControllerMap({ control, fieldConfig }: any) {
       return <MultiImageUploadController fieldConfig={fieldConfig} />;
     case "repeatable-group":
       return <RepeatableGroupController fieldConfig={fieldConfig} />;
+
+    case "calculated-stone-price":
+      return <CalculatedStonePriceController control={control} fieldConfig={fieldConfig} />;
+
+    case "fetched-metal-price":
+      return <FetchedMetalPriceController control={control} fieldConfig={fieldConfig} />;
+
+    case "calculated-total-cost":
+      return <CalculatedTotalCostController control={control} fieldConfig={fieldConfig} />;
+
+    case "calculated-net-price":
+      return <CalculatedNetPriceController control={control} fieldConfig={fieldConfig} />;
 
     default:
       return null;

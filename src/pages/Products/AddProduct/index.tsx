@@ -25,9 +25,11 @@ import {
 } from "@/components/ui/dialog";
 
 const AddProduct = () => {
+  // Draft ID for uploads before product/SKU exists (backend generates SKU)
+  const [uploadRefId, setUploadRefId] = useState(() => `draft-${crypto.randomUUID()}`);
+
   const basicInfoFields = productBasicInfoConfig();
   const descInfoFields = prodcutDescInfoConfig();
-  const goldSpecFields = prodcutGoldSpecConfig();
   const priceAndInventoryFields = prodcutPricingAndInventoryConfig();
 
   const { mutate: addProduct, isPending: isAdding } = useAddProduct();
@@ -35,13 +37,15 @@ const AddProduct = () => {
 
   const methods = useForm<ProductFormValues>({
     defaultValues: {
-      sku: "",
+   
       name: "",
       description: "",
       categories: "",
 
+      calculatedTotalCost: "",
       mrpPrice: "",
       discountedPrice: "",
+      netPrice: "",
       stockQuantity: "",
 
       image: "",
@@ -50,15 +54,19 @@ const AddProduct = () => {
       goldSpecs: {
         karat: "",
         metal: "",
+        purity: "",
         goldWeight: "",
         grossWeight: "",
+        goldPrice: "",
         makingCharges: "",
-        purity: "",
       },
 
       stoneSpecs: [], // ✅ clean
     },
   });
+
+  const metal = useWatch({ control: methods.control, name: "goldSpecs.metal", defaultValue: "" });
+  const goldSpecFields = prodcutGoldSpecConfig(metal);
 
   const onSubmit = (data: any) => {
     console.log("Submitted Product (raw):", data);
@@ -68,18 +76,20 @@ const AddProduct = () => {
     
     // Build clean payload with only expected fields
     const cleanPayload: any = {
-      sku: submitData.sku,
       name: submitData.name,
       description: submitData.description,
       categories: submitData.categories || category, // Use categories, fallback to category if needed
+      calculatedTotalCost: submitData.calculatedTotalCost,
       mrpPrice: submitData.mrpPrice,
-      discountedPrice: submitData.discountedPrice || 0,
+      discountedPrice: submitData.discountedPrice ?? 0,
+      netPrice: submitData.netPrice,
       stockQuantity: submitData.stockQuantity,
       material: submitData.material,
       image: submitData.image,
       gallery: Array.isArray(submitData.gallery) ? submitData.gallery : [],
       goldSpecs: submitData.goldSpecs,
       stoneSpecs: Array.isArray(submitData.stoneSpecs) ? submitData.stoneSpecs : [],
+      uploadRefId, // Backend uses this to associate files uploaded with this draft ID
     };
 
     // Remove undefined, null, or empty string values (except for required fields)
@@ -152,10 +162,8 @@ const AddProduct = () => {
   const handleAddOtherItem = () => {
     setIsSuccessDialogOpen(false);
     methods.reset();
-    // Stay on the same page to add another product
+    setUploadRefId(`draft-${crypto.randomUUID()}`); // Fresh refId for next product's uploads
   };
-  const sku = methods.watch("sku") || "";
-
   return (
     <AdminLayout title="Add Product">
       <FormProvider {...methods}>
@@ -234,7 +242,7 @@ const AddProduct = () => {
             <hr />
             <FormRenderer
               control={methods.control}
-              fields={productImageConfig(sku)}
+              fields={productImageConfig(uploadRefId)}
             />
           </div>
           <div className="rounded-md border border-black/10 p-7 space-y-5 shadow-sm bg-white">
@@ -247,7 +255,7 @@ const AddProduct = () => {
             <hr />
             <FormRenderer
               control={methods.control}
-              fields={productGalleryConfig(sku)}
+              fields={productGalleryConfig(uploadRefId)}
             />
           </div>
 
