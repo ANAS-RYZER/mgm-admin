@@ -13,10 +13,10 @@ export function CalculatedNetPriceController({ control, fieldConfig }: any) {
   const { watch, setValue } = useFormContext();
 
   const mrpPrice = watch("mrpPrice");
-  const discountedPercent = watch("discountedPrice");
+  const discountedPercentage = watch("discountedPercentage");
 
   const mrp = Number(mrpPrice) || 0;
-  const discount = Number(discountedPercent) || 0;
+  const discount = Number(discountedPercentage) || 0;
   const net = mrp > 0 ? mrp * (1 - discount / 100) : 0;
 
   useEffect(() => {

@@ -12,15 +12,17 @@ export function CalculatedTotalCostController({ control, fieldConfig }: any) {
   const { name, label } = fieldConfig;
   const { watch, setValue } = useFormContext();
 
-  const goldPrice = watch("goldSpecs.goldPrice");
-  const stoneSpecs = watch("stoneSpecs") ?? [];
+  const goldPrice = watch("goldPrice");
+  const stonesTotalValue = watch("multiplestonePrice");
+  const va = watch("va") || 0;
+  const makingCharges = watch("goldSpecs.makingCharges") || 0;
 
   const metalTotal = Number(goldPrice) || 0;
-  const stonesTotal = (Array.isArray(stoneSpecs) ? stoneSpecs : []).reduce(
-    (sum, item) => sum + (Number(item?.price) || 0),
-    0
-  );
-  const total = metalTotal + stonesTotal;
+  const stonesTotal = Number(stonesTotalValue) || 0;
+  const vaVal = Number(va) || 0;
+  const makingVal = Number(makingCharges) || 0;
+
+  const total = metalTotal + stonesTotal + vaVal + makingVal;
 
   useEffect(() => {
     setValue(name, total > 0 ? total : "", { shouldValidate: false });
@@ -31,11 +33,13 @@ export function CalculatedTotalCostController({ control, fieldConfig }: any) {
   const breakdown =
     hasMetal || hasStones
       ? [
-          hasMetal && `Metal: ₹${metalTotal.toLocaleString("en-IN")}`,
-          hasStones && `Stones: ₹${stonesTotal.toLocaleString("en-IN")}`,
-        ]
-          .filter(Boolean)
-          .join("  ·  ")
+        hasMetal && `Metal: ₹${metalTotal.toLocaleString("en-IN")}`,
+        hasStones && `Stones: ₹${stonesTotal.toLocaleString("en-IN")}`,
+        vaVal > 0 && `VA: ₹${vaVal.toLocaleString("en-IN")}`,
+        makingVal > 0 && `Making: ₹${makingVal.toLocaleString("en-IN")}`,
+      ]
+        .filter(Boolean)
+        .join("  ·  ")
       : "";
   const displayValue =
     total > 0

@@ -1,3 +1,5 @@
+import { CalculatedStoneTotalController } from "./controllers/calculatedController/CalculatedStoneTotalController";
+import { CalculatedMrpPriceController } from "./controllers/calculatedController/CalculatedMrpPriceController";
 import { CalculatedStonePriceController } from "./controllers/calculatedController/CalculatedStonePriceController";
 import { CalculatedNetPriceController } from "./controllers/calculatedController/CalculatedNetPriceController";
 import { CalculatedTotalCostController } from "./controllers/calculatedController/CalculatedTotalCostController";
@@ -12,7 +14,7 @@ import { TextareaController } from "./controllers/textArea/TextAreaController";
 export function ControllerMap({ control, fieldConfig }: any) {
   switch (fieldConfig.type) {
     case "text":
-      
+
     case "number":
       return <InputController control={control} fieldConfig={fieldConfig} />;
 
@@ -40,6 +42,12 @@ export function ControllerMap({ control, fieldConfig }: any) {
 
     case "calculated-net-price":
       return <CalculatedNetPriceController control={control} fieldConfig={fieldConfig} />;
+
+    case "calculated-mrp-price":
+      return <CalculatedMrpPriceController control={control} fieldConfig={fieldConfig} />;
+
+    case "calculated-stone-total":
+      return <CalculatedStoneTotalController control={control} fieldConfig={fieldConfig} />;
 
     default:
       return null;

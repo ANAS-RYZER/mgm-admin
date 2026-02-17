@@ -12,7 +12,15 @@ export type ProductFormValues = {
   calculatedTotalCost?: number | "";
   mrpPrice: number | "";
   discountedPrice?: number | "";
-  netPrice?: number | "";
+  discountedPercentage?: number | "";
+  netprice?: number | "";
+
+  // New pricing fields
+  grossPrice?: number | "";
+  cgst?: number | "";
+  sgst?: number | "";
+  va?: number | "";
+  multiplestonePrice?: number | "";
 
   stockQuantity: number | "";
 
@@ -22,12 +30,11 @@ export type ProductFormValues = {
   goldSpecs: {
     karat: string;
     metal: string;
-    purity?: string;
     goldWeight: number | "";
-    grossWeight: number | "";
-    goldPrice?: number | "";
     makingCharges?: number | "";
   };
+  netWeight?: number | ""; // Top level to fix 400 error
+  goldPrice?: number | ""; // Top level to fix 400 error
   stoneSpecs?: any[];
 };
 
@@ -73,7 +80,7 @@ export const productBasicInfoConfig = (): FieldConfig[] => {
       required: true,
     },
 
-  
+
 
     {
       name: "material",
@@ -107,24 +114,58 @@ export const prodcutDescInfoConfig = (): FieldConfig[] => {
 
 export const prodcutPricingAndInventoryConfig = (): FieldConfig[] => {
   return [
-   
     {
-      name: "mrpPrice",
+      name: "grossPrice",
       type: "calculated-total-cost",
-      label: "MRP Price",
+      label: "Gross Price",
       placeholder: "₹ 0.00",
-      required: true,
     },
     {
-      name: "discountedPrice",
+      name: "va",
       type: "number",
-      label: "Discounted %",
+      label: "VA (Value Added) Amount",
       placeholder: "0",
     },
     {
-      name: "netPrice",
-      type: "calculated-net-price",
-      label: "Net price",
+      name: "multiplestonePrice",
+      type: "calculated-stone-total",
+      label: "Multiple Stone Price",
+      placeholder: "₹ 0.00",
+    },
+    {
+      name: "goldSpecs.makingCharges",
+      type: "number",
+      label: "Making Charges",
+      placeholder: "0",
+    },
+    {
+      name: "cgst",
+      type: "number",
+      label: "CGST (%)",
+      placeholder: "1.5",
+    },
+    {
+      name: "sgst",
+      type: "number",
+      label: "SGST (%)",
+      placeholder: "1.5",
+    },
+    {
+      name: "mrpPrice",
+      type: "calculated-mrp-price", // We will create this or update CalculatedTotalCost
+      label: "MRP Price (Incl. Tax)",
+      placeholder: "₹ 0.00",
+    },
+    {
+      name: "discountedPercentage",
+      type: "number",
+      label: "Discount %",
+      placeholder: "0",
+    },
+    {
+      name: "discountedPrice",
+      type: "calculated-net-price", // This currently calculates based on discountedPrice as percent, I'll update it
+      label: "Final Price",
     },
     {
       name: "stockQuantity",
@@ -138,7 +179,7 @@ export const prodcutPricingAndInventoryConfig = (): FieldConfig[] => {
 export const PLATINUM_PURITY_OPTIONS = [
   { label: "99%", value: "99%" },
   { label: "90%", value: "90%" },
-  {label : "95%", value : "95%"},
+  { label: "95%", value: "95%" },
   { label: "85%", value: "85%" },
 ];
 
@@ -161,51 +202,52 @@ export const prodcutGoldSpecConfig = (metal: string = ""): FieldConfig[] => {
     ...(isPlatinum
       ? []
       : [
-          {
-            name: "goldSpecs.karat",
-            type: "select" as const,
-            label: "Karat",
-            placeholder: "Select karat",
-            required: true,
-            options: [
-              { label: "24K", value: "24K" },
-              { label: "22K", value: "22K" },
-              { label: "18K", value: "18K" },
-              { label: "14K", value: "14K" },
-            ],
-          },
-        ]),
+        {
+          name: "goldSpecs.karat",
+          type: "select" as const,
+          label: "Karat",
+          placeholder: "Select karat",
+          required: true,
+          options: [
+            { label: "24K", value: "24K" },
+            { label: "22K", value: "22K" },
+            { label: "18K", value: "18K" },
+            { label: "14K", value: "14K" },
+          ],
+        },
+        {
+          name: "goldSpecs.goldWeight", // Moved back into goldSpecs
+          type: "number" as const,
+          label: "Gold Weight (g)",
+          required: true,
+        },
+      ]),
     // Purity for Platinum only
     ...(isPlatinum
       ? [
-          {
-            name: "goldSpecs.purity",
-            type: "select" as const,
-            label: "Purity",
-            placeholder: "Select purity",
-            required: true,
-            options: PLATINUM_PURITY_OPTIONS,
-          },
-        ]
+        {
+          name: "goldSpecs.purity",
+          type: "select" as const,
+          label: "Purity",
+          placeholder: "Select purity",
+          required: true,
+          options: PLATINUM_PURITY_OPTIONS,
+        },
+      ]
       : []),
+
+
     {
-      name: "goldSpecs.goldWeight",
-    type: "number",
-    label: "Gold Weight (g)",
-    required: true,
-  },
- 
-  {
-    name: "goldSpecs.grossWeight",
-    type: "number",
-    label: "Gross Weight (g)",
-    required: true,
-  },
-  {
-    name: "goldSpecs.goldPrice",
-    type: "fetched-metal-price",
-    label: "Metal value (weight × per g price)",
-  },
+      name: "netWeight",
+      type: "number" as const,
+      label: "Net Weight (g)",
+      required: true,
+    },
+    {
+      name: "goldPrice", // Moved to top level
+      type: "fetched-metal-price" as const,
+      label: "Metal value (weight × per g price)",
+    },
   ];
 };
 
@@ -245,22 +287,22 @@ export const productStoneSpecsConfig = (): FieldConfig[] => [
   // export class StoneDetailsDto {
   //   @IsNotEmpty()
   //   stoneName: string;
-  
+
   //   @IsNumber()
   //   quantity: number;
-  
+
   //   @IsEnum(GemCut)
   //   cut: GemCut;
-  
+
   //   @IsOptional()
   //   @IsEnum(DiamondClarity)
   //   clarity?: DiamondClarity;
-  
+
   //   @ValidateNested()
   //   @Type(() => ColorDto)
   //   color: ColorDto;
   // }
-  
+
   {
     name: "stoneSpecs",
     type: "repeatable-group",
@@ -301,17 +343,17 @@ export const productStoneSpecsConfig = (): FieldConfig[] => [
       },
       {
         name: "diamondType",
-        type:   "select",
+        type: "select",
         label: " Diamond Type",
-        options : [
-            {label : "Lab Grown" , value : "lab-grown"},
-            {label : "Natural" , value : "Natural"}
-            
-          ]
-     
+        options: [
+          { label: "Lab Grown", value: "lab-grown" },
+          { label: "Natural", value: "Natural" }
+
+        ]
+
       },
       {
-        name: "price",
+        name: "stoneprice",
         type: "calculated-stone-price",
         label: "Price (₹)",
       },

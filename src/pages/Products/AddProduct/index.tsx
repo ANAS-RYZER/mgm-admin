@@ -37,7 +37,7 @@ const AddProduct = () => {
 
   const methods = useForm<ProductFormValues>({
     defaultValues: {
-   
+
       name: "",
       description: "",
       categories: "",
@@ -45,19 +45,28 @@ const AddProduct = () => {
       calculatedTotalCost: "",
       mrpPrice: "",
       discountedPrice: "",
-      netPrice: "",
+      discountedPercentage: "",
+      netprice: "",
+
+      // New pricing fields
+      grossPrice: "",
+      cgst: "",
+      sgst: "",
+      va: "",
+      multiplestonePrice: "",
+
       stockQuantity: "",
 
       image: "",
       gallery: [],
 
+      netWeight: "",
+      goldPrice: "",
+
       goldSpecs: {
         karat: "",
         metal: "",
-        purity: "",
         goldWeight: "",
-        grossWeight: "",
-        goldPrice: "",
         makingCharges: "",
       },
 
@@ -73,7 +82,7 @@ const AddProduct = () => {
 
     // Remove 'category' if it exists (should use 'categories' instead)
     const { category, ...submitData } = data;
-    
+
     // Build clean payload with only expected fields
     const cleanPayload: any = {
       name: submitData.name,
@@ -82,39 +91,98 @@ const AddProduct = () => {
       calculatedTotalCost: submitData.calculatedTotalCost,
       mrpPrice: submitData.mrpPrice,
       discountedPrice: submitData.discountedPrice ?? 0,
-      netPrice: submitData.netPrice,
+      discountedPercentage: submitData.discountedPercentage ?? 0,
+      netprice: submitData.netprice,
+
+      // New pricing fields
+      grossPrice: submitData.grossPrice,
+      cgst: submitData.cgst,
+      sgst: submitData.sgst,
+      va: submitData.va,
+      multiplestonePrice: submitData.multiplestonePrice,
+
       stockQuantity: submitData.stockQuantity,
       material: submitData.material,
       image: submitData.image,
       gallery: Array.isArray(submitData.gallery) ? submitData.gallery : [],
-      goldSpecs: submitData.goldSpecs,
-      stoneSpecs: Array.isArray(submitData.stoneSpecs) ? submitData.stoneSpecs : [],
+
+      netWeight: submitData.netWeight !== "" ? Number(submitData.netWeight) : undefined,
+      goldPrice: submitData.goldPrice !== "" ? Number(submitData.goldPrice) : undefined,
+
+      goldSpecs: {
+        karat: submitData.goldSpecs?.karat,
+        metal: submitData.goldSpecs?.metal,
+        goldWeight: Number(submitData.goldSpecs?.goldWeight) || 0,
+        makingCharges: Number(submitData.goldSpecs?.makingCharges) || 0,
+      },
+      stoneSpecs: Array.isArray(submitData.stoneSpecs)
+        ? submitData.stoneSpecs.map((stone: any) => ({
+          ...stone,
+          quantity: stone.quantity !== "" ? Number(stone.quantity) : undefined,
+          stoneprice: stone.stoneprice !== "" ? Number(stone.stoneprice) : undefined,
+        }))
+        : [],
       uploadRefId, // Backend uses this to associate files uploaded with this draft ID
     };
+
+    // Ensure all numeric fields are actual Numbers
+    const numericFields = [
+      "calculatedTotalCost", "mrpPrice", "discountedPrice", "discountedPercentage", "netprice",
+      "grossPrice", "cgst", "sgst", "va", "multiplestonePrice", "stockQuantity",
+      "netWeight", "goldPrice"
+    ];
+
+    numericFields.forEach(field => {
+      if (cleanPayload[field] !== undefined && cleanPayload[field] !== null && cleanPayload[field] !== "") {
+        cleanPayload[field] = Number(cleanPayload[field]);
+      }
+    });
+
+    // Deep clean goldSpecs
+    if (cleanPayload.goldSpecs) {
+      Object.keys(cleanPayload.goldSpecs).forEach(key => {
+        const val = cleanPayload.goldSpecs[key];
+        if (val === undefined || val === null || val === "") {
+          delete cleanPayload.goldSpecs[key];
+        } else if (["goldWeight", "makingCharges"].includes(key)) {
+          cleanPayload.goldSpecs[key] = Number(val);
+        }
+      });
+    }
+
+    // Deep clean stoneSpecs
+    if (Array.isArray(cleanPayload.stoneSpecs)) {
+      cleanPayload.stoneSpecs = cleanPayload.stoneSpecs.map((stone: any) => {
+        const cleaned = { ...stone };
+        if (cleaned.quantity !== undefined) cleaned.quantity = Number(cleaned.quantity) || 0;
+        if (cleaned.stoneprice !== undefined) cleaned.stoneprice = Number(cleaned.stoneprice) || 0;
+        return cleaned;
+      });
+    }
 
     // Remove undefined, null, or empty string values (except for required fields)
     Object.keys(cleanPayload).forEach((key) => {
       const value = cleanPayload[key];
-      
+
       // Remove undefined or null values
       if (value === undefined || value === null) {
         delete cleanPayload[key];
         return;
       }
-      
+
       // Handle empty strings - keep for required fields, remove for optional
       if (value === '' && !['sku', 'name', 'categories'].includes(key)) {
         delete cleanPayload[key];
         return;
       }
-      
+
       // Validate image URL format
       if (key === 'image' && value && typeof value !== 'string') {
         console.warn('Invalid image value type:', typeof value, value);
         delete cleanPayload[key];
         return;
       }
-      
+
       // Validate gallery is array of strings
       if (key === 'gallery' && Array.isArray(value)) {
         cleanPayload[key] = value.filter((url) => typeof url === 'string' && url.trim() !== '');
@@ -133,18 +201,18 @@ const AddProduct = () => {
         onError: (error: any) => {
           console.error("Error adding product:", error);
           let errorMessage = "Failed to add product. Please try again.";
-          
+
           // Handle different error response formats
           if (error?.response?.data?.message) {
             const message = error.response.data.message;
             // If message is an array, join it
-            errorMessage = Array.isArray(message) 
-              ? message.join(", ") 
+            errorMessage = Array.isArray(message)
+              ? message.join(", ")
               : message;
           } else if (error?.message) {
             errorMessage = error.message;
           }
-          
+
           toast.error("Error", {
             description: errorMessage,
           });
@@ -193,7 +261,7 @@ const AddProduct = () => {
           <div className="rounded-md border border-black/10 p-7 space-y-5 shadow-sm bg-white">
             <div className="flex items-center gap-3">
               <div className="bg-rose-100 rounded-full text-rose-800 h-10 w-10 flex justify-center items-center font-bold">
-                  3
+                3
               </div>
               <h1 className="text-lg font-semibold ">Gold Specifications</h1>
             </div>
@@ -201,8 +269,8 @@ const AddProduct = () => {
 
             <FormRenderer control={methods.control} fields={goldSpecFields} />
           </div>
-        
-      
+
+
           <div className="rounded-md border border-black/10 p-7 space-y-5 shadow-sm bg-white">
             <div className="flex items-center gap-3">
               <div className="bg-rose-100 rounded-full text-rose-800 h-10 w-10 flex justify-center items-center font-bold">
