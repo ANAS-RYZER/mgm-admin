@@ -8,7 +8,8 @@ export default function useGetAppointments(searchTerm?: string) {
       const res = await api.get(
         `/dashboard/appointment?search=${searchTerm || ""}`,
       );
-      return res.data;
+      console.log(res.data.appointments, "res.data")
+      return res.data.appointments;
     },
     staleTime: 60 * 1000,
     retry: 2,

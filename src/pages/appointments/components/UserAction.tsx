@@ -1,4 +1,6 @@
 import { Button } from "@/components/ui/button";
+import {  useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 interface UserActionProps {
   name?: string;
@@ -7,6 +9,11 @@ interface UserActionProps {
 
 const UserAction = ({ name, status }: UserActionProps) => {
   const isActionAllowed = status === "CONFIRMED";
+  const navigate = useNavigate()
+  const param = useParams()
+
+  console.log(param.id, param, "param")
+
 
   const renderOutcome = () => {
     if (status === "ISVISITED")
@@ -34,7 +41,7 @@ const UserAction = ({ name, status }: UserActionProps) => {
           </p>
 
           <div className="flex md:flex-row flex-col gap-3 mt-4">
-            <Button className="bg-red-600 hover:bg-red-700 text-white">
+            <Button className="bg-red-600 hover:bg-red-700 text-white" >
               Mark as Not Visited
             </Button>
 
@@ -42,7 +49,7 @@ const UserAction = ({ name, status }: UserActionProps) => {
               Mark as Visited
             </Button>
 
-            <Button className="bg-green-600 hover:bg-green-700 text-white">
+            <Button className="bg-green-600 hover:bg-green-700 text-white" onClick={()=>navigate(`/checkout/${param.id}`)}>
               Mark as Purchased
             </Button>
           </div>

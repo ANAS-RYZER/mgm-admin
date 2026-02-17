@@ -21,7 +21,6 @@ const Appointments = () => {
 
   const { data: appointments, isFetching: isLoadingAppointments } =
     useGetAppointments(searchTerm);
-  console.log("Appointments", appointments);
 
   return (
     <AdminLayout
@@ -61,11 +60,11 @@ const Appointments = () => {
             value={appointments?.totalAppointments || 0}
             icon={<Calendar size={20} className=" text-gold" />}
           />
-          <DashboardCard
+          {/* <DashboardCard
             title="Today's Visit"
             value={2}
             icon={<Clock size={20} className=" text-gold" />}
-          />
+          /> */}
         </div>
 
         {/* Search */}
@@ -90,7 +89,7 @@ const Appointments = () => {
           ) : (
             <TableComponent
               columns={cols}
-              data={appointments.appointments || []}
+              data={appointments || []}
               model="Appointment"
             />
           )}
