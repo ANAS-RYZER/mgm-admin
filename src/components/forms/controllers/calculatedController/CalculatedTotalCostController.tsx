@@ -15,12 +15,12 @@ export function CalculatedTotalCostController({ control, fieldConfig }: any) {
   const goldPrice = watch("goldPrice");
   const stonesTotalValue = watch("multiplestonePrice");
   const va = watch("va") || 0;
-  const makingCharges = watch("goldSpecs.makingCharges") || 0;
+  const makingChanges = watch("makingChanges") || 0;
 
   const metalTotal = Number(goldPrice) || 0;
   const stonesTotal = Number(stonesTotalValue) || 0;
   const vaVal = Number(va) || 0;
-  const makingVal = Number(makingCharges) || 0;
+  const makingVal = Number(makingChanges) || 0;
 
   const total = metalTotal + stonesTotal + vaVal + makingVal;
 

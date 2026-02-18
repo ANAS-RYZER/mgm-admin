@@ -3,21 +3,43 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { LoaderCircle, Search } from "lucide-react";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import TableComponent from "@/components/TableComponent";
 import useGetAllApplications from "@/hooks/applications/useGetApplications";
 import { agentListCols } from "./schema/agentListCols";
 import useGetAllAgents from "@/hooks/agents/useGetAllAgents";
+import queryString from "query-string";
+import { useDebounce } from "@/hooks/useDebounce";
+import Pagination from "@/components/pagination/pagination";
 
 const Agents = () => {
   const navigate = useNavigate();
 
+  const searchParams = useSearchParams();
+  const { pathname } = useLocation();
+  const queryParams = queryString.parse(searchParams.toString());
   const [searchTerm, setSearchTerm] = useState("");
-  const [status, setStatus] = useState<string>("");
+  const search = useDebounce(searchTerm, 500);
+  const currentPage = Number(queryParams?.page) || 1;
+  const limit = Number(queryParams?.limit) || 10;
 
   const cols = agentListCols();
 
-  const { data: agents, isFetching: isLoadingAgents } = useGetAllAgents();
+  const { data: agents, isFetching: isLoadingAgents } = useGetAllAgents({
+    search,
+    page: currentPage,
+    limit,
+  });
+
+  const onPageChange = (page: number) => {
+    navigate(
+      `${pathname}?page=${page}&limit=${agents?.pagination?.limit || 10}`,
+    );
+  };
+
+  const onPageSizeChange = (pageSize: number) => {
+    navigate(`${pathname}?page=1&limit=${pageSize}`);
+  };
 
   return (
     <AdminLayout
@@ -52,7 +74,7 @@ const Agents = () => {
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
-              placeholder="Search applications..."
+              placeholder="Search Partners..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="pl-10"
@@ -67,9 +89,17 @@ const Agents = () => {
               <LoaderCircle size={50} className=" animate-spin text-gold" />
             </div>
           ) : (
-            <TableComponent columns={cols} data={agents} model="Agents" />
+            <TableComponent columns={cols} data={agents?.data} model="Agents" />
           )}
         </div>
+
+        {agents?.pagination && (
+          <Pagination
+            {...agents?.pagination}
+            onPageChange={onPageChange}
+            onPageSizeChange={onPageSizeChange}
+          />
+        )}
       </section>
     </AdminLayout>
   );

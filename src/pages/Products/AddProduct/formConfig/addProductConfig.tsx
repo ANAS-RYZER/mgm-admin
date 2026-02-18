@@ -31,8 +31,8 @@ export type ProductFormValues = {
     karat: string;
     metal: string;
     goldWeight: number | "";
-    makingCharges?: number | "";
   };
+  makingChanges?: number | "";
   netWeight?: number | ""; // Top level to fix 400 error
   goldPrice?: number | ""; // Top level to fix 400 error
   stoneSpecs?: any[];
@@ -133,9 +133,9 @@ export const prodcutPricingAndInventoryConfig = (): FieldConfig[] => {
       placeholder: "₹ 0.00",
     },
     {
-      name: "goldSpecs.makingCharges",
+      name: "makingChanges",
       type: "number",
-      label: "Making Charges",
+      label: "Making Charges (₹)",
       placeholder: "0",
     },
     {

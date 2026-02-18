@@ -67,8 +67,8 @@ const AddProduct = () => {
         karat: "",
         metal: "",
         goldWeight: "",
-        makingCharges: "",
       },
+      makingChanges: "",
 
       stoneSpecs: [], // ✅ clean
     },
@@ -109,11 +109,11 @@ const AddProduct = () => {
       netWeight: submitData.netWeight !== "" ? Number(submitData.netWeight) : undefined,
       goldPrice: submitData.goldPrice !== "" ? Number(submitData.goldPrice) : undefined,
 
+      makingChanges: Number(submitData.makingChanges) || 0,
       goldSpecs: {
         karat: submitData.goldSpecs?.karat,
         metal: submitData.goldSpecs?.metal,
         goldWeight: Number(submitData.goldSpecs?.goldWeight) || 0,
-        makingCharges: Number(submitData.goldSpecs?.makingCharges) || 0,
       },
       stoneSpecs: Array.isArray(submitData.stoneSpecs)
         ? submitData.stoneSpecs.map((stone: any) => ({

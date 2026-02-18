@@ -11,13 +11,22 @@ import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import useCreateOrder from "@/hooks/orders/useCreateOrder";
 
-export type Product = {
+export interface Product {
   id: string;
   name: string;
   sku: string;
-  price: number;
   quantity: number;
-};
+
+  mrpPrice: number;
+  grossPrice: number;
+  discountedPrice: number;
+  discountedPercentage: number;
+  cgst: number;
+  sgst: number;
+  makingCharges: number;
+  va: number;
+}
+
 
 const Appointments = () => {
   const { id } = useParams<{ id: string }>();
@@ -35,7 +44,14 @@ const Appointments = () => {
           id: product._id,
           name: product.name,
           sku: product.sku,
-          price: product.mrpPrice,
+          mrpPrice: product.mrpPrice,
+          grossPrice: product.grossPrice,
+          discountedPrice: product.discountedPrice,
+          discountedPercentage: product.discountedPercentage,
+          cgst: product.cgst,
+          sgst: product.sgst,
+          makingCharges: product.makingChanges || 0,
+          va: product.va || 0,
           quantity: 1,
         }));
 

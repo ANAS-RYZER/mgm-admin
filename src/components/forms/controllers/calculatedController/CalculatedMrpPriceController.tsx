@@ -13,24 +13,20 @@ export function CalculatedMrpPriceController({ control, fieldConfig }: any) {
     const { watch, setValue } = useFormContext();
 
     const grossPrice = watch("grossPrice");
-    const cgst = watch("cgst") || 0;
-    const sgst = watch("sgst") || 0;
 
-    const gross = Number(grossPrice) || 0;
-    const cgstVal = Number(cgst) || 0;
-    const sgstVal = Number(sgst) || 0;
-
-    const taxAmount = gross * ((cgstVal + sgstVal) / 100);
-    const mrp = gross + taxAmount;
+    const mrp = Number(grossPrice) || 0;
 
     useEffect(() => {
-        setValue(name, mrp > 0 ? Math.round(mrp) : "", { shouldValidate: false });
-    }, [name, mrp, setValue]);
+        setValue(name, mrp > 0 ? Math.round(mrp) : "", {
+            shouldValidate: false,
+            shouldDirty: false,
+        });
+    }, [mrp, name, setValue]);
 
     const displayValue =
-        mrp > 0 ? `₹ ${Math.round(mrp).toLocaleString("en-IN")}` : "—";
-
-    const breakdown = mrp > 0 ? `Tax: ₹${Math.round(taxAmount).toLocaleString("en-IN")} (${cgstVal + sgstVal}%)` : null;
+        mrp > 0
+            ? `₹ ${Math.round(mrp).toLocaleString("en-IN")}`
+            : "—";
 
     return (
         <FormField
@@ -39,19 +35,19 @@ export function CalculatedMrpPriceController({ control, fieldConfig }: any) {
             render={() => (
                 <FormItem className="col-span-1 md:col-span-2 xl:col-span-3">
                     <FormLabel className="text-black">{label}</FormLabel>
+
                     <FormControl>
-                        <div className="space-y-1">
-                            <Input
-                                type="text"
-                                readOnly
-                                value={displayValue}
-                                className="bg-gray-100 border border-black/10 text-black font-medium shadow-none rounded-lg cursor-not-allowed text-base"
-                            />
-                            {breakdown && (
-                                <p className="text-xs text-muted-foreground">{breakdown}</p>
-                            )}
-                        </div>
+                        <Input
+                            type="text"
+                            readOnly
+                            value={displayValue}
+                            className="bg-gray-100 border border-black/10 text-black font-medium shadow-none rounded-lg cursor-not-allowed text-base"
+                        />
                     </FormControl>
+
+                    <p className="text-xs text-muted-foreground">
+                        MRP (Base Price + VA + Making Charges)
+                    </p>
                 </FormItem>
             )}
         />

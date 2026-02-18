@@ -3,24 +3,44 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Calendar, Clock, LoaderCircle, Search } from "lucide-react";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import TableComponent from "@/components/TableComponent";
 import useGetAllApplications from "@/hooks/applications/useGetApplications";
 import { applicationListCols } from "../applications/schema/applicationListCols";
 import { appointmentListCols } from "./schema/appointmentListCols";
 import useGetAppointments from "@/hooks/appointments/useGetAppointments";
 import DashboardCard from "./components/DashboardCard";
+import Pagination from "@/components/pagination/pagination";
+import queryString from "query-string";
+import { useDebounce } from "@/hooks/useDebounce";
 
 const Appointments = () => {
   const navigate = useNavigate();
 
+  const searchParams = useSearchParams();
+  const { pathname } = useLocation();
+  const queryParams = queryString.parse(searchParams.toString());
   const [searchTerm, setSearchTerm] = useState("");
-  const [status, setStatus] = useState<string>("");
+  const search = useDebounce(searchTerm, 500);
+
+  const currentPage = Number(queryParams?.page) || 1;
+  const limit = Number(queryParams?.limit) || 10;
 
   const cols = appointmentListCols();
 
   const { data: appointments, isFetching: isLoadingAppointments } =
-    useGetAppointments(searchTerm);
+    useGetAppointments({ search, page: currentPage, limit });
+  console.log("Appointments data:", appointments);
+
+  const onPageChange = (page: number) => {
+    navigate(
+      `${pathname}?page=${page}&limit=${appointments?.pagination?.limit || 10}`,
+    );
+  };
+
+  const onPageSizeChange = (pageSize: number) => {
+    navigate(`${pathname}?page=1&limit=${pageSize}`);
+  };
 
   return (
     <AdminLayout
@@ -89,11 +109,18 @@ const Appointments = () => {
           ) : (
             <TableComponent
               columns={cols}
-              data={appointments || []}
+              data={appointments?.appointments || []}
               model="Appointment"
             />
           )}
         </div>
+        {appointments?.pagination && (
+          <Pagination
+            {...appointments?.pagination}
+            onPageChange={onPageChange}
+            onPageSizeChange={onPageSizeChange}
+          />
+        )}
       </section>
     </AdminLayout>
   );

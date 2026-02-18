@@ -3,16 +3,40 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Plus, Search } from "lucide-react";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import TableComponent from "@/components/TableComponent";
 import { productColumns } from "./schema/columns";
 import useGetAllProducts from "@/hooks/product/useGetAllProducts";
+import queryString from "query-string";
+import Pagination from "@/components/pagination/pagination";
+import { useDebounce } from "@/hooks/useDebounce";
 
 const Products = () => {
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const { pathname } = useLocation();
   const [searchTerm, setSearchTerm] = useState("");
+  const search = useDebounce(searchTerm, 500);
 
-  const { data: products, isFetching: isLoadingProducts } = useGetAllProducts();
+  const currentPage = Number(searchParams.get("page")) || 1;
+  const limit = Number(searchParams.get("limit")) || 10;
+
+  console.log("Current Page:", currentPage, "Limit:", limit, "Search:", search);
+  const { data: products, isFetching: isLoadingProducts } = useGetAllProducts({
+    page: currentPage,
+    limit,
+    search,
+  });
+
+  const onPageChange = (page: number) => {
+    navigate(
+      `${pathname}?page=${page}&limit=${products?.pagination?.limit || 10}`,
+    );
+  };
+
+  const onPageSizeChange = (pageSize: number) => {
+    navigate(`${pathname}?page=1&limit=${pageSize}`);
+  };
 
   return (
     <AdminLayout
@@ -57,11 +81,18 @@ const Products = () => {
           ) : (
             <TableComponent
               columns={productColumns}
-              data={products}
+              data={products?.data}
               model="product"
             />
           )}
         </div>
+        {products?.pagination && (
+          <Pagination
+            {...products?.pagination}
+            onPageChange={onPageChange}
+            onPageSizeChange={onPageSizeChange}
+          />
+        )}
       </section>
     </AdminLayout>
   );

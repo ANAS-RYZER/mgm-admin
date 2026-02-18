@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import { Phone, PhoneCall } from "lucide-react";
 import React from "react";
 
@@ -5,7 +6,7 @@ interface UserProfileCardProps {
   title: string;
   name: string;
   email: string;
-  phone: string;
+  phone?: string;
   id?: React.ReactNode;
   profilePic?: string;
 }
@@ -28,11 +29,11 @@ const UserProfileCard = ({
   profilePic,
 }: UserProfileCardProps) => {
   return (
-    <div className="border rounded-lg shadow-md p-5  w-full flex-1 bg-white">
+    <div className="border rounded-lg shadow-md p-5  w-full flex-1 bg-white ">
       <h1 className="text-lg font-semibold mb-2">{title}</h1>
       <hr />
 
-      <div className="flex items-center gap-4 mt-4">
+      <div className="flex items-center gap-4 my-4">
         {/* Avatar Section */}
         {profilePic ? (
           <img
@@ -53,11 +54,18 @@ const UserProfileCard = ({
           <p className="text-sm text-muted-foreground">{email}</p>
         </div>
       </div>
-      <div className="flex items-center gap-2 text-muted-foreground my-2">
-        <Phone size={17} />
-        <p className="text-md font-medium text-black ">{phone}</p>
-      </div>
-      <div className="bg-gray-100 border-gray-400 text-gray-600 inline px-2 border rounded-md text-sm ">
+      {phone && (
+        <div className="flex items-center gap-2 text-muted-foreground mb-2">
+          <Phone size={17} />
+          <p className="text-md font-medium text-black ">{phone}</p>
+        </div>
+      )}
+      <div
+        className={clsx(
+          phone ? "" : "mt-2",
+          "bg-gray-100 border-gray-400 text-gray-600 inline px-2 border rounded-md text-sm",
+        )}
+      >
         {id}
       </div>
     </div>

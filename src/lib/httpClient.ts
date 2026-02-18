@@ -1,8 +1,8 @@
 import axios from "axios";
 
 // const BASE_URL = "https://test.ownmali.com/api";
-// const BASE_URL = "https://mgm-backend.vercel.app";  
- const BASE_URL = "http://localhost:5050";
+// const BASE_URL = "https://mgm-backend.vercel.app";
+const BASE_URL = "http://localhost:5050";
 
 const api = axios.create({
   baseURL: BASE_URL,
@@ -56,13 +56,15 @@ api.interceptors.response.use(
         const refreshToken = getRefreshToken();
         const sessionId = getSessionId();
         console.log("Attempting token refresh with sessionId:", sessionId);
-        if (!sessionId) {
-          // logout();
+        console.log("Attempting token refresh with sessionId:", sessionId);
+        if (!sessionId || !refreshToken) {
+          logout(); 
           return Promise.reject({ message: "No refresh token" });
         }
 
         const { data } = await axios.post(`${BASE_URL}/admin/auth/refresh`, {
           sessionId,
+          refreshToken,
         });
 
         const newAccessToken = data?.data?.accessToken;
@@ -73,7 +75,7 @@ api.interceptors.response.use(
         // Update request & retry
         originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
         return api(originalRequest);
-      } catch {
+      } catch (error) {
         logout();
         return Promise.reject({ message: "Session expired" });
       }
