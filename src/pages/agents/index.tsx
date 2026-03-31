@@ -11,6 +11,7 @@ import useGetAllAgents from "@/hooks/agents/useGetAllAgents";
 import queryString from "query-string";
 import { useDebounce } from "@/hooks/useDebounce";
 import Pagination from "@/components/pagination/pagination";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 const Agents = () => {
   const navigate = useNavigate();
@@ -85,8 +86,8 @@ const Agents = () => {
         {/* Table */}
         <div className="rounded-xl  bg-background">
           {isLoadingAgents ? (
-            <div className="flex items-center justify-center p-10 text-muted-foreground">
-              <LoaderCircle size={50} className=" animate-spin text-gold" />
+            <div className="p-4 mt-10 text-sm text-muted-foreground">
+              <LoadingSpinner label={"Loading Partners..."} />
             </div>
           ) : (
             <TableComponent columns={cols} data={agents?.data} model="Agents" />

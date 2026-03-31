@@ -18,15 +18,35 @@ import clsx from "clsx";
 import UserAction from "../components/UserAction";
 import UserProfileCard from "../components/UserProfileCard";
 import ProductCard from "../components/ProductCard";
+import useUpdateAppointment from "@/hooks/appointments/useUpdateAppointment";
+import { toast } from "sonner";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 const AppointmentDetails = () => {
   const { id } = useParams<{ id: string }>();
   const { data: appointment, isFetching: isAppointmentLoading } =
     useGetAppointmentById(id as string);
+  const { mutate: updateAppointment, isPending: updatingAppointment } =
+    useUpdateAppointment();
   const config = getStatusConfig(appointment?.status);
   const Icon = config.icon || <TimerIcon size={15} className="text-gold" />;
-  console.log("Appointment ID:", id);
-  console.log("Fetched Appointment:", appointment);
+  const handleStatusChange = (newStatus: string) => {
+    if (!id) return;
+    updateAppointment(
+      { appointmentId: id, data: { status: newStatus } },
+      {
+        onSuccess: () => {
+          // Optionally show a success message or perform additional actions}}
+          toast.success("Appointment status updated successfully");
+        },
+        onError: (error) => {
+          console.error("Error updating appointment status:", error);
+          toast.error("Failed to update appointment status");
+        },
+      },
+    );
+  };
+
   return (
     <AdminLayout
       title="Appointment Details"
@@ -35,8 +55,8 @@ const AppointmentDetails = () => {
       searchBar={false}
     >
       {isAppointmentLoading && (
-        <div className="flex items-center justify-center p-10 text-muted-foreground">
-          <LoaderCircle size={50} className=" animate-spin text-gold" />
+        <div className="p-4 mt-10 text-sm text-muted-foreground">
+          <LoadingSpinner label={"Loading Appointment..."} />
         </div>
       )}
       {!isAppointmentLoading && appointment && (
@@ -106,6 +126,7 @@ const AppointmentDetails = () => {
               <UserAction
                 name={appointment?.userDetails?.fullName}
                 status={appointment?.status || "CONFIRMED"}
+                statusChange={handleStatusChange}
               />
 
               {/* PROFILE CARDS */}
@@ -133,7 +154,9 @@ const AppointmentDetails = () => {
                   email={
                     appointment?.agentDetails?.email || "partner@example.com"
                   }
-                  phone={appointment?.agentDetails?.phoneNumber || "+91 9876543210"}
+                  phone={
+                    appointment?.agentDetails?.phoneNumber || "+91 9876543210"
+                  }
                   id={
                     <>
                       User Id:

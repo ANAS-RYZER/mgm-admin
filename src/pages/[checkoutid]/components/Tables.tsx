@@ -7,17 +7,20 @@ import api from "@/lib/httpClient";
 import { toast } from "sonner";
 import { Product } from "../index";
 import { Row } from "./Row";
+import { Breakdown } from "@/hooks/orders/useCreateOrder";
 
 interface TablesProps {
   products: Product[];
   setProducts: React.Dispatch<React.SetStateAction<Product[]>>;
   isLoadingAppointment?: boolean;
+  breakdown: Breakdown;
 }
 
 const Tables = ({
   products,
   setProducts,
   isLoadingAppointment,
+  breakdown,
 }: TablesProps) => {
   const [skuInput, setSkuInput] = useState("");
   const [isSearchingSku, setIsSearchingSku] = useState(false);
@@ -78,62 +81,6 @@ const Tables = ({
       setIsSearchingSku(false);
     }
   };
-
-  const breakdown = useMemo(() => {
-    let basePriceTotal = 0;
-    let vaTotal = 0;
-    let makingTotal = 0;
-    let grossTotal = 0;
-    let discountTotal = 0;
-    let taxableTotal = 0;
-    let cgstTotal = 0;
-    let sgstTotal = 0;
-
-    products.forEach((p) => {
-      const qty = p.quantity;
-
-      // Base price = gold + stone
-      const basePrice = p.grossPrice - p.makingCharges - (p.va || 0);
-
-      const grossPrice = p.grossPrice;
-
-      const discount = grossPrice - p.discountedPrice;
-
-      const taxable = p.discountedPrice;
-
-      const cgst = taxable * (p.cgst / 100);
-      const sgst = taxable * (p.sgst / 100);
-
-      basePriceTotal += basePrice * qty;
-      vaTotal += (p.va || 0) * qty;
-      makingTotal += p.makingCharges * qty;
-      grossTotal += grossPrice * qty;
-      discountTotal += discount * qty;
-      taxableTotal += taxable * qty;
-      cgstTotal += cgst * qty;
-      sgstTotal += sgst * qty;
-    });
-
-    const grandTotal = taxableTotal + cgstTotal + sgstTotal;
-
-    const commission = taxableTotal * 0.02;
-
-    const adminRevenue = taxableTotal - commission;
-
-    return {
-      basePriceTotal,
-      vaTotal,
-      makingTotal,
-      grossTotal,
-      discountTotal,
-      taxableTotal,
-      cgstTotal,
-      sgstTotal,
-      grandTotal,
-      commission,
-      adminRevenue,
-    };
-  }, [products]);
 
   const increaseQty = (id: string) => {
     setProducts((prev) =>

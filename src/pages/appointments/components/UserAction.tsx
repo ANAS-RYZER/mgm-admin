@@ -1,19 +1,19 @@
 import { Button } from "@/components/ui/button";
-import {  useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 
 interface UserActionProps {
   name?: string;
   status?: string;
+  statusChange?: (newStatus: string) => void;
 }
 
-const UserAction = ({ name, status }: UserActionProps) => {
+const UserAction = ({ name, status, statusChange }: UserActionProps) => {
   const isActionAllowed = status === "CONFIRMED";
-  const navigate = useNavigate()
-  const param = useParams()
+  const navigate = useNavigate();
+  const param = useParams();
 
-  console.log(param.id, param, "param")
-
+  console.log(param.id, param, "param");
 
   const renderOutcome = () => {
     if (status === "ISVISITED")
@@ -26,6 +26,12 @@ const UserAction = ({ name, status }: UserActionProps) => {
       return `${name || "User"} did not visit the store.`;
 
     return "No actions available.";
+  };
+
+  const handleStatusChange = (newStatus: string) => {
+    if (statusChange) {
+      statusChange(newStatus);
+    }
   };
 
   return (
@@ -41,15 +47,24 @@ const UserAction = ({ name, status }: UserActionProps) => {
           </p>
 
           <div className="flex md:flex-row flex-col gap-3 mt-4">
-            <Button className="bg-red-600 hover:bg-red-700 text-white" >
+            <Button
+              className="bg-red-600 hover:bg-red-700 text-white"
+              onClick={() => handleStatusChange("NOTVISITED")}
+            >
               Mark as Not Visited
             </Button>
 
-            <Button className="bg-blue-600 hover:bg-blue-700 text-white">
+            <Button
+              className="bg-blue-600 hover:bg-blue-700 text-white"
+              onClick={() => handleStatusChange("ISVISITED")}
+            >
               Mark as Visited
             </Button>
 
-            <Button className="bg-green-600 hover:bg-green-700 text-white" onClick={()=>navigate(`/checkout/${param.id}`)}>
+            <Button
+              className="bg-green-600 hover:bg-green-700 text-white"
+              onClick={() => navigate(`/checkout/${param.id}`)}
+            >
               Mark as Purchased
             </Button>
           </div>

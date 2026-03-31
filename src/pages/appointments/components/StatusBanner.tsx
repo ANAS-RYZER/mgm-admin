@@ -1,4 +1,4 @@
-import { CheckCircle, Info, ShoppingBagIcon } from "lucide-react";
+import { CheckCircle, Info, MapPinCheck, PackageCheck, ShoppingBagIcon } from "lucide-react";
 import React from "react";
 
 type AppointmentStatus = "CONFIRMED" | "ISVISITED" | "ISPURCHASED";
@@ -24,21 +24,21 @@ const StatusBanner: React.FC<StatusBannerProps> = ({
         return {
           text: `${userName} has confirmed the appointment and is scheduled to visit on ${date} at ${timeSlot}.`,
           className: "bg-blue-50 text-blue-700 border-blue-200",
-          icon: <Info className="text-blue-600 text-lg" />,
+          icon: <CheckCircle className="text-blue-600 text-lg" />,
         };
 
       case "ISVISITED":
         return {
           text: `${userName} visited the store on ${date} but no purchases were made.`,
           className: "bg-yellow-50 text-yellow-700 border-yellow-200",
-          icon: <CheckCircle className="text-yellow-600 text-lg" />,
+          icon: <MapPinCheck className="text-yellow-600 text-lg" />,
         };
 
       case "ISPURCHASED":
         return {
-          text: `${userName} completed a store visit and purchased products worth ${amount} on ${date}.`,
+          text: `${userName} completed a store visit and purchased  on ${date}.`,
           className: "bg-green-50 text-green-700 border-green-200",
-          icon: <ShoppingBagIcon className="text-green-600 text-lg" />,
+          icon: <PackageCheck className="text-green-600 text-lg" />,
         };
 
       default:

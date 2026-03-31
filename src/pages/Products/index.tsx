@@ -10,6 +10,7 @@ import useGetAllProducts from "@/hooks/product/useGetAllProducts";
 import queryString from "query-string";
 import Pagination from "@/components/pagination/pagination";
 import { useDebounce } from "@/hooks/useDebounce";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 const Products = () => {
   const navigate = useNavigate();
@@ -75,8 +76,8 @@ const Products = () => {
         {/* Table */}
         <div className="rounded-xl bg-background">
           {isLoadingProducts ? (
-            <div className="p-4 text-sm text-muted-foreground">
-              Loading products...
+            <div className="p-4 mt-10 text-sm text-muted-foreground">
+              <LoadingSpinner label={"Loading Products..."} />
             </div>
           ) : (
             <TableComponent

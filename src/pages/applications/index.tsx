@@ -10,6 +10,7 @@ import useGetAllApplications from "@/hooks/applications/useGetApplications";
 import Pagination from "@/components/pagination/pagination";
 import queryString from "query-string";
 import { useDebounce } from "@/hooks/useDebounce";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 const Applications = () => {
   const navigate = useNavigate();
@@ -88,8 +89,8 @@ const Applications = () => {
         {/* Table */}
         <div className="rounded-xl  bg-background">
           {isLoadingApplications ? (
-            <div className="flex items-center justify-center p-10 text-muted-foreground">
-              <LoaderCircle size={50} className=" animate-spin text-gold" />
+            <div className="p-4 mt-10 text-sm text-muted-foreground">
+              <LoadingSpinner label={"Loading Applications..."} />
             </div>
           ) : (
             <TableComponent

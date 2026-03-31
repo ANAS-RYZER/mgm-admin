@@ -1,4 +1,5 @@
 import { AdminLayout } from "@/components/layout/AdminLayout";
+import LoadingSpinner from "@/components/LoadingSpinner";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -168,9 +169,9 @@ export default function PricesPage() {
   if (isLoading) {
     return (
       <AdminLayout title="Prices" description="Manage metal prices">
-        <div className="flex items-center justify-center min-h-[200px]">
-          <Loader2 className="h-8 w-8 animate-spin text-gold" />
-        </div>
+        <div className="p-4 mt-10 text-sm text-muted-foreground">
+        <LoadingSpinner label={"Loading Prices..."} />
+      </div>
       </AdminLayout>
     );
   }

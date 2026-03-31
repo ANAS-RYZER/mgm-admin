@@ -13,6 +13,7 @@ import DashboardCard from "./components/DashboardCard";
 import Pagination from "@/components/pagination/pagination";
 import queryString from "query-string";
 import { useDebounce } from "@/hooks/useDebounce";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 const Appointments = () => {
   const navigate = useNavigate();
@@ -103,8 +104,8 @@ const Appointments = () => {
         {/* Table */}
         <div className="rounded-xl  bg-background">
           {isLoadingAppointments ? (
-            <div className="flex items-center justify-center p-10 text-muted-foreground">
-              <LoaderCircle size={50} className=" animate-spin text-gold" />
+            <div className="p-4 mt-10 text-sm text-muted-foreground">
+              <LoadingSpinner label={"Loading Appointments..."} />
             </div>
           ) : (
             <TableComponent

@@ -4,20 +4,18 @@ import {
   Clock,
   MapPinCheck,
   HelpCircle,
+  PackageCheck,
 } from "lucide-react";
-
-
 
 type AppointmentStatus = "CONFIRMED" | "ISVISITED" | "ISPURCHASED" | "UNKNOWN";
 
 interface StatusConfig {
   text: string;
-  icon: React.ElementType;   
+  icon: React.ElementType;
   bgColor: string;
   borderColor: string;
   textColor: string;
 }
-
 
 export const APPOINTMENT_STATUS_CONFIG: Record<
   AppointmentStatus,
@@ -26,25 +24,25 @@ export const APPOINTMENT_STATUS_CONFIG: Record<
   CONFIRMED: {
     text: "Confirmed",
     icon: CheckCircle,
-    bgColor: "bg-green-500",
-    borderColor: "border-green-300",
-    textColor: "text-green-700",
-  },
-
-  ISVISITED: {
-    text: "Visited",
-    icon: MapPinCheck,
     bgColor: "bg-blue-500",
     borderColor: "border-blue-300",
     textColor: "text-blue-700",
   },
 
-  ISPURCHASED: {
-    text: "Purchased",
-    icon: Clock,
+  ISVISITED: {
+    text: "Visited",
+    icon: MapPinCheck,
     bgColor: "bg-yellow-500",
     borderColor: "border-yellow-300",
     textColor: "text-yellow-700",
+  },
+
+  ISPURCHASED: {
+    text: "Purchased",
+    icon: PackageCheck,
+    bgColor: "bg-green-500",
+    borderColor: "border-green-300",
+    textColor: "text-green-700",
   },
 
   UNKNOWN: {
@@ -55,7 +53,6 @@ export const APPOINTMENT_STATUS_CONFIG: Record<
     textColor: "text-gray-700",
   },
 };
-
 
 export const getStatusConfig = (status?: string): StatusConfig => {
   if (!status) return APPOINTMENT_STATUS_CONFIG.UNKNOWN;
