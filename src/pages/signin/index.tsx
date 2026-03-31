@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useRefreshToken } from "@/hooks/login/useLogin";
 import { useLogin } from "@/hooks/login/useLogin";
+import { Eye, EyeOff } from "lucide-react";
 
 const slides = [
   {
@@ -36,6 +37,7 @@ const slides = [
 const index = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const activeSlide = useMemo(() => slides[activeIndex], [activeIndex]);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const { mutate: login, isPending, error } = useLogin();
 
@@ -53,10 +55,9 @@ const index = () => {
           // navigate to dashboard
           window.location.href = "/";
         },
-         onError: (error: any) => {
-              console.log("error",error)
-             
-            },
+        onError: (error: any) => {
+          console.log("error", error);
+        },
       },
     );
   };
@@ -163,23 +164,46 @@ const index = () => {
                   Forgot?
                 </Link>
               </div>
-              <Input
+              {/* <Input
                 id="password"
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Enter your password"
                 className="h-11 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 text-white placeholder:text-white/60 focus:bg-white/15 focus:border-white/30 transition-all duration-300"
-              />
+              /> */}
+              <div className="relative">
+                <Input
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Enter your password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="h-11 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 text-white placeholder:text-white/60 focus:bg-white/15 focus:border-white/30 transition-all duration-300"
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((p) => !p)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-primary-foreground/50 hover:text-primary-foreground/80 transition-colors p-1 rounded-md hover:bg-primary-foreground/10"
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                >
+                  {showPassword ? (
+                    <EyeOff className="w-5 h-5" />
+                  ) : (
+                    <Eye className="w-5 h-5" />
+                  )}
+                </button>
+              </div>
             </div>
-            <div className="flex items-center justify-between text-sm text-white/80">
-              <label className="flex items-center gap-2">
+            <div className="flex items-center justify-end text-sm text-white/80">
+              {/* <label className="flex items-center gap-2">
                 <input
                   type="checkbox"
                   className="h-4 w-4 rounded border-white/30 bg-white/10 backdrop-blur-md"
                 />
                 Remember me
-              </label>
+              </label> */}
               <span>
                 Need access?{" "}
                 <Link
@@ -194,7 +218,7 @@ const index = () => {
               type="submit"
               variant="default"
               disabled={isPending}
-              className="h-11 w-full rounded-xl text-base font-semibold bg-gradient-to-r from-white/15 via-white/10 to-white/5 backdrop-blur-xl border border-white/30 text-white hover:from-white/25 hover:via-white/20 hover:to-white/10 transition-all duration-300 shadow-xl hover:shadow-2xl hover:scale-[1.02]"
+              className="h-11 w-full rounded-xl text-base font-semibold bg-gold hover:bg-gold/90 transition-all duration-300 shadow-xl hover:shadow-2xl hover:scale-[1.02]"
             >
               {isPending ? "Signing in..." : "Sign In"}
             </Button>

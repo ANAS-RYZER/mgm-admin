@@ -25,9 +25,11 @@ import {
 } from "@/components/ui/dialog";
 
 const AddProduct = () => {
+  // Draft ID for uploads before product/SKU exists (backend generates SKU)
+  const [uploadRefId, setUploadRefId] = useState(() => `draft-${crypto.randomUUID()}`);
+
   const basicInfoFields = productBasicInfoConfig();
   const descInfoFields = prodcutDescInfoConfig();
-  const goldSpecFields = prodcutGoldSpecConfig();
   const priceAndInventoryFields = prodcutPricingAndInventoryConfig();
 
   const { mutate: addProduct, isPending: isAdding } = useAddProduct();
@@ -35,76 +37,152 @@ const AddProduct = () => {
 
   const methods = useForm<ProductFormValues>({
     defaultValues: {
-      sku: "",
+
       name: "",
       description: "",
       categories: "",
 
+      calculatedTotalCost: "",
       mrpPrice: "",
       discountedPrice: "",
+      discountedPercentage: "",
+      netprice: "",
+
+      // New pricing fields
+      grossPrice: "",
+      cgst: "",
+      sgst: "",
+      va: "",
+      multiplestonePrice: "",
+
       stockQuantity: "",
 
       image: "",
       gallery: [],
 
+      netWeight: "",
+      goldPrice: "",
+
       goldSpecs: {
         karat: "",
         metal: "",
         goldWeight: "",
-        grossWeight: "",
-        makingCharges: "",
-        purity: "",
       },
+      makingChanges: "",
 
       stoneSpecs: [], // ✅ clean
     },
   });
+
+  const metal = useWatch({ control: methods.control, name: "goldSpecs.metal", defaultValue: "" });
+  const goldSpecFields = prodcutGoldSpecConfig(metal);
 
   const onSubmit = (data: any) => {
     console.log("Submitted Product (raw):", data);
 
     // Remove 'category' if it exists (should use 'categories' instead)
     const { category, ...submitData } = data;
-    
+
     // Build clean payload with only expected fields
     const cleanPayload: any = {
-      sku: submitData.sku,
       name: submitData.name,
       description: submitData.description,
       categories: submitData.categories || category, // Use categories, fallback to category if needed
+      calculatedTotalCost: submitData.calculatedTotalCost,
       mrpPrice: submitData.mrpPrice,
-      discountedPrice: submitData.discountedPrice || 0,
+      discountedPrice: submitData.discountedPrice ?? 0,
+      discountedPercentage: submitData.discountedPercentage ?? 0,
+      netprice: submitData.netprice,
+
+      // New pricing fields
+      grossPrice: submitData.grossPrice,
+      cgst: submitData.cgst,
+      sgst: submitData.sgst,
+      va: submitData.va,
+      multiplestonePrice: submitData.multiplestonePrice,
+
       stockQuantity: submitData.stockQuantity,
       material: submitData.material,
       image: submitData.image,
       gallery: Array.isArray(submitData.gallery) ? submitData.gallery : [],
-      goldSpecs: submitData.goldSpecs,
-      stoneSpecs: Array.isArray(submitData.stoneSpecs) ? submitData.stoneSpecs : [],
+
+      netWeight: submitData.netWeight !== "" ? Number(submitData.netWeight) : undefined,
+      goldPrice: submitData.goldPrice !== "" ? Number(submitData.goldPrice) : undefined,
+
+      makingChanges: Number(submitData.makingChanges) || 0,
+      goldSpecs: {
+        karat: submitData.goldSpecs?.karat,
+        metal: submitData.goldSpecs?.metal,
+        goldWeight: Number(submitData.goldSpecs?.goldWeight) || 0,
+      },
+      stoneSpecs: Array.isArray(submitData.stoneSpecs)
+        ? submitData.stoneSpecs.map((stone: any) => ({
+          ...stone,
+          quantity: stone.quantity !== "" ? Number(stone.quantity) : undefined,
+          stoneprice: stone.stoneprice !== "" ? Number(stone.stoneprice) : undefined,
+        }))
+        : [],
+      uploadRefId, // Backend uses this to associate files uploaded with this draft ID
     };
+
+    // Ensure all numeric fields are actual Numbers
+    const numericFields = [
+      "calculatedTotalCost", "mrpPrice", "discountedPrice", "discountedPercentage", "netprice",
+      "grossPrice", "cgst", "sgst", "va", "multiplestonePrice", "stockQuantity",
+      "netWeight", "goldPrice"
+    ];
+
+    numericFields.forEach(field => {
+      if (cleanPayload[field] !== undefined && cleanPayload[field] !== null && cleanPayload[field] !== "") {
+        cleanPayload[field] = Number(cleanPayload[field]);
+      }
+    });
+
+    // Deep clean goldSpecs
+    if (cleanPayload.goldSpecs) {
+      Object.keys(cleanPayload.goldSpecs).forEach(key => {
+        const val = cleanPayload.goldSpecs[key];
+        if (val === undefined || val === null || val === "") {
+          delete cleanPayload.goldSpecs[key];
+        } else if (["goldWeight", "makingCharges"].includes(key)) {
+          cleanPayload.goldSpecs[key] = Number(val);
+        }
+      });
+    }
+
+    // Deep clean stoneSpecs
+    if (Array.isArray(cleanPayload.stoneSpecs)) {
+      cleanPayload.stoneSpecs = cleanPayload.stoneSpecs.map((stone: any) => {
+        const cleaned = { ...stone };
+        if (cleaned.quantity !== undefined) cleaned.quantity = Number(cleaned.quantity) || 0;
+        if (cleaned.stoneprice !== undefined) cleaned.stoneprice = Number(cleaned.stoneprice) || 0;
+        return cleaned;
+      });
+    }
 
     // Remove undefined, null, or empty string values (except for required fields)
     Object.keys(cleanPayload).forEach((key) => {
       const value = cleanPayload[key];
-      
+
       // Remove undefined or null values
       if (value === undefined || value === null) {
         delete cleanPayload[key];
         return;
       }
-      
+
       // Handle empty strings - keep for required fields, remove for optional
       if (value === '' && !['sku', 'name', 'categories'].includes(key)) {
         delete cleanPayload[key];
         return;
       }
-      
+
       // Validate image URL format
       if (key === 'image' && value && typeof value !== 'string') {
         console.warn('Invalid image value type:', typeof value, value);
         delete cleanPayload[key];
         return;
       }
-      
+
       // Validate gallery is array of strings
       if (key === 'gallery' && Array.isArray(value)) {
         cleanPayload[key] = value.filter((url) => typeof url === 'string' && url.trim() !== '');
@@ -123,18 +201,18 @@ const AddProduct = () => {
         onError: (error: any) => {
           console.error("Error adding product:", error);
           let errorMessage = "Failed to add product. Please try again.";
-          
+
           // Handle different error response formats
           if (error?.response?.data?.message) {
             const message = error.response.data.message;
             // If message is an array, join it
-            errorMessage = Array.isArray(message) 
-              ? message.join(", ") 
+            errorMessage = Array.isArray(message)
+              ? message.join(", ")
               : message;
           } else if (error?.message) {
             errorMessage = error.message;
           }
-          
+
           toast.error("Error", {
             description: errorMessage,
           });
@@ -152,10 +230,8 @@ const AddProduct = () => {
   const handleAddOtherItem = () => {
     setIsSuccessDialogOpen(false);
     methods.reset();
-    // Stay on the same page to add another product
+    setUploadRefId(`draft-${crypto.randomUUID()}`); // Fresh refId for next product's uploads
   };
-  const sku = methods.watch("sku") || "";
-
   return (
     <AdminLayout title="Add Product">
       <FormProvider {...methods}>
@@ -185,7 +261,7 @@ const AddProduct = () => {
           <div className="rounded-md border border-black/10 p-7 space-y-5 shadow-sm bg-white">
             <div className="flex items-center gap-3">
               <div className="bg-rose-100 rounded-full text-rose-800 h-10 w-10 flex justify-center items-center font-bold">
-                  3
+                3
               </div>
               <h1 className="text-lg font-semibold ">Gold Specifications</h1>
             </div>
@@ -193,8 +269,8 @@ const AddProduct = () => {
 
             <FormRenderer control={methods.control} fields={goldSpecFields} />
           </div>
-        
-      
+
+
           <div className="rounded-md border border-black/10 p-7 space-y-5 shadow-sm bg-white">
             <div className="flex items-center gap-3">
               <div className="bg-rose-100 rounded-full text-rose-800 h-10 w-10 flex justify-center items-center font-bold">
@@ -234,7 +310,7 @@ const AddProduct = () => {
             <hr />
             <FormRenderer
               control={methods.control}
-              fields={productImageConfig(sku)}
+              fields={productImageConfig(uploadRefId)}
             />
           </div>
           <div className="rounded-md border border-black/10 p-7 space-y-5 shadow-sm bg-white">
@@ -247,7 +323,7 @@ const AddProduct = () => {
             <hr />
             <FormRenderer
               control={methods.control}
-              fields={productGalleryConfig(sku)}
+              fields={productGalleryConfig(uploadRefId)}
             />
           </div>
 

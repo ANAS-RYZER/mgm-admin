@@ -7,7 +7,7 @@ export const agentListCols = () => {
   const navigate = useNavigate();
   return [
     {
-      header: "Agent ID",
+      header: "Partner ID",
       accessorKey: "agentId",
       cell: ({ row }: { row: any }) => {
         const agentId = row.original.agentId;

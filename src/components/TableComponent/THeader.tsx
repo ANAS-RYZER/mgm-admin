@@ -18,7 +18,13 @@ const THeader: React.FC<THeaderProps> = ({ headerGroups }) => {
             return (
               <th
                 key={header.id}
-                className="relative px-6 py-4 text-left text-xs font-semibold tracking-wide text-gray-500"
+                className={`relative px-6 py-4 text-xs font-semibold tracking-wide text-gray-500 ${
+                  header.column.columnDef.meta?.align === "center"
+                    ? "text-center"
+                    : header.column.columnDef.meta?.align === "right"
+                      ? "text-right"
+                      : "text-left"
+                }`}
                 style={{ maxWidth: header.getSize() }}
                 colSpan={header.colSpan}
               >

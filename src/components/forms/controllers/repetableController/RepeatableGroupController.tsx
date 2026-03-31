@@ -1,7 +1,7 @@
 import { useFieldArray, useFormContext } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Plus, Trash } from "lucide-react";
-import { ControllerMap } from "../ControllerMap";
+import { ControllerMap } from    "../../ControllerMap";
 
 export function RepeatableGroupController({ fieldConfig }: any) {
   const { name, label, fields = [] } = fieldConfig;

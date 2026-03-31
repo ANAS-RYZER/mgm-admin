@@ -42,6 +42,7 @@ function TableComponent<TData>({
     onColumnSizingChange: setColumnSizing,
   });
 
+
   const tableData = table.getRowModel().rows || [];
 
   return (

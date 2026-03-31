@@ -3,12 +3,7 @@ import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import {
   LayoutDashboard,
   Diamond,
-  PackageSearch,
-  Users,
-  Palette,
-  Megaphone,
-  BarChart3,
-  Settings,
+
   Menu,
   X,
   UserCircle2,
@@ -17,6 +12,8 @@ import {
   ClipboardList,
   UserCog,
   UserCheck,
+  Calendar,
+  Calculator,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
@@ -25,7 +22,9 @@ const navigation = [
   { label: "Dashboard", icon: LayoutDashboard, to: "/dashboard" },
   { label: "Products", icon: Diamond, to: "/products" },
   { label: "Applications", icon: ClipboardList , to: "/applications" },
-  { label: "Agents", icon: UserCheck   , to: "/agents" },
+  { label: "Partners", icon: UserCheck   , to: "/partners" },
+  { label: "Appointments", icon: Calendar   , to: "/appointments" },
+  {  label : "Prices" , icon :  Calculator  , to : "/prices"}
 ];
 
 interface AdminSidebarProps {

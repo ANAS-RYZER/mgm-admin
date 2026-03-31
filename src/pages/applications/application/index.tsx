@@ -7,6 +7,7 @@ import DocumentViewer from "./components/DocumentViewer";
 import { LoaderCircle } from "lucide-react";
 import useUpdateStatusApplication from "@/hooks/applications/useUpdateStatusApplication";
 import { toast } from "sonner";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 const ApplicationReviewPage = () => {
   const { id } = useParams();
@@ -43,8 +44,8 @@ const ApplicationReviewPage = () => {
       searchBar={false}
     >
       {isLoading && (
-        <div className="flex items-center justify-center p-10 text-muted-foreground">
-          <LoaderCircle size={50} className=" animate-spin text-gold" />
+        <div className="p-4 mt-10 text-sm text-muted-foreground">
+          <LoadingSpinner label={"Loading Application..."} />
         </div>
       )}
       {!application && !isLoading && (
@@ -55,7 +56,7 @@ const ApplicationReviewPage = () => {
       {application && (
         <div className="space-y-6">
           <ApplicationTopBar
-            applicationId={application?.agentId}
+            applicationId={application?.applicationId || ""}
             status={application?.status}
             onUpdateStatus={handleUpdateStatus}
             isUpdating={isUpdating}

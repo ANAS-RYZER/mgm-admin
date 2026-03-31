@@ -1,8 +1,8 @@
 import axios from "axios";
 
 // const BASE_URL = "https://test.ownmali.com/api";
-const BASE_URL = "https://mgm-backend.vercel.app";  
-//  const BASE_URL = "http://localhost:5050";
+const BASE_URL = "https://mgm-backend.vercel.app";
+// const BASE_URL = "http://localhost:5050";
 
 const api = axios.create({
   baseURL: BASE_URL,
@@ -11,9 +11,9 @@ const api = axios.create({
   },
 });
 
-
 const getAccessToken = () => localStorage.getItem("accessToken");
 const getRefreshToken = () => localStorage.getItem("refreshToken");
+const getSessionId = () => localStorage.getItem("sessionId");
 
 const setAccessToken = (token: string) =>
   localStorage.setItem("accessToken", token);
@@ -21,32 +21,26 @@ const setAccessToken = (token: string) =>
 const clearTokens = () => {
   localStorage.removeItem("accessToken");
   localStorage.removeItem("refreshToken");
+  localStorage.removeItem("sessionId");
 };
-
 
 const logout = () => {
   clearTokens();
   window.location.href = "/signin";
 };
 
-
-api.interceptors.request.use(
-  (config) => {
-    const token = getAccessToken();
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  },
-  Promise.reject
-);
-
+api.interceptors.request.use((config) => {
+  const token = getAccessToken();
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+}, Promise.reject);
 
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
-
 
     if (!error.response) {
       return Promise.reject({ message: "Network Error" });
@@ -60,12 +54,16 @@ api.interceptors.response.use(
 
       try {
         const refreshToken = getRefreshToken();
-        if (!refreshToken) {
-          logout();
+        const sessionId = getSessionId();
+        console.log("Attempting token refresh with sessionId:", sessionId);
+        console.log("Attempting token refresh with sessionId:", sessionId);
+        if (!sessionId || !refreshToken) {
+          logout(); 
           return Promise.reject({ message: "No refresh token" });
         }
 
-        const { data } = await axios.post(`${BASE_URL}/admin/refresh-token`, {
+        const { data } = await axios.post(`${BASE_URL}/admin/auth/refresh`, {
+          sessionId,
           refreshToken,
         });
 
@@ -77,14 +75,14 @@ api.interceptors.response.use(
         // Update request & retry
         originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
         return api(originalRequest);
-      } catch {
+      } catch (error) {
         logout();
         return Promise.reject({ message: "Session expired" });
       }
     }
 
     return Promise.reject(error);
-  }
+  },
 );
 
 export default api;

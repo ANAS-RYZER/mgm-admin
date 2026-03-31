@@ -3,16 +3,41 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Plus, Search } from "lucide-react";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import TableComponent from "@/components/TableComponent";
 import { productColumns } from "./schema/columns";
 import useGetAllProducts from "@/hooks/product/useGetAllProducts";
+import queryString from "query-string";
+import Pagination from "@/components/pagination/pagination";
+import { useDebounce } from "@/hooks/useDebounce";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 const Products = () => {
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const { pathname } = useLocation();
   const [searchTerm, setSearchTerm] = useState("");
+  const search = useDebounce(searchTerm, 500);
 
-  const { data: products, isFetching: isLoadingProducts } = useGetAllProducts();
+  const currentPage = Number(searchParams.get("page")) || 1;
+  const limit = Number(searchParams.get("limit")) || 10;
+
+  console.log("Current Page:", currentPage, "Limit:", limit, "Search:", search);
+  const { data: products, isFetching: isLoadingProducts } = useGetAllProducts({
+    page: currentPage,
+    limit,
+    search,
+  });
+
+  const onPageChange = (page: number) => {
+    navigate(
+      `${pathname}?page=${page}&limit=${products?.pagination?.limit || 10}`,
+    );
+  };
+
+  const onPageSizeChange = (pageSize: number) => {
+    navigate(`${pathname}?page=1&limit=${pageSize}`);
+  };
 
   return (
     <AdminLayout
@@ -20,7 +45,7 @@ const Products = () => {
       description="Curate inventory, manage artisanship pipelines, and govern MGM Jewels collections."
       className="space-y-8"
     >
-      <section className="space-y-6">
+      <section className="space-y-6 z-10">
         {/* Header */}
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div>
@@ -51,17 +76,24 @@ const Products = () => {
         {/* Table */}
         <div className="rounded-xl bg-background">
           {isLoadingProducts ? (
-            <div className="p-4 text-sm text-muted-foreground">
-              Loading products...
+            <div className="p-4 mt-10 text-sm text-muted-foreground">
+              <LoadingSpinner label={"Loading Products..."} />
             </div>
           ) : (
             <TableComponent
               columns={productColumns}
-              data={products}
+              data={products?.data}
               model="product"
             />
           )}
         </div>
+        {products?.pagination && (
+          <Pagination
+            {...products?.pagination}
+            onPageChange={onPageChange}
+            onPageSizeChange={onPageSizeChange}
+          />
+        )}
       </section>
     </AdminLayout>
   );

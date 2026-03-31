@@ -3,22 +3,47 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { LoaderCircle, Search } from "lucide-react";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import TableComponent from "@/components/TableComponent";
 import { applicationListCols } from "./schema/applicationListCols";
 import useGetAllApplications from "@/hooks/applications/useGetApplications";
+import Pagination from "@/components/pagination/pagination";
+import queryString from "query-string";
+import { useDebounce } from "@/hooks/useDebounce";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 const Applications = () => {
   const navigate = useNavigate();
 
-  const [searchTerm, setSearchTerm] = useState("");
   const [status, setStatus] = useState<string>("");
+  const searchParams = useSearchParams();
+  const { pathname } = useLocation();
+  const queryParams = queryString.parse(searchParams.toString());
+  const [searchTerm, setSearchTerm] = useState("");
+  const search = useDebounce(searchTerm, 500);
 
-  const cols=applicationListCols();
+  const currentPage = Number(queryParams?.page) || 1;
+  const limit = Number(queryParams?.limit) || 10;
 
-  const { data: applications, isFetching: isLoadingApplications } = useGetAllApplications({
-    status,
-  });
+  const cols = applicationListCols();
+
+  const { data: applications, isFetching: isLoadingApplications } =
+    useGetAllApplications({
+      status,
+      search,
+      page: currentPage,
+      limit,
+    });
+
+  const onPageChange = (page: number) => {
+    navigate(
+      `${pathname}?page=${page}&limit=${applications?.pagination?.limit || 10}`,
+    );
+  };
+
+  const onPageSizeChange = (pageSize: number) => {
+    navigate(`${pathname}?page=1&limit=${pageSize}`);
+  };
 
   return (
     <AdminLayout
@@ -64,17 +89,24 @@ const Applications = () => {
         {/* Table */}
         <div className="rounded-xl  bg-background">
           {isLoadingApplications ? (
-            <div className="flex items-center justify-center p-10 text-muted-foreground">
-              <LoaderCircle size={50} className=" animate-spin text-gold" />
+            <div className="p-4 mt-10 text-sm text-muted-foreground">
+              <LoadingSpinner label={"Loading Applications..."} />
             </div>
           ) : (
             <TableComponent
               columns={cols}
-              data={applications}
+              data={applications?.data}
               model="Application"
             />
           )}
         </div>
+        {applications?.pagination && (
+          <Pagination
+            {...applications?.pagination}
+            onPageChange={onPageChange}
+            onPageSizeChange={onPageSizeChange}
+          />
+        )}
       </section>
     </AdminLayout>
   );
