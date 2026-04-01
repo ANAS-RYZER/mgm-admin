@@ -14,6 +14,7 @@ import {
   UserCheck,
   Calendar,
   Calculator,
+  ShoppingBasket,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
@@ -24,6 +25,7 @@ const navigation = [
   { label: "Applications", icon: ClipboardList , to: "/applications" },
   { label: "Partners", icon: UserCheck   , to: "/partners" },
   { label: "Appointments", icon: Calendar   , to: "/appointments" },
+  { label: "Orders", icon: ShoppingBasket   , to: "/orders" },
   {  label : "Prices" , icon :  Calculator  , to : "/prices"}
 ];
 

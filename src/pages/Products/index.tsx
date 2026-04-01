@@ -11,10 +11,13 @@ import queryString from "query-string";
 import Pagination from "@/components/pagination/pagination";
 import { useDebounce } from "@/hooks/useDebounce";
 import LoadingSpinner from "@/components/LoadingSpinner";
+import { categories, categoryColors } from "@/lib/global";
+import clsx from "clsx";
 
 const Products = () => {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
+  const [category, setCategory] = useState<string>("");
   const { pathname } = useLocation();
   const [searchTerm, setSearchTerm] = useState("");
   const search = useDebounce(searchTerm, 500);
@@ -27,6 +30,7 @@ const Products = () => {
     page: currentPage,
     limit,
     search,
+    category,
   });
 
   const onPageChange = (page: number) => {
@@ -71,6 +75,26 @@ const Products = () => {
               className="pl-10"
             />
           </div>
+        </div>
+        <div className="flex items-center gap-2 flex-wrap">
+          {categories.map((ctgry) => (
+            <Button
+              key={ctgry.value}
+              className={clsx(
+                ctgry.value === category
+                  ? ctgry.active
+                  : categoryColors[ctgry.value],
+                "capitalize border rounded-full shadow-none hover:text-white",
+                ctgry.hover,
+              )}
+              size="sm"
+              onClick={() => {
+                setCategory(ctgry.value);
+              }}
+            >
+              {ctgry.label}
+            </Button>
+          ))}
         </div>
 
         {/* Table */}

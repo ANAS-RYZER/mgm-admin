@@ -2,60 +2,67 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Eye, Edit, Trash2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import clsx from "clsx";
+import { categoryColors } from "@/lib/global";
+
+
 
 export const productColumns = [
   {
-    header: 'Product ID',
-    accessorKey: '_id',
+    header: "Product ID",
+    accessorKey: "_id",
     cell: ({ row }: { row: any }) => {
       const shortId = row.original._id.slice(0, 6);
       return (
-        <span className="font-mono text-xs">{`PRD-${shortId}` || '-'}</span>
+        <span className="font-mono text-xs">{`PRD-${shortId}` || "-"}</span>
       );
     },
   },
   {
-    header: 'SKU',
-    accessorKey: 'sku',
+    header: "SKU",
+    accessorKey: "sku",
+    cell: ({ row }: { row: any }) => {
+      return <span className="font-medium">{row.original.sku || "-"}</span>;
+    },
+  },
+  {
+    header: "Product Name",
+    accessorKey: "name",
+    cell: ({ row }: { row: any }) => {
+      return <span>{row.original.name || "-"}</span>;
+    },
+  },
+  {
+    header: "categories",
+    accessorKey: "categories",
     cell: ({ row }: { row: any }) => {
       return (
-        <span className="font-medium">{row.original.sku || '-'}</span>
+        <Badge
+          className={clsx(
+            categoryColors[row.original.categories] || "capitalize border",
+          )}
+        >
+          {row.original.categories || "-"}
+        </Badge>
       );
     },
   },
   {
-    header: 'Product Name',
-    accessorKey: 'name',
-    cell: ({ row }: { row: any }) => {
-      return (
-        <span>{row.original.name || '-'}</span>
-      );
-    },
-  },
-  {
-    header: 'categories',
-    accessorKey: 'categories',
-    cell: ({ row }: { row: any }) => {
-      return (
-        <Badge  className="capitalize border-black/20 text-primary bg-gray-200/60">{row.original.categories || '-'}</Badge>
-      );
-    },
-  },
-  {
-    header: 'Price',
-    accessorKey: 'mrpPrice',
+    header: "Price",
+    accessorKey: "mrpPrice",
     cell: ({ row }: { row: any }) => {
       const price = row.original.mrpPrice;
       return (
-        <span>₹{price ? price.toLocaleString('en-IN') : '-'}</span>
+        <span className="font-medium">
+          ₹{price ? price.toLocaleString("en-IN") : "-"}
+        </span>
       );
     },
   },
 
-
   {
-    header: 'Actions',
-    accessorKey: 'action',
+    header: "Actions",
+    accessorKey: "action",
     cell: ({ row }: { row: any }) => {
       return (
         <div className="flex items-center gap-2">
@@ -64,7 +71,7 @@ export const productColumns = [
             size="sm"
             onClick={() => {
               // Handle view action
-              console.log('View product:', row.original);
+              console.log("View product:", row.original);
             }}
             className="h-8 w-8 p-0"
           >
@@ -75,7 +82,7 @@ export const productColumns = [
             size="sm"
             onClick={() => {
               // Handle edit action
-              console.log('Edit product:', row.original);
+              console.log("Edit product:", row.original);
             }}
             className="h-8 w-8 p-0"
           >
@@ -86,7 +93,7 @@ export const productColumns = [
             size="sm"
             onClick={() => {
               // Handle delete action
-              console.log('Delete product:', row.original);
+              console.log("Delete product:", row.original);
             }}
             className="h-8 w-8 p-0 text-red-600 hover:text-red-700"
           >
