@@ -12,6 +12,7 @@ import queryString from "query-string";
 import { useDebounce } from "@/hooks/useDebounce";
 import Pagination from "@/components/pagination/pagination";
 import LoadingSpinner from "@/components/LoadingSpinner";
+import { set } from "lodash";
 
 const Agents = () => {
   const navigate = useNavigate();
@@ -21,25 +22,24 @@ const Agents = () => {
   const queryParams = queryString.parse(searchParams.toString());
   const [searchTerm, setSearchTerm] = useState("");
   const search = useDebounce(searchTerm, 500);
-  const currentPage = Number(queryParams?.page) || 1;
-  const limit = Number(queryParams?.limit) || 10;
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(10);
 
   const cols = agentListCols();
 
   const { data: agents, isFetching: isLoadingAgents } = useGetAllAgents({
     search,
-    page: currentPage,
+    page: page,
     limit,
   });
 
   const onPageChange = (page: number) => {
-    navigate(
-      `${pathname}?page=${page}&limit=${agents?.pagination?.limit || 10}`,
-    );
+    setPage(page);
   };
 
   const onPageSizeChange = (pageSize: number) => {
-    navigate(`${pathname}?page=1&limit=${pageSize}`);
+    setLimit(pageSize);
+    setPage(1);
   };
 
   return (

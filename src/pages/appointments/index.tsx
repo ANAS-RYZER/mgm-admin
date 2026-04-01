@@ -14,6 +14,7 @@ import Pagination from "@/components/pagination/pagination";
 import queryString from "query-string";
 import { useDebounce } from "@/hooks/useDebounce";
 import LoadingSpinner from "@/components/LoadingSpinner";
+import { set } from "lodash";
 
 const Appointments = () => {
   const navigate = useNavigate();
@@ -24,23 +25,22 @@ const Appointments = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const search = useDebounce(searchTerm, 500);
 
-  const currentPage = Number(queryParams?.page) || 1;
-  const limit = Number(queryParams?.limit) || 10;
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(10);
 
   const cols = appointmentListCols();
 
   const { data: appointments, isFetching: isLoadingAppointments } =
-    useGetAppointments({ search, page: currentPage, limit });
+    useGetAppointments({ search, page: page, limit });
   console.log("Appointments data:", appointments);
 
   const onPageChange = (page: number) => {
-    navigate(
-      `${pathname}?page=${page}&limit=${appointments?.pagination?.limit || 10}`,
-    );
+      setPage(page);
   };
 
   const onPageSizeChange = (pageSize: number) => {
-    navigate(`${pathname}?page=1&limit=${pageSize}`);
+    setLimit(pageSize);
+     setPage(1); // Reset to first page when page size changes
   };
 
   return (
