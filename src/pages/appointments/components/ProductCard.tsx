@@ -4,9 +4,10 @@ interface ProductCardProps {
   image: string;
   name: string;
   sku: string;
+  price?: number;
 }
 
-const ProductCard = ({ image, name, sku }: ProductCardProps) => {
+const ProductCard = ({ image, name, sku, price }: ProductCardProps) => {
   return (
     <div className="border rounded-lg shadow-sm p-3 bg-white">
       <img className="w-50 h-50 rounded mb-3" src={image} alt={name} />
@@ -14,6 +15,13 @@ const ProductCard = ({ image, name, sku }: ProductCardProps) => {
       <p className=" text-xs text-muted-foreground ml-3 mt-1">
         sku-id: <span className="text-black uppercase">{sku}</span>
       </p>
+      {
+        price && (
+          <p className=" text-xs text-muted-foreground ml-3 mt-1">
+            Price: <span className="text-black">₹{price}</span>
+          </p>
+        )
+      }
     </div>
   );
 };

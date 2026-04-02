@@ -14,6 +14,7 @@ import {
   UserCheck,
   Calendar,
   Calculator,
+  Percent,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
@@ -24,7 +25,8 @@ const navigation = [
   { label: "Applications", icon: ClipboardList , to: "/applications" },
   { label: "Partners", icon: UserCheck   , to: "/partners" },
   { label: "Appointments", icon: Calendar   , to: "/appointments" },
-  {  label : "Prices" , icon :  Calculator  , to : "/prices"}
+  {  label : "Prices" , icon :  Calculator  , to : "/prices"},
+  { label: "Commissions", icon: Percent, to: "/commissions" },
 ];
 
 interface AdminSidebarProps {
