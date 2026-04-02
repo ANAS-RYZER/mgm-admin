@@ -13,7 +13,8 @@ interface OrderBreakdownProps {
   valueAddition?: number;
   makingCharges?: number;
   discountAmount?: number; // backend can send 593 or -593, both handled as discount
-  commissionRate?: number; // default 10%
+  commissionRate?: number; // can be 10 (percent) or 0.1
+  commissionAmount?: number; // use this directly when backend provides final amount
 }
 
 const toNumber = (value: unknown) => {
@@ -27,6 +28,7 @@ const OrderBreakdown = ({
   makingCharges,
   discountAmount,
   commissionRate,
+  commissionAmount,
 }: OrderBreakdownProps) => {
   const normalizedDiscount = useMemo(
     () => -Math.abs(toNumber(discountAmount)),
@@ -47,10 +49,16 @@ const OrderBreakdown = ({
     () => breakdownItems.reduce((sum, item) => sum + item.amount, 0),
     [breakdownItems],
   );
-  const partnerCommission = useMemo(
-    () => totalAmount * toNumber(commissionRate),
-    [totalAmount, commissionRate],
-  );
+  const partnerCommission = useMemo(() => {
+    const normalizedCommissionAmount = toNumber(commissionAmount);
+    if (normalizedCommissionAmount > 0) {
+      return normalizedCommissionAmount;
+    }
+
+    const normalizedRate = toNumber(commissionRate);
+    const rate = normalizedRate > 1 ? normalizedRate / 100 : normalizedRate;
+    return totalAmount * rate;
+  }, [totalAmount, commissionRate, commissionAmount]);
 
   return (
     <Card className="p-2 rounded-xl border shadow-sm">
