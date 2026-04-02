@@ -5,7 +5,7 @@ import StatusBadge from "@/components/common/StatusBadge";
 import { ColumnDef } from "@tanstack/react-table";
 import { format } from "date-fns";
 
-const formatCurrency = (value?: number) => {
+export const formatCurrency = (value?: number) => {
   if (!value && value !== 0) return "-";
   return `₹${value.toLocaleString("en-IN")}`;
 };

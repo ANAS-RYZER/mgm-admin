@@ -14,6 +14,7 @@ import {
   UserCheck,
   Calendar,
   Calculator,
+  Percent,
   ShoppingBasket,
   ShoppingBag,
   ShoppingCart,
@@ -28,7 +29,8 @@ const navigation = [
   { label: "Partners", icon: UserCheck   , to: "/partners" },
   { label: "Appointments", icon: Calendar   , to: "/appointments" },
   { label: "Orders", icon: ShoppingCart   , to: "/orders" },
-  {  label : "Prices" , icon :  Calculator  , to : "/prices"}
+  {  label : "Prices" , icon :  Calculator  , to : "/prices"},
+  { label: "Commissions", icon: Percent, to: "/commissions" },
 ];
 
 interface AdminSidebarProps {
