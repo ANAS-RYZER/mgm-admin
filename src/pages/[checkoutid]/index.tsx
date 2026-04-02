@@ -26,6 +26,7 @@ export interface Product {
   sgst: number;
   makingCharges: number;
   va: number;
+  commissionPercentage: number;
 }
 
 const Appointments = () => {
@@ -55,6 +56,7 @@ const Appointments = () => {
           makingCharges: product.makingChanges || 0,
           va: product.va || 0,
           quantity: 1,
+          commissionPercentage: product.commissionPercentage || 0,
         }),
       );
 
@@ -71,7 +73,8 @@ const Appointments = () => {
     let taxableTotal = 0;
     let cgstTotal = 0;
     let sgstTotal = 0;
-
+    let commission = 0;
+    console.log("products", products);
     products.forEach((p) => {
       const qty = p.quantity;
 
@@ -79,6 +82,7 @@ const Appointments = () => {
       const grossPrice = p.grossPrice;
       const discount = grossPrice - p.discountedPrice;
       const taxable = p.discountedPrice;
+      const commissionPercentage = p.commissionPercentage || 0;
 
       const cgst = taxable * (p.cgst / 100);
       const sgst = taxable * (p.sgst / 100);
@@ -91,11 +95,12 @@ const Appointments = () => {
       taxableTotal += taxable * qty;
       cgstTotal += cgst * qty;
       sgstTotal += sgst * qty;
+      // Commission is calculated per line-item taxable amount, then summed.
+      commission += (taxable * commissionPercentage) / 100 * qty;
     });
 
     const grandTotal = taxableTotal + cgstTotal + sgstTotal;
-    const commission = taxableTotal * 0.02;
-    const adminRevenue = taxableTotal - commission;
+    const adminRevenue = grandTotal - commission;
 
     return {
       basePriceTotal,

@@ -1,8 +1,8 @@
 import axios from "axios";
 
 // const BASE_URL = "https://test.ownmali.com/api";
-const BASE_URL = "https://mgm-backend.vercel.app";
-// const BASE_URL = "http://localhost:5050";
+// const BASE_URL = "https://mgm-backend.vercel.app";
+const BASE_URL = "http://localhost:5050";
 
 const api = axios.create({
   baseURL: BASE_URL,
@@ -56,9 +56,9 @@ api.interceptors.response.use(
         const refreshToken = getRefreshToken();
         const sessionId = getSessionId();
         console.log("Attempting token refresh with sessionId:", sessionId);
-        console.log("Attempting token refresh with sessionId:", sessionId);
         if (!sessionId || !refreshToken) {
-          logout(); 
+          // If we can't refresh, the session is effectively invalid.
+          logout();
           return Promise.reject({ message: "No refresh token" });
         }
 
