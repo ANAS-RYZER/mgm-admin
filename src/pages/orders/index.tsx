@@ -1,6 +1,6 @@
 import { AdminLayout } from "@/components/layout/AdminLayout";
 import { Input } from "@/components/ui/input";
-import {  Search } from "lucide-react";
+import { Search } from "lucide-react";
 import { useState } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import TableComponent from "@/components/TableComponent";
@@ -13,34 +13,29 @@ import useGetOrderListCols from "@/hooks/orders/useGetOrderList";
 
 const Orders = () => {
   const navigate = useNavigate();
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(10);
 
   const searchParams = useSearchParams();
   const { pathname } = useLocation();
-  const queryParams = queryString.parse(searchParams.toString());
   const [searchTerm, setSearchTerm] = useState("");
   const search = useDebounce(searchTerm, 500);
-
-  const currentPage = Number(queryParams?.page) || 1;
-  const limit = Number(queryParams?.limit) || 10;
 
   const cols = orderListCols();
 
   const { data: orders, isFetching: isLoadingOrders } = useGetOrderListCols({
     search,
-    page: currentPage,
+    page: page,
     limit,
   });
 
-  
-
   const onPageChange = (page: number) => {
-    navigate(
-      `${pathname}?page=${page}&limit=${orders?.pagination?.limit || 10}`,
-    );
+    setPage(page);
   };
 
   const onPageSizeChange = (pageSize: number) => {
-    navigate(`${pathname}?page=1&limit=${pageSize}`);
+    setLimit(pageSize);
+    setPage(1);
   };
 
   return (
@@ -101,6 +96,9 @@ const Orders = () => {
         {orders?.data?.pagination && (
           <Pagination
             {...orders?.data?.pagination}
+            limit={orders?.data?.pagination?.limit}
+            currentPage={orders?.data?.pagination?.page}
+            totalPages={orders?.data?.pagination?.totalPages}
             onPageChange={onPageChange}
             onPageSizeChange={onPageSizeChange}
           />

@@ -9,6 +9,12 @@ import { Input } from "@/components/ui/input";
 import clsx from "clsx";
 
 export function InputController({ control, fieldConfig }: any) {
+  const normalizeValue = (value: any) => {
+    if (typeof value === "object" && value !== null) {
+      return value.value ?? "";
+    }
+    return value ?? "";
+  };
   return (
     <FormField
       rules={{
@@ -28,8 +34,13 @@ export function InputController({ control, fieldConfig }: any) {
           <FormControl>
             <Input
               {...field}
+              value={normalizeValue(field.value)}
               type={fieldConfig.type === "number" ? "number" : "text"}
-              step={fieldConfig.type === "number" ? (fieldConfig.step ?? "any") : undefined}
+              step={
+                fieldConfig.type === "number"
+                  ? (fieldConfig.step ?? "any")
+                  : undefined
+              }
               placeholder={fieldConfig.placeholder}
               disabled={fieldConfig.disabled}
               onChange={(e) => {
@@ -40,7 +51,7 @@ export function InputController({ control, fieldConfig }: any) {
                     ? raw === ""
                       ? ""
                       : isNaN(Number(raw))
-                        ? field.value 
+                        ? field.value
                         : Number(raw)
                     : raw;
 

@@ -14,7 +14,6 @@ export const orderListCols = (): ColumnDef<any>[] => {
   const navigate = useNavigate();
 
   return [
-    // 🆔 Order ID
     {
       header: "Order ID",
       accessorKey: "_id",
@@ -23,18 +22,16 @@ export const orderListCols = (): ColumnDef<any>[] => {
       ),
     },
 
-    // 📅 Date
     {
       header: "Date",
       accessorKey: "createdAt",
       cell: ({ row }) => (
-        <span className="font-medium">
+        <span className="font-medium text-xs">
           {format(row.original.createdAt, "dd MMM yyyy, hh:mm a") || "-"}
         </span>
       ),
     },
 
-    // 👤 Customer
     {
       header: "Customer",
       accessorKey: "user",
@@ -50,7 +47,6 @@ export const orderListCols = (): ColumnDef<any>[] => {
       },
     },
 
-    // 🤝 Partner / Agent
     {
       header: "Partner",
       accessorKey: "partner",
@@ -79,10 +75,12 @@ export const orderListCols = (): ColumnDef<any>[] => {
         const remaining = products.length - 1;
 
         return (
-          <span className="truncate max-w-[180px] inline-block">
-            {first}
+          <div className="flex flex-col text-xs max-w-[150px]">
+            <div className="max-w-[120px]">
+              <p className="break-words">{first}</p>
+            </div>{" "}
             {remaining > 0 && ` +${remaining}`}
-          </span>
+          </div>
         );
       },
     },
@@ -101,7 +99,7 @@ export const orderListCols = (): ColumnDef<any>[] => {
       header: "Commission",
       accessorKey: "partnerCommission",
       cell: ({ row }) => (
-        <span className="text-sm text-muted-foreground">
+        <span className="text-sm font-medium">
           {formatCurrency(row.original.partnerCommission)}
         </span>
       ),
@@ -118,6 +116,7 @@ export const orderListCols = (): ColumnDef<any>[] => {
     {
       header: "Actions",
       id: "actions",
+      size: 120,
       cell: ({ row }) => (
         <div className="flex items-center gap-2">
           <Button

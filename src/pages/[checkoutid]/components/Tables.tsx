@@ -51,6 +51,7 @@ const Tables = ({
           sgst: productData.sgst,
           makingCharges: productData.makingChanges || 0,
           va: productData.va || 0,
+          commissionPercentage: productData.commissionPercentage || 0,
         };
 
         setProducts((prev) => {

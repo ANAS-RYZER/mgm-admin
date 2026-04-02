@@ -6,7 +6,7 @@ interface ProductCardProps {
   sku: string;
 }
 
-const ProductCard = ({ image, name, sku }: ProductCardProps) => {
+const ProductCard = ({ image, name, sku, }: ProductCardProps) => {
   return (
     <div className="border rounded-lg shadow-sm p-3 bg-white">
       <img className="w-50 h-50 rounded mb-3" src={image} alt={name} />

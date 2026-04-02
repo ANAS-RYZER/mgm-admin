@@ -32,6 +32,7 @@ const Products = () => {
     search,
     category,
   });
+  const cols = productColumns(navigate);
 
   const onPageChange = (page: number) => {
     navigate(
@@ -48,6 +49,7 @@ const Products = () => {
       title="Product Catalogue"
       description="Curate inventory, manage artisanship pipelines, and govern MGM Jewels collections."
       className="space-y-8"
+      searchBar={false}
     >
       <section className="space-y-6 z-10">
         {/* Header */}
@@ -105,7 +107,7 @@ const Products = () => {
             </div>
           ) : (
             <TableComponent
-              columns={productColumns}
+              columns={cols}
               data={products?.data}
               model="product"
             />

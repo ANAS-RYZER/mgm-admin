@@ -4,6 +4,7 @@ import { selectRowsFn } from "@tanstack/react-table";
 
 export type ProductFormValues = {
   name: string;
+  material: string;
   categories: string;
   description?: string;
 
@@ -31,6 +32,7 @@ export type ProductFormValues = {
     karat: string;
     metal: string;
     goldWeight: number | "";
+    netWeight: number | "";
   };
   makingChanges?: number | "";
   netWeight?: number | ""; // Top level to fix 400 error
@@ -153,7 +155,7 @@ export const prodcutPricingAndInventoryConfig = (): FieldConfig[] => {
     {
       name: "mrpPrice",
       type: "calculated-mrp-price", // We will create this or update CalculatedTotalCost
-      label: "MRP Price (Incl. Tax)",
+      label: "MRP Price (EXCLUDES Tax)",
       placeholder: "₹ 0.00",
     },
     {
@@ -238,7 +240,7 @@ export const prodcutGoldSpecConfig = (metal: string = ""): FieldConfig[] => {
 
 
     {
-      name: "netWeight",
+      name: "goldSpecs.netWeight",
       type: "number" as const,
       label: "Net Weight (g)",
       required: true,
@@ -284,25 +286,7 @@ export const productGalleryConfig = (refId: string): FieldConfig[] => [
 ];
 
 export const productStoneSpecsConfig = (): FieldConfig[] => [
-  // export class StoneDetailsDto {
-  //   @IsNotEmpty()
-  //   stoneName: string;
-
-  //   @IsNumber()
-  //   quantity: number;
-
-  //   @IsEnum(GemCut)
-  //   cut: GemCut;
-
-  //   @IsOptional()
-  //   @IsEnum(DiamondClarity)
-  //   clarity?: DiamondClarity;
-
-  //   @ValidateNested()
-  //   @Type(() => ColorDto)
-  //   color: ColorDto;
-  // }
-
+  
   {
     name: "stoneSpecs",
     type: "repeatable-group",
@@ -360,3 +344,15 @@ export const productStoneSpecsConfig = (): FieldConfig[] => [
     ],
   },
 ];
+
+
+export const commisionConfig = (): FieldConfig[] => {
+  return [
+    {
+      name: "commissionPercentage",
+      type: "number",
+      label: "Commision (%)",
+      placeholder: "0",
+    },
+  ]
+};
