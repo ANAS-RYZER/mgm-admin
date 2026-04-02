@@ -15,6 +15,9 @@ import {
   Calendar,
   Calculator,
   Percent,
+  ShoppingBasket,
+  ShoppingBag,
+  ShoppingCart,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
@@ -27,6 +30,7 @@ const navigation = [
   { label: "Appointments", icon: Calendar   , to: "/appointments" },
   {  label : "Prices" , icon :  Calculator  , to : "/prices"},
   { label: "Commissions", icon: Percent, to: "/commissions" },
+  { label: "Orders", icon: ShoppingCart   , to: "/orders" },
 ];
 
 interface AdminSidebarProps {
@@ -57,7 +61,7 @@ export const AdminSidebar = ({ isOpen, onToggle }: AdminSidebarProps) => {
   );
 
   const SidebarInner = ({ onNavigate }: { onNavigate?: () => void }) => (
-    <div className="flex h-full flex-col px-6 py-8 text-white">
+    <div className="flex h-full flex-col px-6 py-8 text-white ">
       <div className="flex items-center justify-center">
         <Link to="/" className="text-center">
           <p className="font-elegant text-xl uppercase tracking-[0.4em] text-gold-light">
@@ -104,7 +108,7 @@ export const AdminSidebar = ({ isOpen, onToggle }: AdminSidebarProps) => {
 
   return (
     <Fragment>
-      <aside className="hidden h-screen w-72 flex-col bg-gradient-to-b from-[#3C1124] via-[#250915] to-[#11030A] shadow-[0_30px_80px_-40px_rgba(0,0,0,0.6)] lg:fixed lg:inset-y-0 lg:left-0 lg:flex">
+      <aside className="hidden h-screen w-72 flex-col bg-gradient-to-b from-[#3C1124] via-[#250915] to-[#11030A] shadow-[0_30px_80px_-40px_rgba(0,0,0,0.6)] lg:fixed lg:inset-y-0 lg:left-0 lg:flex z-30">
         <SidebarInner />
       </aside>
 

@@ -63,6 +63,10 @@ const mainRoutes: RouteConfig[] = [
     path: "/add-product",
     component: React.lazy(() => import("@/pages/Products/AddProduct")),
   },
+  {
+    path: "/edit-product/:id",
+    component: React.lazy(() => import("@/pages/Products/AddProduct")),
+  },
 
   {
     path: "/dashboard",
@@ -91,9 +95,15 @@ const mainRoutes: RouteConfig[] = [
   {
     path: "/checkout/:id",
     component: React.lazy(() => import("@/pages/[checkoutid]")),
-  }
-  
-  ,
+  },
+  {
+    path: "/orders",
+    component: React.lazy(() => import("@/pages/orders")),
+  },
+  {
+    path: "/orders/:id",
+    component: React.lazy(() => import("@/pages/orders/[orderId]")),
+  },
   {
     path: "/prices",
     component: React.lazy(() => import("@/pages/prices")),
