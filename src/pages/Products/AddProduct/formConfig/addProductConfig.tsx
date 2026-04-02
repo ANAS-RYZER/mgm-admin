@@ -155,7 +155,7 @@ export const prodcutPricingAndInventoryConfig = (): FieldConfig[] => {
     {
       name: "mrpPrice",
       type: "calculated-mrp-price", // We will create this or update CalculatedTotalCost
-      label: "MRP Price (Incl. Tax)",
+      label: "MRP Price (EXCLUDES Tax)",
       placeholder: "₹ 0.00",
     },
     {
@@ -286,25 +286,7 @@ export const productGalleryConfig = (refId: string): FieldConfig[] => [
 ];
 
 export const productStoneSpecsConfig = (): FieldConfig[] => [
-  // export class StoneDetailsDto {
-  //   @IsNotEmpty()
-  //   stoneName: string;
-
-  //   @IsNumber()
-  //   quantity: number;
-
-  //   @IsEnum(GemCut)
-  //   cut: GemCut;
-
-  //   @IsOptional()
-  //   @IsEnum(DiamondClarity)
-  //   clarity?: DiamondClarity;
-
-  //   @ValidateNested()
-  //   @Type(() => ColorDto)
-  //   color: ColorDto;
-  // }
-
+  
   {
     name: "stoneSpecs",
     type: "repeatable-group",
@@ -362,3 +344,15 @@ export const productStoneSpecsConfig = (): FieldConfig[] => [
     ],
   },
 ];
+
+
+export const commisionConfig = (): FieldConfig[] => {
+  return [
+    {
+      name: "commissionPercentage",
+      type: "number",
+      label: "Commision (%)",
+      placeholder: "0",
+    },
+  ]
+};

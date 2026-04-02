@@ -56,9 +56,9 @@ api.interceptors.response.use(
         const refreshToken = getRefreshToken();
         const sessionId = getSessionId();
         console.log("Attempting token refresh with sessionId:", sessionId);
-        console.log("Attempting token refresh with sessionId:", sessionId);
         if (!sessionId || !refreshToken) {
-          logout(); 
+          // If we can't refresh, the session is effectively invalid.
+          logout();
           return Promise.reject({ message: "No refresh token" });
         }
 

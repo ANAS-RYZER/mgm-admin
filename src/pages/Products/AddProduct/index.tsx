@@ -10,6 +10,7 @@ import {
   productGalleryConfig,
   productImageConfig,
   productStoneSpecsConfig,
+  commisionConfig,
 } from "./formConfig/addProductConfig";
 import { AdminLayout } from "@/components/layout/AdminLayout";
 import { Button } from "@/components/ui/button";
@@ -190,6 +191,7 @@ const AddProduct = () => {
               stone.stoneprice !== "" ? Number(stone.stoneprice) : undefined,
           }))
         : [],
+      commissionPercentage: submitData.commissionPercentage,
       uploadRefId, // Backend uses this to associate files uploaded with this draft ID
     };
 
@@ -411,6 +413,21 @@ const AddProduct = () => {
             <FormRenderer
               control={methods.control}
               fields={priceAndInventoryFields}
+            />
+          </div>
+
+          <div className="rounded-md border border-black/10 p-7 space-y-5 shadow-sm bg-white">
+            <div className="flex items-center gap-3">
+              <div className="bg-rose-100 rounded-full text-rose-800 h-10 w-10 flex justify-center items-center font-bold">
+                6
+              </div>
+              <h1 className="text-lg font-semibold ">Commision</h1>
+            </div>
+            <hr />
+
+            <FormRenderer
+              control={methods.control}
+              fields={commisionConfig()}
             />
           </div>
 
