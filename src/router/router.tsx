@@ -99,6 +99,10 @@ const mainRoutes: RouteConfig[] = [
     component: React.lazy(() => import("@/pages/orders")),
   },
   {
+    path: "/orders/:id",
+    component: React.lazy(() => import("@/pages/orders/[orderId]")),
+  },
+  {
     path: "/prices",
     component: React.lazy(() => import("@/pages/prices")),
   }

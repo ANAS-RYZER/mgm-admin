@@ -5,7 +5,6 @@ export default function useGetAppointmentById(appointmentId: string) {
   return useQuery({
     queryKey: ["appointment", appointmentId],
     queryFn: async () => {
-      // Replace with actual API call
       const response = await api.get(
         `/dashboard/admin/appointment/${appointmentId}`,
       );

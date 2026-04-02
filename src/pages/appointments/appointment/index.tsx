@@ -137,6 +137,7 @@ const AppointmentDetails = () => {
                   email={
                     appointment?.userDetails?.email || "mrunal@example.com"
                   }
+                  role="customer"
                   // phone={appointment?.userDetails?.phoneNumber || "+91 9876543210"}
                   id={
                     <>
@@ -157,6 +158,7 @@ const AppointmentDetails = () => {
                   phone={
                     appointment?.agentDetails?.phoneNumber || "+91 9876543210"
                   }
+                  role="partner"
                   id={
                     <>
                       User Id:
