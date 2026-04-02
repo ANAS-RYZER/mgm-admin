@@ -28,7 +28,7 @@ const index = () => {
   };
 
   return (
-    <AdminLayout title="Commissions">
+    <AdminLayout title="Commissions" searchBar={false} description="View and manage commissions for all orders">
       <div className='space-y-6'>
         <h1 className='text-lg font-semibold'>Commissions</h1>
         <div className='flex items-center gap-2'>

@@ -28,9 +28,9 @@ const navigation = [
   { label: "Applications", icon: ClipboardList , to: "/applications" },
   { label: "Partners", icon: UserCheck   , to: "/partners" },
   { label: "Appointments", icon: Calendar   , to: "/appointments" },
+  { label: "Orders", icon: ShoppingCart   , to: "/orders" },
   {  label : "Prices" , icon :  Calculator  , to : "/prices"},
   { label: "Commissions", icon: Percent, to: "/commissions" },
-  { label: "Orders", icon: ShoppingCart   , to: "/orders" },
 ];
 
 interface AdminSidebarProps {
