@@ -32,6 +32,7 @@ const Products = () => {
     search,
     category,
   });
+  const cols = productColumns(navigate);
 
   const onPageChange = (page: number) => {
     navigate(
@@ -106,7 +107,7 @@ const Products = () => {
             </div>
           ) : (
             <TableComponent
-              columns={productColumns}
+              columns={cols}
               data={products?.data}
               model="product"
             />

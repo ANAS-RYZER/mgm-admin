@@ -4,6 +4,7 @@ import { selectRowsFn } from "@tanstack/react-table";
 
 export type ProductFormValues = {
   name: string;
+  material: string;
   categories: string;
   description?: string;
 
@@ -31,6 +32,7 @@ export type ProductFormValues = {
     karat: string;
     metal: string;
     goldWeight: number | "";
+    netWeight: number | "";
   };
   makingChanges?: number | "";
   netWeight?: number | ""; // Top level to fix 400 error
@@ -238,7 +240,7 @@ export const prodcutGoldSpecConfig = (metal: string = ""): FieldConfig[] => {
 
 
     {
-      name: "netWeight",
+      name: "goldSpecs.netWeight",
       type: "number" as const,
       label: "Net Weight (g)",
       required: true,
