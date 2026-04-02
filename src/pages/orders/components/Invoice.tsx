@@ -13,7 +13,7 @@ const InvoiceSummary = ({ breakdown }: { breakdown: any }) => {
       <Row label="Value Addition (VA)" value={breakdown.vaTotal} />
       <Row label="Making Charges (MA)" value={breakdown.makingTotal} />
 
-      <hr />
+      <hr className="border-dashed border-muted-foreground/50" />
 
       <Row label="Gross Price" value={breakdown.grossTotal} />
 
@@ -28,7 +28,7 @@ const InvoiceSummary = ({ breakdown }: { breakdown: any }) => {
       <Row label="CGST" value={breakdown.cgstTotal} />
       <Row label="SGST" value={breakdown.sgstTotal} />
 
-      <hr />
+      <hr className="border-dashed border-muted-foreground/50" />
 
       <Row label="Customer Paid" value={breakdown.grandTotal} bold />
 
