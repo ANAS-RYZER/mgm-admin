@@ -1,4 +1,5 @@
 import axios from "axios";
+import { toast } from "sonner";
 
 // const BASE_URL = "https://test.ownmali.com/api";
 const BASE_URL = "https://mgm-backend.vercel.app";  
@@ -27,7 +28,11 @@ const clearTokens = () => {
 
 const logout = () => {
   clearTokens();
-  window.location.href = "/signin";
+  // window.location.href = "/signin";
+  if(window.location.href !== "/signin") {
+    
+    window.location.href = "/signin";
+  }
 };
 
 api.interceptors.request.use((config) => {

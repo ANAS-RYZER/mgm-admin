@@ -61,8 +61,8 @@ const OrderBreakdown = ({
   }, [totalAmount, commissionRate, commissionAmount]);
 
   return (
-    <Card className="p-2 rounded-xl border shadow-sm">
-      <CardContent className="p-4">
+    <div className="p-2 rounded-lg shadow-md border bg-white">
+      <div className="p-4">
         <div className="flex flex-col gap-4">
           <h2 className="text-xl font-semibold text-primary">Order Breakdown</h2>
 
@@ -103,8 +103,8 @@ const OrderBreakdown = ({
             </div>
           </div>
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 };
 

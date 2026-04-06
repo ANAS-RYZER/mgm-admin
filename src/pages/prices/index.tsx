@@ -56,9 +56,13 @@ function PriceRow({
   if (!isEditing) {
     return (
       <div className="flex items-center gap-4 py-2 border-b border-black/5 last:border-0">
-        <span className="flex-1 text-sm font-medium text-foreground">{item.name}</span>
+        <span className="flex-1 text-sm font-medium text-foreground">
+          {item.name}
+        </span>
         <div className="flex items-center gap-2 w-36 justify-end">
-          <span className="text-sm text-muted-foreground tabular-nums">{item.price}</span>
+          <span className="text-sm text-muted-foreground tabular-nums">
+            {item.price}
+          </span>
           <Button
             type="button"
             size="icon"
@@ -77,7 +81,9 @@ function PriceRow({
 
   return (
     <div className="flex items-center gap-4 py-2 border-b border-black/5 last:border-0">
-      <span className="flex-1 text-sm font-medium text-foreground">{item.name}</span>
+      <span className="flex-1 text-sm font-medium text-foreground">
+        {item.name}
+      </span>
       <div className="flex items-center gap-2 w-36">
         <Input
           ref={inputRef}
@@ -124,7 +130,7 @@ function PriceSection({
   isSaving: boolean;
 }) {
   return (
-    <Card className="border border-black/10 bg-white shadow-sm">
+    <Card className="border border-black/10 bg-white shadow-sm rounded-lg">
       <CardHeader className="pb-2">
         <CardTitle className="text-base">{title}</CardTitle>
       </CardHeader>
@@ -157,24 +163,25 @@ export default function PricesPage() {
         {
           onSuccess: () => toast.success("Price updated"),
           onError: (err: any) => {
-            const msg = err?.response?.data?.message ?? err?.message ?? "Update failed";
+            const msg =
+              err?.response?.data?.message ?? err?.message ?? "Update failed";
             toast.error(msg);
           },
-        }
+        },
       );
     },
-    [updatePrice]
+    [updatePrice],
   );
 
-  if (isLoading) {
-    return (
-      <AdminLayout title="Prices" description="Manage metal prices">
-        <div className="p-4 mt-10 text-sm text-muted-foreground">
-        <LoadingSpinner label={"Loading Prices..."} />
-      </div>
-      </AdminLayout>
-    );
-  }
+  // if (isLoading) {
+  //   return (
+  //     <AdminLayout title="Prices" description="Manage metal prices">
+  //       <div className="p-4 mt-10 text-sm text-muted-foreground">
+  //         <LoadingSpinner label={"Loading Prices..."} />
+  //       </div>
+  //     </AdminLayout>
+  //   );
+  // }
 
   if (isError) {
     return (
@@ -190,21 +197,32 @@ export default function PricesPage() {
   const gold = data?.gold ?? [];
 
   return (
-    <AdminLayout title="Prices" description="Edit metal prices per unit">
-      <div className="grid gap-6    grid-cols-2">
-        <PriceSection
-          title="Platinum"
-          items={platinum}
-          onSave={handleSave}
-          isSaving={isUpdating}
-        />
-        <PriceSection
-          title="Gold"
-          items={gold}
-          onSave={handleSave}
-          isSaving={isUpdating}
-        />
-      </div>
+    <AdminLayout
+      title="Prices"
+      description="Edit metal prices per unit"
+      searchBar={false}
+    >
+      {isLoading && (
+        <div className="p-4 mt-10 text-sm text-muted-foreground">
+          <LoadingSpinner label={"Loading Prices..."} />
+        </div>
+      )}
+      {!isLoading && (
+        <div className="grid gap-6    grid-cols-2">
+          <PriceSection
+            title="Platinum"
+            items={platinum}
+            onSave={handleSave}
+            isSaving={isUpdating}
+          />
+          <PriceSection
+            title="Gold"
+            items={gold}
+            onSave={handleSave}
+            isSaving={isUpdating}
+          />
+        </div>
+      )}
     </AdminLayout>
   );
 }
