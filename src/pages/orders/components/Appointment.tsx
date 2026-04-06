@@ -7,7 +7,7 @@ import clsx from "clsx";
 
 const AppointmentCard = ({ appointment }: { appointment: any }) => {
   return (
-    <div className="border rounded-xl p-5 bg-white space-y-4">
+    <div className="border shadow-md rounded-lg p-5 bg-white space-y-4">
       {/* 🔹 Top Section */}
       <div className="flex items-center justify-between">
         <div>

@@ -13,11 +13,13 @@ import {
   LogOut,
   Menu,
   X,
+  ArrowLeft,
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface AdminHeaderProps {
   title: string;
@@ -25,6 +27,7 @@ interface AdminHeaderProps {
   onSidebarToggle?: () => void;
   isSidebarOpen?: boolean;
   isSearchBar?: boolean;
+  isBack?: boolean;
 }
 
 export const AdminHeader = ({
@@ -33,12 +36,14 @@ export const AdminHeader = ({
   onSidebarToggle,
   isSidebarOpen,
   isSearchBar,
+  isBack = false,
 }: AdminHeaderProps) => {
   const [searchFocused, setSearchFocused] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const userMenuRef = useRef<HTMLDivElement>(null);
   const notificationRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -115,25 +120,37 @@ export const AdminHeader = ({
           <div className="flex flex-col gap-4">
             {/* Top row: Title and quick actions */}
             <div className="flex flex-wrap items-center justify-between gap-4">
-              <div className="space-y-1">
-                <motion.h1
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.1, ease: "easeOut" }}
-                  className="text-xl lg:text-2xl font-display font-semibold text-white tracking-wide"
-                >
-                  {title}
-                </motion.h1>
-                {description && (
-                  <motion.p
+              <div className="flex items-start gap-2">
+                {isBack && (
+                  <ArrowLeft
+                    onClick={() => navigate(-1)}
+                    className="text-white mt-2 cursor-pointer"
+                  />
+                )}
+                <div className="space-y-1">
+                  <motion.h1
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 0.2, ease: "easeOut" }}
-                    className="max-w-xl text-sm text-white/70"
+                    transition={{ duration: 0.5, delay: 0.1, ease: "easeOut" }}
+                    className="text-xl lg:text-xl font-display font-semibold text-white tracking-wide"
                   >
-                    {description}
-                  </motion.p>
-                )}
+                    {title}
+                  </motion.h1>
+                  {description && (
+                    <motion.p
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{
+                        duration: 0.5,
+                        delay: 0.2,
+                        ease: "easeOut",
+                      }}
+                      className="max-w-xl text-xs text-white/70"
+                    >
+                      {description}
+                    </motion.p>
+                  )}
+                </div>
               </div>
 
               <div className="flex items-center gap-3">
@@ -153,12 +170,9 @@ export const AdminHeader = ({
                       <span className="relative inline-flex h-3 w-3 rounded-full bg-gradient-to-br from-yellow-400 to-yellow-300 shadow-lg" />
                     </span>
                   </HeaderControl> */}
-
-         
                 </div>
 
                 {/* User menu */}
-            
               </div>
             </div>
 

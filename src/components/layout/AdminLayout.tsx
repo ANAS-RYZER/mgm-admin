@@ -9,9 +9,10 @@ interface AdminLayoutProps {
   children: ReactNode;
   className?: string;
   searchBar?: boolean;
+  isBack?: boolean;
 }
 
-export const AdminLayout = ({ title, description, children, className,searchBar=true }: AdminLayoutProps) => {
+export const AdminLayout = ({ title, description, children, className,searchBar=true, isBack=false }: AdminLayoutProps) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const toggleSidebar = () => setSidebarOpen((prev) => !prev);
@@ -27,6 +28,7 @@ export const AdminLayout = ({ title, description, children, className,searchBar=
             onSidebarToggle={toggleSidebar}
             isSidebarOpen={sidebarOpen}
             isSearchBar={searchBar}
+            isBack={isBack} 
           />
           <div className={cn("mt-10 px-6 pb-12 lg:px-10", className)}>{children}</div>
         </main>

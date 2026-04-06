@@ -350,7 +350,12 @@ const AddProduct = () => {
     setUploadRefId(`draft-${crypto.randomUUID()}`); // Fresh refId for next product's uploads
   };
   return (
-    <AdminLayout title="Add a Product" description="Add a new product to the inventory"  searchBar={false}>
+    <AdminLayout
+      title="Add a Product"
+      description="Add a new product to the inventory"
+      searchBar={false}
+      isBack={true}
+    >
       <FormProvider {...methods}>
         <form onSubmit={methods.handleSubmit(onSubmit)} className="space-y-6">
           <div className="rounded-md border border-black/10 p-7 space-y-5 shadow-sm bg-white">

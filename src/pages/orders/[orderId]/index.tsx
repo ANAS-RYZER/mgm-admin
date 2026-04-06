@@ -8,19 +8,39 @@ import { useParams } from "react-router-dom";
 import Product from "../components/Product";
 import InvoiceSummary from "../components/Invoice";
 import { formatINR } from "@/lib/global";
-import { Package, Wallet } from "lucide-react";
+import { Download, Package, Wallet } from "lucide-react";
 import AppointmentCard from "../components/Appointment";
+import html2pdf from "html2pdf.js";
+import { Invoice, transformOrderToInvoice } from "../components/InvoicePDF";
+import { Button } from "@/components/ui/button";
 
 const OrderdetailsPage = () => {
   const { id } = useParams<{ id: string }>();
   const { data: order, isFetching: isOrderLoading } = useGetOrder(id as string);
   const orderData = order?.data;
+  const invoiceData = orderData ? transformOrderToInvoice(orderData) : null;
+  const downloadInvoice = () => {
+    const el = document.getElementById("invoice");
+    if (!el) return;
+
+    html2pdf()
+      .set({
+        margin: 0,
+        filename: `Invoice_${orderData?._id.slice(-4)}.pdf`,
+        html2canvas: { scale: 2, useCORS: true },
+        jsPDF: { format: "a4" },
+      })
+      .from(el)
+      .save();
+  };
+
   return (
     <AdminLayout
       title="Order Details"
       description="View and manage the details of this order."
       className="space-y-8"
       searchBar={false}
+      isBack={true}
     >
       {isOrderLoading && (
         <div className="p-4 mt-10 text-sm text-muted-foreground">
@@ -135,6 +155,15 @@ const OrderdetailsPage = () => {
                 </div>
               </div>
             </div>
+            <Button onClick={downloadInvoice} className="col-span-4 w-full">
+              <Download />
+              Download Invoice
+            </Button>
+
+            <div style={{ position: "absolute", left: "-9999px", top: 0 }}>
+              {invoiceData && <Invoice data={invoiceData} />}
+            </div>
+            {/* <div>{invoiceData && <Invoice data={invoiceData} />}</div> */}
           </div>
         </>
       )}

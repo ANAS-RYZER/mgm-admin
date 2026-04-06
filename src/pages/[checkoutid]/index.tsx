@@ -156,6 +156,7 @@ const Appointments = () => {
       description="Record Purchase for Appointment"
       className="space-y-8"
       searchBar={false}
+      isBack={true}
     >
       {isAppointmentLoading && (
         <div className="p-4 mt-10 text-sm text-muted-foreground">
