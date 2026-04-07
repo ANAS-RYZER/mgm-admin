@@ -18,8 +18,8 @@ const index = () => {
 
   return (
     <AdminLayout
-      title={`${isCommissionLoading ? "Loading" : commission?.agent?.name}'s Commission Details`}
-      description="Breakdown of the agent’s commission, including earnings and calculation details."
+      title={`${commission?.agent?.name || "Partner"}'s Commission Details`}
+      description={`Breakdown of the ${commission?.agent?.name || "partner"}'s commission, including earnings and calculation details.`}
       searchBar={false}
       isBack={true}
     >

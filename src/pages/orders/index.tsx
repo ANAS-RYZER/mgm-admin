@@ -40,7 +40,7 @@ const Orders = () => {
 
   return (
     <AdminLayout
-      title="Visit Order Management"
+      title="Order Management"
       description="Monitor and manage orders efficiently."
       className="space-y-8"
       searchBar={false}
@@ -51,7 +51,7 @@ const Orders = () => {
           <div>
             <h2 className="text-lg font-semibold">All Orders</h2>
             <p className="text-sm text-muted-foreground">
-              Monitor and manage orders and their details.
+              Browse orders with customer, partner, and commission details.
             </p>
           </div>
 

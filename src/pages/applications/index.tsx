@@ -58,7 +58,7 @@ const Applications = () => {
           <div>
             <h2 className="text-lg font-semibold">All Applications</h2>
             <p className="text-sm text-muted-foreground">
-              Monitor application activities and performance.
+              Browse applications, review information, and track status.
             </p>
           </div>
 

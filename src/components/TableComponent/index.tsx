@@ -10,17 +10,20 @@ import {
 import type { SortingState } from "@tanstack/react-table";
 import TBody from "./TBody";
 import THeader from "./THeader";
+import clsx from "clsx";
 
 interface TableComponentProps<TData> {
   columns: ColumnDef<any, any>[];
   data: any[];
   model?: string;
+  border?: boolean;
 }
 
 function TableComponent<TData>({
   columns,
   data,
   model,
+  border = true,
 }: TableComponentProps<TData>) {
   const [columnSizing, setColumnSizing] = React.useState({});
   const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -42,11 +45,15 @@ function TableComponent<TData>({
     onColumnSizingChange: setColumnSizing,
   });
 
-
   const tableData = table.getRowModel().rows || [];
 
   return (
-    <div className="rounded-xl border bg-white shadow-sm overflow-hidden">
+    <div
+      className={clsx(
+        border ? "border rounded-xl" : "",
+        "  bg-white shadow-sm overflow-hidden",
+      )}
+    >
       <div className="overflow-x-auto">
         <table className="min-w-full table-fixed">
           <THeader headerGroups={table.getHeaderGroups()} />
