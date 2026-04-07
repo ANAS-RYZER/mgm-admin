@@ -57,7 +57,7 @@ export const agentListCols = () => {
               size="sm"
               onClick={() => {
                 // Handle view action
-                navigate(`/applications/${row.original._id}`);
+                navigate(`/partners/${row.original._id}`);
               }}
               className="h-8 w-8 p-0 hover:bg-primary/10"
             >

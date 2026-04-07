@@ -198,8 +198,8 @@ export default function PricesPage() {
 
   return (
     <AdminLayout
-      title="Prices"
-      description="Edit metal prices per unit"
+      title="Price Management"
+      description="Manage and update metal prices."
       searchBar={false}
     >
       {isLoading && (

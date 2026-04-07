@@ -16,7 +16,6 @@ import { set } from "lodash";
 
 const Agents = () => {
   const navigate = useNavigate();
-
   const searchParams = useSearchParams();
   const { pathname } = useLocation();
   const queryParams = queryString.parse(searchParams.toString());
@@ -45,7 +44,7 @@ const Agents = () => {
   return (
     <AdminLayout
       title="Partner Management"
-      description="Manage your partners and their details"
+      description="Monitor partner's activities and performance."
       className="space-y-8"
       searchBar={false}
     >
@@ -55,7 +54,7 @@ const Agents = () => {
           <div>
             <h2 className="text-lg font-semibold">All Partners</h2>
             <p className="text-sm text-muted-foreground">
-              Monitor partner's activities and performance.
+              Browse partners, check their information, and track activity.
             </p>
           </div>
 

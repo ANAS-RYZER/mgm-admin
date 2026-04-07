@@ -7,9 +7,9 @@ type StatusBadgeProps = {
   className?: string;
 };
 
-const GREEN_STATUSES = ["approved", "success", "active"];
-const YELLOW_STATUSES = ["pending", "in-progress", "processing"];
-const RED_STATUSES = ["rejected", "failed", "inactive"];
+const GREEN_STATUSES = ["approved", "success", "active","ISPURCHASED"];
+const YELLOW_STATUSES = ["pending", "in-progress", "processing","ISVISITED"];
+const RED_STATUSES = ["rejected", "failed", "inactive","ISNOT"];
 
 const getVariant = (status: string) => {
   const value = status.toLowerCase();
@@ -26,7 +26,13 @@ const getVariant = (status: string) => {
 
 const StatusBadge = ({ status, className }: StatusBadgeProps) => {
   return (
-    <Badge className={clsx("capitalize cursor-pointer", getVariant(status), className)}>
+    <Badge
+      className={clsx(
+        "capitalize cursor-pointer",
+        getVariant(status),
+        className,
+      )}
+    >
       {status}
     </Badge>
   );

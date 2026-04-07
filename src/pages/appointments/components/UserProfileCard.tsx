@@ -12,7 +12,7 @@ interface UserProfileCardProps {
   role: "customer" | "partner";
 }
 
-const getInitials = (name: string) => {
+export const getInitials = (name: string) => {
   return name
     .split(" ")
     .map((word) => word[0])

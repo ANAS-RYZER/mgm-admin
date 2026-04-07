@@ -49,8 +49,8 @@ const AppointmentDetails = () => {
 
   return (
     <AdminLayout
-      title="Appointment Details"
-      description="Visit Management and Appointment details"
+      title={`Appointment Details - ${appointment?.userDetails?.fullName || "Customer"}`}
+      description={`View appointment details and visit outcome for ${appointment?.userDetails?.fullName || "Customer"}.`}
       className="space-y-8"
       searchBar={false}
       isBack={true}

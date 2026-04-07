@@ -46,7 +46,7 @@ const Appointments = () => {
   return (
     <AdminLayout
       title="Visit Management"
-      description="Monitor store visit appointments"
+      description="Monitor store visit appointments and their details."
       className="space-y-8"
       searchBar={false}
     >
@@ -56,7 +56,8 @@ const Appointments = () => {
           <div>
             <h2 className="text-lg font-semibold">All Appointments</h2>
             <p className="text-sm text-muted-foreground">
-              Monitor store visit appointments and their details.
+              
+              Browse and manage all store visit appointments.
             </p>
           </div>
 

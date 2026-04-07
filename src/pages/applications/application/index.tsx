@@ -40,8 +40,9 @@ const ApplicationReviewPage = () => {
   return (
     <AdminLayout
       title={`Application - ${isLoading ? "..." : !application ? "Not Found" : application?.name}`}
-      description="Review and approve agent application"
+      description={`Review ${application?.name || "Application"}’s details and approve or reject the request.`}
       searchBar={false}
+      isBack
     >
       {isLoading && (
         <div className="p-4 mt-10 text-sm text-muted-foreground">

@@ -351,8 +351,16 @@ const AddProduct = () => {
   };
   return (
     <AdminLayout
-      title="Add a Product"
-      description="Add a new product to the inventory"
+      title={
+        isEdit
+          ? `Edit Product - ${existingProduct?.name || ""} `
+          : "Add New Product"
+      }
+      description={
+        isEdit
+          ? `Modify  information, description, and specifications of ${existingProduct?.name || "the product"}. `
+          : "Create and add a new product to the inventory."
+      }
       searchBar={false}
       isBack={true}
     >

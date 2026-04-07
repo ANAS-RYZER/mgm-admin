@@ -1,4 +1,5 @@
 import { ClipboardList, Container, Diamond, Gem } from "lucide-react";
+import { toast } from "sonner";
 
 export const EMPTY_TABLE_DATA = [
   {
@@ -28,6 +29,12 @@ export const EMPTY_TABLE_DATA = [
     id: "Appointments",
     title: "No appointments found",
     description: "There are no appointments available at the moment.",
+    icon: <Container size={44} />,
+  },
+  {
+    id: "Commisions",
+    title: "No commissions found",
+    description: "There are no commissions available for this partner.",
     icon: <Container size={44} />,
   },
 ];
@@ -93,4 +100,15 @@ export const formatINR = (amount?: number) => {
     style: "currency",
     currency: "INR",
   }).format(amount);
+};
+
+export const handleCopyToClipboard = (text: string,message: string) => {
+  navigator.clipboard.writeText(text).then(
+    () => {
+      toast.success(`${message} copied to clipboard!`);
+    },
+    (err) => {
+      toast.error("Failed to copy text: ", err);
+    },
+  );
 };
