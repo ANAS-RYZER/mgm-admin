@@ -13,23 +13,25 @@ import THeader from "./THeader";
 import clsx from "clsx";
 
 interface TableComponentProps<TData> {
-  columns: ColumnDef<any, any>[];
-  data: any[];
+  columns?: ColumnDef<any, any>[];
+  data?: any[];
   model?: string;
   border?: boolean;
 }
 
 function TableComponent<TData>({
-  columns,
-  data,
+  columns = [],
+  data = [],
   model,
   border = true,
 }: TableComponentProps<TData>) {
   const [columnSizing, setColumnSizing] = React.useState({});
   const [sorting, setSorting] = React.useState<SortingState>([]);
+  const safeColumns = Array.isArray(columns) ? columns : [];
+  const safeData = Array.isArray(data) ? data : [];
   const table = useReactTable({
-    data,
-    columns,
+    data: safeData,
+    columns: safeColumns,
     state: {
       sorting,
       columnSizing,

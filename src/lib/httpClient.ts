@@ -1,5 +1,5 @@
 import axios from "axios";
-import { toast } from "sonner";
+import router from "@/router/router";
 
 // const BASE_URL = "https://test.ownmali.com/api";
 const BASE_URL = "https://mgm-backend.vercel.app";  
@@ -20,6 +20,12 @@ const getSessionId = () => localStorage.getItem("sessionId");
 const setAccessToken = (token: string) =>
   localStorage.setItem("accessToken", token);
 
+const setRefreshToken = (token: string) =>
+  localStorage.setItem("refreshToken", token);
+
+const setSessionId = (id: string) =>
+  localStorage.setItem("sessionId", id);
+
 const clearTokens = () => {
   localStorage.removeItem("accessToken");
   localStorage.removeItem("refreshToken");
@@ -28,10 +34,8 @@ const clearTokens = () => {
 
 const logout = () => {
   clearTokens();
-  // window.location.href = "/signin";
-  if(window.location.href !== "/signin") {
-    
-    window.location.href = "/signin";
+  if (window.location.pathname !== "/signin") {
+    router.navigate("/signin", { replace: true });
   }
 };
 
@@ -61,26 +65,33 @@ api.interceptors.response.use(
       try {
         const refreshToken = getRefreshToken();
         const sessionId = getSessionId();
-        console.log("Attempting token refresh with sessionId:", sessionId);
         if (!sessionId || !refreshToken) {
           // If we can't refresh, the session is effectively invalid.
           logout();
           return Promise.reject({ message: "No refresh token" });
         }
 
-        const { data } = await axios.post(`${BASE_URL}/admin/auth/refresh`, {
-          sessionId,
-          refreshToken,
-        });
-
-        const newAccessToken = data?.data?.accessToken;
+        const { data } = await axios.post(
+          `${BASE_URL}/admin/auth/refresh`,
+          {
+            sessionId,
+            refreshToken,
+          },
+        );
+        const tokenPayload = data?.data ?? data;
+        const newAccessToken = tokenPayload?.accessToken;
+        const newRefreshToken = tokenPayload?.refreshToken ?? refreshToken;
+        const newSessionId = tokenPayload?.sessionId ?? sessionId;
         if (!newAccessToken) throw new Error("No new access token");
+        if (!newRefreshToken) throw new Error("No new refresh token");
+        if (!newSessionId) throw new Error("No new session id");
 
         setAccessToken(newAccessToken);
-
-        // Update request & retry
-        originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
-        return api(originalRequest);
+        setRefreshToken(newRefreshToken);
+        setSessionId(newSessionId);
+        // Force app state to restart with fresh credentials.
+        window.location.reload();
+        return Promise.reject({ message: "Session refreshed. Reloading..." });
       } catch (error) {
         logout();
         return Promise.reject({ message: "Session expired" });

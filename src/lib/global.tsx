@@ -47,6 +47,7 @@ export const categoryColors: Record<string, string> = {
   pendants: "bg-purple-100 text-purple-800 border-purple-400",
   mangalsutras: "bg-emerald-100 text-emerald-800 border-emerald-400",
   chains: "bg-amber-100 text-amber-800 border-amber-400",
+  necklaces: "bg-indigo-100 text-indigo-800 border-indigo-400",
 };
 
 export const categories = [
@@ -92,6 +93,12 @@ export const categories = [
     active: "bg-amber-700",
     hover: "hover:bg-amber-700",
   },
+  {
+    value: "necklaces",
+    label: "Necklaces",
+    active: "bg-indigo-700",
+    hover: "hover:bg-indigo-700",
+  }
 ];
 export const formatINR = (amount?: number) => {
   if (amount === null || amount === undefined) return "-";
