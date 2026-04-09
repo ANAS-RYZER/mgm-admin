@@ -155,12 +155,7 @@ const index = () => {
             <div className="space-y-2">
               <div className="flex items-center justify-between text-sm font-medium text-white">
                 <label htmlFor="password">Password</label>
-                <Link
-                  to="/forgot-password"
-                  className="text-sm text-gold underline-offset-4 hover:underline"
-                >
-                  Forgot?
-                </Link>
+              
               </div>
               {/* <Input
                 id="password"
