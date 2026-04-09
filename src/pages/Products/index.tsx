@@ -1,7 +1,7 @@
 import { AdminLayout } from "@/components/layout/AdminLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Plus, Search } from "lucide-react";
+import { Plus, Search, XIcon } from "lucide-react";
 import { useState } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import TableComponent from "@/components/TableComponent";
@@ -25,18 +25,23 @@ const Products = () => {
   const currentPage = Number(searchParams.get("page")) || 1;
   const limit = Number(searchParams.get("limit")) || 10;
 
-  console.log("Current Page:", currentPage, "Limit:", limit, "Search:", search);
   const { data: products, isFetching: isLoadingProducts } = useGetAllProducts({
     page: currentPage,
     limit,
     search,
     category,
   });
+  const productRows = products?.data ?? products?.products ?? [];
+  const productPagination = products?.pagination ?? {
+    page: currentPage,
+    limit,
+    totalPages: 1,
+  };
   const cols = productColumns(navigate);
 
   const onPageChange = (page: number) => {
     navigate(
-      `${pathname}?page=${page}&limit=${products?.pagination?.limit || 10}`,
+      `${pathname}?page=${page}&limit=${productPagination?.limit || 10}`,
     );
   };
 
@@ -97,6 +102,16 @@ const Products = () => {
               {ctgry.label}
             </Button>
           ))}
+
+          {category && (
+            <Button variant="ghost" className="rounded-full" size="sm" onClick={() => {
+              setCategory("");
+              setSearchTerm("");
+            }}>
+              <XIcon/>
+              Clear
+            </Button>
+          )}
         </div>
 
         {/* Table */}
@@ -108,14 +123,14 @@ const Products = () => {
           ) : (
             <TableComponent
               columns={cols}
-              data={products?.data}
+              data={productRows}
               model="product"
             />
           )}
         </div>
-        {products?.pagination && (
+        {products && (
           <Pagination
-            {...products?.pagination}
+            {...productPagination}
             onPageChange={onPageChange}
             onPageSizeChange={onPageSizeChange}
           />

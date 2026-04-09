@@ -6,7 +6,6 @@ export const useLogin= () => {
     // mutationKey: ["login"],
     mutationFn: async (payload: { email: string; password: string }) => {
       const res = await api.post("/admin/auth/login", payload);
-      console.log("response",res);
       return res.data;
     },
     onSuccess: (data) => {

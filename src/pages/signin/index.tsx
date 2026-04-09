@@ -1,11 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useRefreshToken } from "@/hooks/login/useLogin";
 import { useLogin } from "@/hooks/login/useLogin";
 import { Eye, EyeOff } from "lucide-react";
+import { useQueryClient } from "@tanstack/react-query";
 
 const slides = [
   {
@@ -35,6 +35,8 @@ const slides = [
 ];
 
 const index = () => {
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const [activeIndex, setActiveIndex] = useState(0);
   const activeSlide = useMemo(() => slides[activeIndex], [activeIndex]);
   const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -51,12 +53,8 @@ const index = () => {
       { email, password },
       {
         onSuccess: () => {
-          console.log("sign in success");
-          // navigate to dashboard
-          window.location.href = "/";
-        },
-        onError: (error: any) => {
-          console.log("error", error);
+          queryClient.invalidateQueries();
+          navigate("/", { replace: true });
         },
       },
     );
@@ -157,12 +155,7 @@ const index = () => {
             <div className="space-y-2">
               <div className="flex items-center justify-between text-sm font-medium text-white">
                 <label htmlFor="password">Password</label>
-                <Link
-                  to="/forgot-password"
-                  className="text-sm text-gold underline-offset-4 hover:underline"
-                >
-                  Forgot?
-                </Link>
+              
               </div>
               {/* <Input
                 id="password"

@@ -19,15 +19,23 @@ const ApplicationReviewPage = () => {
   const { mutate: updateStatus, isPending: isUpdating } =
     useUpdateStatusApplication();
 
-  const handleUpdateStatus = (status: "approved" | "rejected") => {
+  const handleUpdateStatus = (
+    status: "approved" | "rejected",
+    rejectionReason?: string,
+  ) => {
     updateStatus(
       {
         applicationId: id as string,
         status,
+        rejectionReason,
       },
       {
         onSuccess: () => {
-          toast.success("Application Approved successfully");
+          toast.success(
+            status === "approved"
+              ? "Application approved successfully"
+              : "Application rejected successfully",
+          );
         },
         onError: (err) => {
           console.error(err);

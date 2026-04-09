@@ -65,17 +65,16 @@ export const productColumns = (navigate:any) => {
       cell: ({ row }: { row: any }) => {
         return (
           <div className="flex items-center gap-2">
-            <Button
+            {/* <Button
               variant="ghost"
               size="sm"
               onClick={() => {
-                // Handle view action
-                console.log("View product:", row.original);
+                navigate(`/product/${row.original._id}`);
               }}
               className="h-8 w-8 p-0"
             >
               <Eye className="h-4 w-4" />
-            </Button>
+            </Button> */}
             <Button
               variant="ghost"
               size="sm"
