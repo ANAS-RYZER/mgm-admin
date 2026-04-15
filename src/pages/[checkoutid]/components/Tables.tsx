@@ -243,7 +243,7 @@ const Tables = ({
           Admin Only
         </div>
 
-        <Row label="Partner Commission (2%)" value={breakdown.commission} />
+        <Row label={`Partner Commission (${breakdown.commissionTotalPercentage.toFixed(2)}%)`} value={breakdown.commission} />
 
         <Row label="Admin Revenue" value={breakdown.adminRevenue} bold />
       </Card>

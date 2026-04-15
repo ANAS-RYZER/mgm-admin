@@ -74,18 +74,19 @@ const Appointments = () => {
     let cgstTotal = 0;
     let sgstTotal = 0;
     let commission = 0;
+    let commissionTotalPercentage = 0;
     console.log("products", products);
     products.forEach((p) => {
-      const qty = p.quantity;//quantity of product
+      const qty = p.quantity; //quantity of product
 
-      const basePrice = p.grossPrice - (p.makingCharges || 0) - (p.va || 0); //base price is gross price minus making charges and va 
+      const basePrice = p.grossPrice - (p.makingCharges || 0) - (p.va || 0); //base price is gross price minus making charges and va
       const grossPrice = p.grossPrice;
       const discount = grossPrice - p.discountedPrice;
       const taxable = p.discountedPrice;
       const commissionPercentage = p.commissionPercentage || 0;
 
-      const cgst = taxable * (p.cgst / 100);//cgst is taxable multiplied by cgst percentage
-      const sgst = taxable * (p.sgst / 100);//sgst is taxable multiplied by sgst percentage
+      const cgst = taxable * (p.cgst / 100); //cgst is taxable multiplied by cgst percentage
+      const sgst = taxable * (p.sgst / 100); //sgst is taxable multiplied by sgst percentage
 
       basePriceTotal += basePrice * qty;
       vaTotal += (p.va || 0) * qty;
@@ -96,11 +97,13 @@ const Appointments = () => {
       cgstTotal += cgst * qty;
       sgstTotal += sgst * qty;
       // Commission is calculated per line-item taxable amount, then summed.
-      commission += (taxable * commissionPercentage) / 100 * qty;
+      commission += ((taxable * commissionPercentage) / 100) * qty;
     });
 
     const grandTotal = taxableTotal + cgstTotal + sgstTotal;
     const adminRevenue = grandTotal - commission;
+    commissionTotalPercentage =
+      taxableTotal > 0 ? (commission / taxableTotal) * 100 : 0;
 
     return {
       basePriceTotal,
@@ -112,6 +115,7 @@ const Appointments = () => {
       cgstTotal,
       sgstTotal,
       grandTotal,
+      commissionTotalPercentage,
       commission,
       adminRevenue,
     };

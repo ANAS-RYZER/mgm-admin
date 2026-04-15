@@ -13,6 +13,7 @@ export interface Breakdown {
   grandTotal: number;
   commission: number;
   adminRevenue: number;
+  commissionTotalPercentage: number;
 }
 
 interface CreateOrderPayload {

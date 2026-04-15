@@ -13,6 +13,10 @@ import { useDebounce } from "@/hooks/useDebounce";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import { categories, categoryColors } from "@/lib/global";
 import clsx from "clsx";
+import useDeleteProductId from "@/hooks/product/useDeleteProductId";
+import { toast } from "sonner";
+import DeleteDialog from "./components/DeleteDialog";
+import { set } from "lodash";
 
 const Products = () => {
   const navigate = useNavigate();
@@ -21,6 +25,8 @@ const Products = () => {
   const { pathname } = useLocation();
   const [searchTerm, setSearchTerm] = useState("");
   const search = useDebounce(searchTerm, 500);
+  const [productId, setProductId] = useState<string>("");
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
   const currentPage = Number(searchParams.get("page")) || 1;
   const limit = Number(searchParams.get("limit")) || 10;
@@ -31,13 +37,39 @@ const Products = () => {
     search,
     category,
   });
+  const {
+    mutate: deleteProduct,
+    isPending: isDeleting,
+    error,
+    isError,
+  } = useDeleteProductId();
   const productRows = products?.data ?? products?.products ?? [];
   const productPagination = products?.pagination ?? {
     page: currentPage,
     limit,
     totalPages: 1,
   };
-  const cols = productColumns(navigate);
+  
+  const selectProductIdForDelete = (id: string) => {
+    setProductId(id);
+    setIsDeleteDialogOpen(true);
+  };
+  const cols = productColumns(navigate, selectProductIdForDelete);
+
+  const handleDeleteProduct = (id: string) => {
+    if (!id) return;
+    deleteProduct(id, {
+      onSuccess: () => {
+        // Optionally show a success message or perform additional actions}}
+        setIsDeleteDialogOpen(false);
+        toast.success("Product deleted successfully");
+      },
+      onError: (error) => {
+        console.error("Error deleting product:", error);
+        toast.error("Failed to delete product");
+      },
+    });
+  };
 
   const onPageChange = (page: number) => {
     navigate(
@@ -104,11 +136,16 @@ const Products = () => {
           ))}
 
           {category && (
-            <Button variant="ghost" className="rounded-full" size="sm" onClick={() => {
-              setCategory("");
-              setSearchTerm("");
-            }}>
-              <XIcon/>
+            <Button
+              variant="ghost"
+              className="rounded-full"
+              size="sm"
+              onClick={() => {
+                setCategory("");
+                setSearchTerm("");
+              }}
+            >
+              <XIcon />
               Clear
             </Button>
           )}
@@ -121,11 +158,7 @@ const Products = () => {
               <LoadingSpinner label={"Loading Products..."} />
             </div>
           ) : (
-            <TableComponent
-              columns={cols}
-              data={productRows}
-              model="product"
-            />
+            <TableComponent columns={cols} data={productRows} model="product" />
           )}
         </div>
         {products && (
@@ -135,6 +168,13 @@ const Products = () => {
             onPageSizeChange={onPageSizeChange}
           />
         )}
+
+        <DeleteDialog
+          productId={productId}
+          open={isDeleteDialogOpen}
+          setOpen={setIsDeleteDialogOpen}
+          handleDelete={handleDeleteProduct}
+        />
       </section>
     </AdminLayout>
   );

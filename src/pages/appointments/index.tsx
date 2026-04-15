@@ -119,6 +119,7 @@ const Appointments = () => {
         {appointments?.pagination && (
           <Pagination
             {...appointments?.pagination}
+            currentPage={appointments?.pagination?.page}
             onPageChange={onPageChange}
             onPageSizeChange={onPageSizeChange}
           />
