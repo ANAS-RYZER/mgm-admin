@@ -162,7 +162,7 @@ const AppointmentDetails = () => {
                   role="partner"
                   id={
                     <>
-                      User Id:
+                      Partner Id:
                       <span className="text-black ml-1">
                         {appointment?.agentDetails?.referralCode || "12345"}
                       </span>

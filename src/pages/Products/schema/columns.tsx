@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import clsx from "clsx";
 import { categoryColors } from "@/lib/global";
 
-export const productColumns = (navigate:any) => {
+export const productColumns = (navigate:any, selectProductIdForDelete:(id: string) => void) => {
   return [
     {
       header: "Product ID",
@@ -92,6 +92,7 @@ export const productColumns = (navigate:any) => {
               size="sm"
               onClick={() => {
                 // Handle delete action
+                selectProductIdForDelete(row.original._id);
                 console.log("Delete product:", row.original);
               }}
               className="h-8 w-8 p-0 text-red-600 hover:text-red-700"
