@@ -27,7 +27,8 @@ export default function useCreateOrder(appointmentId: string) {
 
   return useMutation({
     mutationFn: async (payload: CreateOrderPayload) => {
-      const response = await api.post(`/orders`, payload, {
+      const{commissionTotalPercentage,...rest} = payload.breakdown
+      const response = await api.post(`/orders`, { ...payload, breakdown: rest }, {
         params: { appointmentId },
       });
       return response.data;
